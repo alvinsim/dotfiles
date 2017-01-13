@@ -93,7 +93,9 @@
 ;; ido
 (defun asim/ido ()
   (setq ido-enable-flex-matching t
-	ido-everywhere t)
+	ido-everywhere t
+	ido-create-new-buffer 'always
+	ido-ignore-extensions t)
   (ido-mode 1))
 
 ;; org mode
@@ -127,13 +129,13 @@
   (powerline-default-theme))
 
 ;; multi-term
-(defun asim/multi-term ()
-  (require 'multi-term)
-  (setq multi-term-program "/usr/bin/bash"
-	term-unbind-key-list '("C-z" "C-x" "C-h" "C-y")
-	multi-term-dedicated-select-after-open-p t
-	multi-term-dedicated-close-back-to-open-buffer-p t)
-  (define-key global-map (kbd "C-x t") 'multi-term-dedicated-toggle))
+;;(defun asim/multi-term ()
+;;  (require 'multi-term)
+;;  (setq multi-term-program "/usr/bin/bash"
+;;	term-unbind-key-list '("C-z" "C-x" "C-h" "C-y")
+;;	multi-term-dedicated-select-after-open-p t
+;;	multi-term-dedicated-close-back-to-open-buffer-p t)
+;;  (define-key global-map (kbd "C-x t") 'multi-term-dedicated-toggle))
 
 ;; projectile
 (defun asim/projectile ()
