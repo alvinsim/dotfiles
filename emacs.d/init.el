@@ -174,7 +174,7 @@
 ;; which-key
 (defun asim/which-key()
   (require which-key)
-  (which-key-mode)
+  (which-key-mode))
 
 ;;; key-bindings
 
