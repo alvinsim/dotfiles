@@ -18,6 +18,7 @@
 			    solarized-theme
 			    dash
 			    paredit
+			    which-key
 			    powerline))
 
   ;; Init packages and add package archives
@@ -170,6 +171,11 @@
   (setq cider-repl-pop-to-buffer-on-connect nil)
   (add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
+;; which-key
+(defun asim/which-key()
+  (require which-key)
+  (which-key-mode)
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -198,3 +204,4 @@
 (asim/beacon)
 (asim/paredit)
 (asim/cider)
+(asim/which-key)
