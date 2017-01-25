@@ -167,7 +167,8 @@
 
 ;; cider
 (defun asim/cider ()
-  (setq cider-repl-pop-to-buffer-on-connect nil))
+  (setq cider-repl-pop-to-buffer-on-connect nil)
+  (add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
 ;;; key-bindings
 
