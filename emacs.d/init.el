@@ -19,6 +19,7 @@
 			    dash
 			    paredit
 			    which-key
+			    adoc-mode
 			    powerline))
 
   ;; Init packages and add package archives
@@ -156,7 +157,8 @@
 
 ;; org-babel
 (defun asim/plantuml ()
-  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t))))
+  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+  (setq org-plantuml-jar-path (expand-file-name "/path/to/plantuml.jar")))
 
 ;; magit
 (defun asim/magit ()
@@ -172,9 +174,16 @@
   (add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
 ;; which-key
-(defun asim/which-key()
+(defun asim/which-key ()
   (require which-key)
   (which-key-mode))
+
+;; adoc
+(defun asim/adoc ()
+  (require 'adoc-mode)
+  (define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
+  (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
+  (add-hook 'adoc-mode-hook (lambda() (buffer-face-mode t))))
 
 ;;; key-bindings
 
@@ -205,3 +214,29 @@
 (asim/paredit)
 (asim/cider)
 (asim/which-key)
+(asim/adoc)
+
+;;; utilities/helpers
+
+;; interacting with the oreilly clojure cookbook
+(defun increment-clojure-cookbook ()
+	"When reading the Clojure cookbook, find the next section, and
+	close the buffer. If the next section is a sub-directory or in
+	the next chapter, open Dired so you can find it manually."
+	(interactive)
+	(let* ((cur (buffer-name))
+	       (split-cur (split-string cur "[-_]"))
+	       (chap (car split-cur))
+	       (rec (car (cdr split-cur)))
+	       (rec-num (string-to-number rec))
+	       (next-rec-num (1+ rec-num))
+	       (next-rec-s (number-to-string next-rec-num))
+	       (next-rec (if (< next-rec-num 10)
+			     (concat "0" next-rec-s)
+			     next-rec-s))
+	       (target (file-name-directory (concat chap "-" next-rec) "")))
+	      (progn
+		      (if (equal target nil)
+			  (dired (file-name-directory (buffer-file-name)))
+			  (find-file target))
+		      (kill-buffer cur))))
