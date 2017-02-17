@@ -20,6 +20,7 @@
 			    paredit
 			    which-key
 			    adoc-mode
+			    move-tect
 			    powerline))
 
   ;; Init packages and add package archives
@@ -193,6 +194,10 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
+
+;; move-text
+(global-set-key [M-up] 'move-text-up)
+(global-set-key [M-down] 'move-text-down)
 
 ;;; toggle on/off configurations
 
