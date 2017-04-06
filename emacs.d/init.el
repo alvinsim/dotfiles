@@ -20,7 +20,7 @@
 			    paredit
 			    which-key
 			    adoc-mode
-					move-tect
+          move-text
 		      totd
 			    powerline))
 
