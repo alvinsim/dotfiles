@@ -20,7 +20,8 @@
 			    paredit
 			    which-key
 			    adoc-mode
-					ttod
+					move-tect
+		      totd
 			    powerline))
 
   ;; Init packages and add package archives
@@ -50,6 +51,7 @@
 (defun asim/window-system ()
   (when window-system
     (tooltip-mode -1)
+    (setq tooltip-use-echo-area t)
     (tool-bar-mode -1)
     (menu-bar-mode 1)
     (scroll-bar-mode -1)
@@ -198,6 +200,10 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
+
+;; move-text
+(global-set-key [M-up] 'move-text-up)
+(global-set-key [M-down] 'move-text-down)
 
 ;;; toggle on/off configurations
 
