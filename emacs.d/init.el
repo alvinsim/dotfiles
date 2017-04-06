@@ -20,6 +20,7 @@
 			    paredit
 			    which-key
 			    adoc-mode
+					ttod
 			    powerline))
 
   ;; Init packages and add package archives
@@ -185,6 +186,10 @@
   (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
   (add-hook 'adoc-mode-hook (lambda() (buffer-face-mode t))))
 
+;; totd
+(defun asim/totd ()
+	(totd-start))
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -215,6 +220,7 @@
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
+(asim/ttod)
 
 ;;; utilities/helpers
 
