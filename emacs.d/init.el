@@ -79,15 +79,16 @@
 (defun asim/other ()
   (setq-default tab-width 2)
   (setq inhibit-splash-screen t
-	indent-tabs-mode t
-	line-number-mode 1
-	column-number-mode t
-	show-trailing-whitespace t
-	sentence-end-double-space nil
-	echo-keystrokes 0.1
-	use-dialog-box nil
-	visible-bell t
-	transient-mark-mode 1)
+		indent-tabs-mode t
+		line-number-mode 1
+		column-number-mode t
+		show-trailing-whitespace t
+		sentence-end-double-space nil
+		echo-keystrokes 0.1
+		use-dialog-box nil
+		visible-bell t
+		next-line-add-newlines t
+		transient-mark-mode 1)
   (show-paren-mode t)
   (defalias 'yes-or-no-p 'y-or-n-p)	;; make all "yes or no" to "y or n"
   (global-visual-line-mode 1)		;; visual mode word wrap
@@ -178,19 +179,19 @@
 
 ;; which-key
 (defun asim/which-key ()
-  (require which-key)
+  (require 'which-key)
   (which-key-mode))
 
 ;; adoc
 (defun asim/adoc ()
-  (require 'adoc-mode)
-  (define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
-  (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
-  (add-hook 'adoc-mode-hook (lambda() (buffer-face-mode t))))
+	(require 'adoc-mode)
+	(add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
+	(add-hook 'adoc-mode-hook (lambda() (buffer-face-mode t))))
 
-;; totd
-(defun asim/totd ()
-	(totd-start))
+;; find-dired
+(defun asim/find-dired ()
+	(require 'find-dired)
+	(setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 
 ;;; key-bindings
 
@@ -200,6 +201,7 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
+(define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; move-text
 (global-set-key [M-up] 'move-text-up)
@@ -227,6 +229,7 @@
 (asim/which-key)
 (asim/adoc)
 (asim/ttod)
+(asim/find-dired)
 
 ;;; utilities/helpers
 
