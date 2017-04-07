@@ -1,7 +1,7 @@
 ;; Personal information
 (defun asim/personal-information ()
   (setq user-full-name "Alvin Sim"
-	user-mail-address "sim.alvin@gmail.com"))
+				user-mail-address "sim.alvin@gmail.com"))
 
 ;; packages
 (defun asim/packages ()
@@ -77,7 +77,8 @@
 
 ;; other misc configuration
 (defun asim/other ()
-  (setq-default tab-width 2)
+  (setq-default tab-width 2
+								with-editor-emacsclient-executable "emacsclient")
   (setq inhibit-splash-screen t
 		indent-tabs-mode t
 		line-number-mode 1
@@ -99,9 +100,9 @@
 ;; ido
 (defun asim/ido ()
   (setq ido-enable-flex-matching t
-	ido-everywhere t
-	ido-create-new-buffer 'always
-	ido-ignore-extensions t)
+        ido-everywhere t
+        ido-create-new-buffer 'always
+        ido-ignore-extensions t)
   (ido-mode 1))
 
 ;; org mode
