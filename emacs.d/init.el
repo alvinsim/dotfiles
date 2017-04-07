@@ -193,6 +193,10 @@
 	(require 'find-dired)
 	(setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 
+;; totd
+(defun asim/totd ()
+	(totd-start))
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -228,7 +232,7 @@
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
-(asim/ttod)
+(asim/totd)
 (asim/find-dired)
 
 ;;; utilities/helpers
