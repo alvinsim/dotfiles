@@ -6,23 +6,25 @@
 ;; packages
 (defun asim/packages ()
   (setq asim/use-packages '(company
-			    beacon
-			    leuven
-			    projectile
-			    flx-ido
-			    magit
-			    atom-one-dark-theme
-			    yasnippet
-			    clojure
-			    cider
-			    solarized-theme
-			    dash
-			    paredit
-			    which-key
-			    adoc-mode
-          move-text
-		      totd
-			    powerline))
+														beacon
+														leuven
+														projectile
+														flx-ido
+														magit
+														atom-one-dark-theme
+														yasnippet
+														clojure
+														cider
+														solarized-theme
+														dash
+														paredit
+														which-key
+														adoc-mode
+														twilight-bright-theme
+														move-text
+														totd
+														elpy
+														powerline))
 
   ;; Init packages and add package archives
   (load "package")
@@ -50,13 +52,17 @@
 ;; windows configuration
 (defun asim/window-system ()
   (when window-system
-    (tooltip-mode -1)
-    (setq tooltip-use-echo-area t)
-    (tool-bar-mode -1)
-    (menu-bar-mode 1)
-    (scroll-bar-mode -1)
-    ;; theme
-    (load-theme 'atom-one-dark t))
+		(tooltip-mode -1)
+		(setq tooltip-use-echo-area t)
+		(tool-bar-mode -1)
+		(menu-bar-mode 1)
+		(scroll-bar-mode -1))
+		;; theme
+		;;		(load-theme 'atom-one-dark t))
+		;;		(load-theme 'leuven t))
+
+  (require 'twilight-bright-theme)
+  (load-theme 'twilight-bright t)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 
 ;; winner-mode
@@ -77,8 +83,8 @@
 
 ;; other misc configuration
 (defun asim/other ()
-  (setq-default tab-width 2
-								with-editor-emacsclient-executable "emacsclient")
+  (setq-default tab-width 2)
+;								with-editor-emacsclient-executable "emacsclient")
   (setq inhibit-splash-screen t
 		indent-tabs-mode t
 		line-number-mode 1
@@ -158,7 +164,7 @@
 
   ;; disable ido faces to see flx highlights
   (setq ido-enable-flex-matching t
-	ido-use-faces nil))
+		ido-use-faces nil))
 
 ;; org-babel
 (defun asim/plantuml ()
@@ -198,6 +204,37 @@
 (defun asim/totd ()
 	(totd-start))
 
+;; python development
+(defun asim/python-dev ()
+	(elpy-enable))
+
+;; clojure mode
+;; (defun asim/clojure-mode ()
+;; 	(setq clojure-indent-style))
+
+;; interacting with the oreilly clojure cookbook
+(defun increment-clojure-cookbook ()
+	"When reading the Clojure cookbook, find the next section, and
+	close the buffer. If the next section is a sub-directory or in
+	the next chapter, open Dired so you can find it manually."
+	(interactive)
+	(let* ((cur (buffer-name))
+	       (split-cur (split-string cur "[-_]"))
+	       (chap (car split-cur))
+	       (rec (car (cdr split-cur)))
+	       (rec-num (string-to-number rec))
+	       (next-rec-num (1+ rec-num))
+	       (next-rec-s (number-to-string next-rec-num))
+	       (next-rec (if (< next-rec-num 10)
+											 (concat "0" next-rec-s)
+										 next-rec-s))
+	       (target (file-name-directory (concat chap "-" next-rec) "")))
+	      (progn
+		      (if (equal target nil)
+							(dired (file-name-directory (buffer-file-name)))
+						(find-file target))
+		      (kill-buffer cur))))
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -207,6 +244,7 @@
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (define-key global-map (kbd "RET") 'newline-and-indent)
+;;(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
 
 ;; move-text
 (global-set-key [M-up] 'move-text-up)
@@ -234,6 +272,7 @@
 (asim/which-key)
 (asim/adoc)
 (asim/totd)
+(asim/python-dev)
 (asim/find-dired)
 
 ;;; utilities/helpers
