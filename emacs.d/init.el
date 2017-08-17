@@ -206,11 +206,13 @@
 
 ;; python development
 (defun asim/python-dev ()
-	(elpy-enable))
+	(elpy-enable)
+	(setq elpy-rpc-backend "jedi"))
 
-;; clojure mode
-;; (defun asim/clojure-mode ()
-;; 	(setq clojure-indent-style))
+;; clojure cookbook
+(defun asim/clojure-cookbook ()
+	(add-hook 'adoc-mode-hook 'cider-mode)
+	(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook))
 
 ;; interacting with the oreilly clojure cookbook
 (defun increment-clojure-cookbook ()
@@ -228,7 +230,7 @@
 	       (next-rec (if (< next-rec-num 10)
 											 (concat "0" next-rec-s)
 										 next-rec-s))
-	       (target (file-name-directory (concat chap "-" next-rec) "")))
+	       (target (file-name-directory (concat chap "-" next-rec))))
 	      (progn
 		      (if (equal target nil)
 							(dired (file-name-directory (buffer-file-name)))
@@ -244,7 +246,7 @@
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (define-key global-map (kbd "RET") 'newline-and-indent)
-;;(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
+(define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
 
 ;; move-text
 (global-set-key [M-up] 'move-text-up)
