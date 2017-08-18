@@ -207,7 +207,16 @@
 ;; python development
 (defun asim/python-dev ()
 	(elpy-enable)
-	(setq elpy-rpc-backend "jedi"))
+	(setq elpy-rpc-backend "jedi")
+
+	; flycheck
+	(require 'flycheck)
+	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+	(add-hook 'elpy-mode-hook 'flycheck-mode)
+
+	; py-autopep8
+	(require 'py-autopep8)
+	(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 
 ;; clojure cookbook
 (defun asim/clojure-cookbook ()
