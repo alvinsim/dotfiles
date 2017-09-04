@@ -246,6 +246,19 @@
 						(find-file target))
 		      (kill-buffer cur))))
 
+;; clojure mode
+(defun asim/clojure ()
+	(autoload 'clojure-mode "clojure-mode" "A mode for Clojure lisp" t)
+	(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+	(autoload 'paredit-mode "paredit" "Parenthesis editing minor mode" t)
+	(eval-after-load "clojure-mode"
+		'(progn
+			 (defun clojure-paredit-hook () (paredit-mode +1))
+			 (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
+
+			 (define-key clojure-mode-map "{" 'paredit-open-brace)
+			 (define-key clojure-mode-map "}" 'paredit-close-brace))))
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -285,6 +298,7 @@
 (asim/totd)
 (asim/python-dev)
 (asim/find-dired)
+(asim/clojure)
 
 ;;; utilities/helpers
 
