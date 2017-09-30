@@ -78,7 +78,7 @@
 
 ;; paredit
 (defun asim/paredit ()
-  (add-hook 'clojure-mode-hook 'paredit-mode)
+;;  (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'clojurescript-mode-hook 'paredit-mode))
 
 ;; other misc configuration
@@ -146,7 +146,7 @@
 ;;  (require 'multi-term)
 ;;  (setq multi-term-program "/usr/bin/bash"
 ;;	term-unbind-key-list '("C-z" "C-x" "C-h" "C-y")
-;;	multi-term-dedicated-select-after-open-p t
+;;	multi-term-dedicated-select-after-open-p tp
 ;;	multi-term-dedicated-close-back-to-open-buffer-p t)
 ;;  (define-key global-map (kbd "C-x t") 'multi-term-dedicated-toggle))
 
