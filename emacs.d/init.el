@@ -215,7 +215,16 @@
 ;; python development
 (defun asim/python-dev ()
 	(elpy-enable)
-	(setq elpy-rpc-backend "jedi"))
+	(setq elpy-rpc-backend "jedi")
+
+	; flycheck
+	(require 'flycheck)
+	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+	(add-hook 'elpy-mode-hook 'flycheck-mode)
+
+	; py-autopep8
+	(require 'py-autopep8)
+	(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 
 ;; clojure cookbook
 (defun asim/clojure-cookbook ()
@@ -244,6 +253,19 @@
 							(dired (file-name-directory (buffer-file-name)))
 						(find-file target))
 		      (kill-buffer cur))))
+
+;; clojure mode
+(defun asim/clojure ()
+	(autoload 'clojure-mode "clojure-mode" "A mode for Clojure lisp" t)
+	(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+	(autoload 'paredit-mode "paredit" "Parenthesis editing minor mode" t)
+	(eval-after-load "clojure-mode"
+		'(progn
+			 (defun clojure-paredit-hook () (paredit-mode +1))
+			 (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
+
+			 (define-key clojure-mode-map "{" 'paredit-open-brace)
+			 (define-key clojure-mode-map "}" 'paredit-close-brace))))
 
 ;;; key-bindings
 
@@ -284,6 +306,7 @@
 (asim/totd)
 (asim/python-dev)
 (asim/find-dired)
+(asim/clojure)
 
 ;; clojure-mode-hooks
 (add-hook 'clojure-mode-hook #'asim/clojure-mode-hook)
