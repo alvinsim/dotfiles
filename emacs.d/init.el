@@ -24,6 +24,7 @@
 														move-text
 														totd
 														elpy
+														clj-refactor
 														powerline))
 
   ;; Init packages and add package archives
@@ -76,10 +77,17 @@
   (when (display-graphic-p)
     (setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))))
 
-;; paredit
-(defun asim/paredit ()
+;; clojure dev
+(defun asim/clojure-dev ()
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'clojurescript-mode-hook 'paredit-mode))
+
+(defun asim/clojure-mode-hook ()
+	(require 'clj-refactor)
+
+	(clj-refactor-mode 1)
+	(yas-minor-mode)	;;;; for adding require/use/import statements
+	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; other misc configuration
 (defun asim/other ()
@@ -269,13 +277,16 @@
 (asim/projectile)
 (asim/powerline)
 (asim/beacon)
-(asim/paredit)
+(asim/clojure-dev)
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
 (asim/totd)
 (asim/python-dev)
 (asim/find-dired)
+
+;; clojure-mode-hooks
+(add-hook 'clojure-mode-hook #'asim/clojure-mode-hook)
 
 ;;; utilities/helpers
 
