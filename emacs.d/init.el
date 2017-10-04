@@ -25,6 +25,8 @@
 														totd
 														elpy
 														clj-refactor
+														flycheck
+														py-autopep8
 														powerline))
 
   ;; Init packages and add package archives
