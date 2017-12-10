@@ -30,9 +30,10 @@
 														powerline))
 
   ;; Init packages and add package archives
-  (load "package")
+  (require 'package)
   (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("melpa"	. "http://melpa.org/packages/") t)
+	(add-to-list 'package-archives '("org"	. "http://orgmode.org/elpa/") t)
 
   ;; install any packages listed in asim-packages if they are not installed
   (let ((refreshed nil))
@@ -265,9 +266,16 @@
 		'(progn
 			 (defun clojure-paredit-hook () (paredit-mode +1))
 			 (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
+			 (add-hook 'clojurescript-mode 'clojure-paredit-hook)
 
 			 (define-key clojure-mode-map "{" 'paredit-open-brace)
-			 (define-key clojure-mode-map "}" 'paredit-close-brace))))
+			 (define-key clojure-mode-map "}" 'paredit-close-brace)))
+
+	;; clj-refcctor
+	(require 'clj-refactor)
+	(clj-refactor-mode 1)
+	(yas-minor-mode)	;; for adding require/use/import statements
+	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;;; key-bindings
 
@@ -301,7 +309,7 @@
 (asim/projectile)
 (asim/powerline)
 (asim/beacon)
-(asim/clojure-dev)
+;;(asim/clojure-dev)
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
