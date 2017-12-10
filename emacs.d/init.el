@@ -125,6 +125,17 @@
 
 ;; org mode
 (defun asim/org ()
+	(setq org-emphasis-regexp-components
+      '("     ('\"{??"
+        "-   .,!?;''??\")}/\\??"
+        "    \r\n,"
+        "."
+        1))
+	(require 'org)
+	(setcar (nthcdr 2 org-emphasis-regexp-components) " \t\r\n,\"")
+	(custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))
+	(org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
   (setq org-agenda-files (list "/path/to/file.org"))
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "WAITING(w)" "DOING(g)" "|" "DONE(d)" "CANCEL(c)")))
