@@ -27,6 +27,7 @@
 														clj-refactor
 														flycheck
 														py-autopep8
+														org-plus-contrib
 														powerline))
 
   ;; Init packages and add package archives
