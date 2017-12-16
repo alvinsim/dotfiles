@@ -28,6 +28,9 @@
 														flycheck
 														py-autopep8
 														org-plus-contrib
+														htmlize
+														metaweblog
+														org2blog
 														powerline))
 
   ;; Init packages and add package archives
@@ -298,7 +301,7 @@
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (define-key global-map (kbd "RET") 'newline-and-indent)
-(define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
+;;(define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
 
 ;; move-text
 (global-set-key [M-up] 'move-text-up)
