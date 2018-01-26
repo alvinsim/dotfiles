@@ -23,10 +23,10 @@
 														twilight-bright-theme
 														move-text
 														totd
-														elpy
+;;														elpy
 														clj-refactor
 														flycheck
-														py-autopep8
+;;														py-autopep8
 														org-plus-contrib
 														htmlize
 														metaweblog
@@ -99,18 +99,17 @@
 ;; other misc configuration
 (defun asim/other ()
   (setq-default tab-width 2)
-;								with-editor-emacsclient-executable "emacsclient")
   (setq inhibit-splash-screen t
-		indent-tabs-mode t
-		line-number-mode 1
-		column-number-mode t
-		show-trailing-whitespace t
-		sentence-end-double-space nil
-		echo-keystrokes 0.1
-		use-dialog-box nil
-		visible-bell t
-		next-line-add-newlines t
-		transient-mark-mode 1)
+				indent-tabs-mode t
+				line-number-mode 1
+				column-number-mode t
+				show-trailing-whitespace t
+				sentence-end-double-space nil
+				echo-keystrokes 0.1
+				use-dialog-box nil
+				visible-bell t
+				next-line-add-newlines t
+				transient-mark-mode 1)
   (show-paren-mode t)
   (defalias 'yes-or-no-p 'y-or-n-p)	;; make all "yes or no" to "y or n"
   (global-visual-line-mode 1)		;; visual mode word wrap
@@ -165,16 +164,8 @@
 
 ;; Powerline
 (defun asim/powerline ()
+	(require 'powerline)
   (powerline-default-theme))
-
-;; multi-term
-;;(defun asim/multi-term ()
-;;  (require 'multi-term)
-;;  (setq multi-term-program "/usr/bin/bash"
-;;	term-unbind-key-list '("C-z" "C-x" "C-h" "C-y")
-;;	multi-term-dedicated-select-after-open-p t
-;;	multi-term-dedicated-close-back-to-open-buffer-p t)
-;;  (define-key global-map (kbd "C-x t") 'multi-term-dedicated-toggle))
 
 ;; projectile
 (defun asim/projectile ()
@@ -213,6 +204,7 @@
 ;; which-key
 (defun asim/which-key ()
   (require 'which-key)
+	(add-to-list 'load-path "/path/to/which-key.el")
   (which-key-mode))
 
 ;; adoc
@@ -328,8 +320,8 @@
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
-(asim/totd)
-(asim/python-dev)
+;; (asim/totd)
+;;(asim/python-dev)
 (asim/find-dired)
 (asim/clojure)
 
