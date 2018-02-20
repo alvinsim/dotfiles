@@ -31,6 +31,8 @@
 														htmlize
 														metaweblog
 														org2blog
+														json-reformat
+														gradle-mode
 														powerline))
 
   ;; Init packages and add package archives
@@ -65,24 +67,24 @@
 		(tool-bar-mode -1)
 		(menu-bar-mode 1)
 		(scroll-bar-mode -1))
-		;; theme
-		;;		(load-theme 'atom-one-dark t))
-		;;		(load-theme 'leuven t))
+	;; theme
+	;;				(load-theme 'atom-one-dark t)
+	(load-theme 'leuven t)
 
-  (require 'twilight-bright-theme)
-  (load-theme 'twilight-bright t)
+;;  (require 'twilight-bright-theme)
+;;  (load-theme 'twilight-bright t)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 
 ;; winner-mode
 (defun asim/winner-mode ()
   (when (fboundp 'winner-mode)
-    (winner-mode 1)))
+		(winner-mode 1)))
 
 ;; utf-8 encoding
 (defun asim/utf8-encoding ()
   (prefer-coding-system 'utf-8)
   (when (display-graphic-p)
-    (setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))))
+		(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))))
 
 ;; clojure dev
 (defun asim/clojure-dev ()
@@ -115,14 +117,15 @@
   (global-visual-line-mode 1)		;; visual mode word wrap
   (add-hook 'after-init-hook 'global-company-mode)
   (global-hl-line-mode)
+	(global-prettify-symbols-mode 1)
   (turn-on-eldoc-mode))
 
 ;; ido
 (defun asim/ido ()
   (setq ido-enable-flex-matching t
-        ido-everywhere t
-        ido-create-new-buffer 'always
-        ido-ignore-extensions t)
+				ido-everywhere t
+				ido-create-new-buffer 'always
+				ido-ignore-extensions t)
   (ido-mode 1))
 
 ;; org mode
@@ -192,14 +195,14 @@
 (defun asim/magit ()
   (require 'magit)
   (global-set-key (kbd "C-x g") 'magit-status)
-  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+  (global-set-key	(kbd "C-x M-g") 'magit-dispatch-popup)
   (global-set-key (kbd "C-c M-g") 'magit-file-popup)
   (global-magit-file-mode))
 
 ;; cider
 (defun asim/cider ()
-  (setq cider-repl-pop-to-buffer-on-connect nil)
-  (add-hook 'cider-repl-mode-hook #'eldoc-mode))
+	(setq cider-repl-pop-to-buffer-on-connect nil)
+	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
 ;; which-key
 (defun asim/which-key ()
@@ -284,6 +287,29 @@
 	(yas-minor-mode)	;; for adding require/use/import statements
 	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
+;; linum-mode
+(defun asim/linum ()
+	(global-linum-mode 1)	;; always show line numbers
+	(add-hook 'org-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'dired-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'package-menu-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'help-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'org-agenda-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'org-agenda-after-show-hook (lambda () (linum-mode 0))))
+
+;; ispell
+(defun asim/ispell ()
+	(add-to-list 'exec-path "c:/Program Files (x86)/Aspell/bin")
+	(setq ispell-program-name "aspell"
+				ispell-personal-dictionary "~/.emacs.d/.ispell")
+
+	(require 'ispell))
+
+;; gradle-mode
+(defun asim/gradle ()
+	(require 'gradle-mode)
+	(gradle-mode 1))
+
 ;;; key-bindings
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -292,8 +318,11 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "<f8>") 'ispell-word)
+(global-set-key (kbd "C-<f8>") 'flyspell-mode)
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;;(define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
+;;(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
 
 ;; move-text
 (global-set-key [M-up] 'move-text-up)
@@ -320,10 +349,13 @@
 (asim/cider)
 (asim/which-key)
 (asim/adoc)
-;; (asim/totd)
+(asim/totd)
 ;;(asim/python-dev)
 (asim/find-dired)
 (asim/clojure)
+(asim/clojure-cookbook)
+(asim/linum)
+(asim/gradle)
 
 ;; clojure-mode-hooks
 (add-hook 'clojure-mode-hook #'asim/clojure-mode-hook)
