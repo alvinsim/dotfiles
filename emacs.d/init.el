@@ -142,8 +142,12 @@
 	(org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
 
   (setq org-agenda-files (list "/path/to/file.org"))
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "WAITING(w)" "DOING(g)" "|" "DONE(d)" "CANCEL(c)")))
+  (setq org-todo-keywords	'((sequence "TODO(t)" "WAITING(w)" "DOING(g)" "|" "DONE(d)" "CANCEL(c)")))
+  (setq org-hierarchical-todo-statistics nil
+				org-agenda-todo-ignore-deadlines t
+				org-agenda-todo-ignore-scheduled t
+				org-agenda-todo-ignore-timestamp t
+				org-agenda-todo-ignore-with-date t)
 
   ;; keybindings
   (global-set-key "\C-cl" 'org-store-link)
@@ -154,12 +158,8 @@
   (eval-after-load "org"  '(require 'ox-md nil t))
 
   (setq org-catch-invisible-edits 1
-	org-hide-emphasis-markers t
-	org-ellipsis " .."))
-
-  ;; org bullets
-  ;; (require 'org-bullets)
-  ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
+				org-hide-emphasis-markers t
+				org-ellipsis ".."))
 
 ;; Beacon
 (defun asim/beacon ()
