@@ -295,6 +295,7 @@
 	(add-hook 'package-menu-mode-hook (lambda() (linum-mode 0)))
 	(add-hook 'help-mode-hook (lambda() (linum-mode 0)))
 	(add-hook 'org-agenda-mode-hook (lambda() (linum-mode 0)))
+	(add-hook 'magit-popup-mode-hook (lambda () (linum-mode 0)))
 	(add-hook 'org-agenda-after-show-hook (lambda () (linum-mode 0))))
 
 ;; ispell
