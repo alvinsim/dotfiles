@@ -1,11 +1,11 @@
 ;; Personal information
-(defun asim/personal-information ()
+(defun as/personal-information ()
   (setq user-full-name "Alvin Sim"
 				user-mail-address "sim.alvin@gmail.com"))
 
 ;; packages
-(defun asim/packages ()
-  (setq asim/use-packages '(company
+(defun as/packages ()
+  (setq as/use-packages '(company
 														beacon
 														leuven
 														projectile
@@ -33,6 +33,7 @@
 														org2blog
 														json-reformat
 														gradle-mode
+														dashboard
 														powerline))
 
   ;; Init packages and add package archives
@@ -46,7 +47,7 @@
     (when (not package-archive-contents)
       (package-refresh-contents)
       (setq refresh t))
-    (dolist (pkg asim/use-packages)
+    (dolist (pkg as/use-packages)
       (when (and (not (package-installed-p pkg))
 		 (assoc pkg package-archive-contents))
 	(unless refreshed
@@ -54,13 +55,13 @@
 	  (setq refreshed t))
 	(package-install pkg)))))
 
-(defun asim/indicate-empty-lines ()
+(defun as/indicate-empty-lines ()
   (setq-default indicate-empty-lines t)
   (when (not indicate-empty-lines)
     (toggle-indicate-empty-lines)))
 
 ;; windows configuration
-(defun asim/window-system ()
+(defun as/window-system ()
   (when window-system
 		(tooltip-mode -1)
 		(setq tooltip-use-echo-area t)
@@ -76,22 +77,22 @@
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 
 ;; winner-mode
-(defun asim/winner-mode ()
+(defun as/winner-mode ()
   (when (fboundp 'winner-mode)
 		(winner-mode 1)))
 
 ;; utf-8 encoding
-(defun asim/utf8-encoding ()
+(defun as/utf8-encoding ()
   (prefer-coding-system 'utf-8)
   (when (display-graphic-p)
 		(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))))
 
 ;; clojure dev
-(defun asim/clojure-dev ()
+(defun as/clojure-dev ()
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'clojurescript-mode-hook 'paredit-mode))
 
-(defun asim/clojure-mode-hook ()
+(defun as/clojure-mode-hook ()
 	(require 'clj-refactor)
 
 	(clj-refactor-mode 1)
@@ -99,11 +100,11 @@
 	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; other misc configuration
-(defun asim/other ()
+(defun as/other ()
   (setq-default tab-width 2)
   (setq inhibit-splash-screen t
 				indent-tabs-mode t
-				line-number-mode 1
+;				line-number-mode 1
 				column-number-mode t
 				show-trailing-whitespace t
 				sentence-end-double-space nil
@@ -111,6 +112,7 @@
 				use-dialog-box nil
 				visible-bell t
 				next-line-add-newlines t
+				delete-by-moving-to-trash t
 				transient-mark-mode 1)
   (show-paren-mode t)
   (defalias 'yes-or-no-p 'y-or-n-p)	;; make all "yes or no" to "y or n"
@@ -121,7 +123,7 @@
   (turn-on-eldoc-mode))
 
 ;; ido
-(defun asim/ido ()
+(defun as/ido ()
   (setq ido-enable-flex-matching t
 				ido-everywhere t
 				ido-create-new-buffer 'always
@@ -129,7 +131,7 @@
   (ido-mode 1))
 
 ;; org mode
-(defun asim/org ()
+(defun as/org ()
 	(setq org-emphasis-regexp-components
       '("     ('\"{??"
         "-   .,!?;''??\")}/\\??"
@@ -162,21 +164,21 @@
 				org-ellipsis ".."))
 
 ;; Beacon
-(defun asim/beacon ()
+(defun as/beacon ()
   (beacon-mode 1))
 
 ;; Powerline
-(defun asim/powerline ()
+(defun as/powerline ()
 	(require 'powerline)
   (powerline-default-theme))
 
 ;; projectile
-(defun asim/projectile ()
+(defun as/projectile ()
   (require 'projectile)
   (projectile-global-mode))
 
 ;; flx-ido
-(defun asim/flx-ido ()
+(defun as/flx-ido ()
   (require 'flx-ido)
   (ido-mode 1)
   (ido-everywhere 1)
@@ -187,12 +189,12 @@
 		ido-use-faces nil))
 
 ;; org-babel
-(defun asim/plantuml ()
+(defun as/plantuml ()
   (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
   (setq org-plantuml-jar-path (expand-file-name "/path/to/plantuml.jar")))
 
 ;; magit
-(defun asim/magit ()
+(defun as/magit ()
   (require 'magit)
   (global-set-key (kbd "C-x g") 'magit-status)
   (global-set-key	(kbd "C-x M-g") 'magit-dispatch-popup)
@@ -200,33 +202,33 @@
   (global-magit-file-mode))
 
 ;; cider
-(defun asim/cider ()
+(defun as/cider ()
 	(setq cider-repl-pop-to-buffer-on-connect nil)
 	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
 ;; which-key
-(defun asim/which-key ()
+(defun as/which-key ()
   (require 'which-key)
 	(add-to-list 'load-path "/path/to/which-key.el")
   (which-key-mode))
 
 ;; adoc
-(defun asim/adoc ()
+(defun as/adoc ()
 	(require 'adoc-mode)
 	(add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
 	(add-hook 'adoc-mode-hook (lambda() (buffer-face-mode t))))
 
 ;; find-dired
-(defun asim/find-dired ()
+(defun as/find-dired ()
 	(require 'find-dired)
 	(setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 
 ;; totd
-(defun asim/totd ()
+(defun as/totd ()
 	(totd-start))
 
 ;; python development
-(defun asim/python-dev ()
+(defun as/python-dev ()
 	(elpy-enable)
 	(setq elpy-rpc-backend "jedi")
 
@@ -240,7 +242,7 @@
 	(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 ;; clojure cookbook
-(defun asim/clojure-cookbook ()
+(defun as/clojure-cookbook ()
 	(add-hook 'adoc-mode-hook 'cider-mode)
 	(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook))
 
@@ -268,7 +270,7 @@
 		      (kill-buffer cur))))
 
 ;; clojure mode
-(defun asim/clojure ()
+(defun as/clojure ()
 	(autoload 'clojure-mode "clojure-mode" "A mode for Clojure lisp" t)
 	(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 	(autoload 'paredit-mode "paredit" "Parenthesis editing minor mode" t)
@@ -288,7 +290,7 @@
 	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; linum-mode
-(defun asim/linum ()
+(defun as/linum ()
 	(global-linum-mode 1)	;; always show line numbers
 	(add-hook 'org-mode-hook (lambda() (linum-mode 0)))
 	(add-hook 'dired-mode-hook (lambda() (linum-mode 0)))
@@ -296,20 +298,37 @@
 	(add-hook 'help-mode-hook (lambda() (linum-mode 0)))
 	(add-hook 'org-agenda-mode-hook (lambda() (linum-mode 0)))
 	(add-hook 'magit-popup-mode-hook (lambda () (linum-mode 0)))
-	(add-hook 'org-agenda-after-show-hook (lambda () (linum-mode 0))))
+	(add-hook 'org-agenda-after-show-hook (lambda () (linum-mode 0)))
+	(add-hook 'eww-mode-hook (lambda () (linum-mode 0))))
 
 ;; ispell
-(defun asim/ispell ()
+(defun as/ispell ()
 	(add-to-list 'exec-path "c:/Program Files (x86)/Aspell/bin")
 	(setq ispell-program-name "aspell"
-				ispell-personal-dictionary "~/.emacs.d/.ispell")
+	      text-mode-hook '(lambda () (flyspell-mode t)))
 
-	(require 'ispell))
+	(require 'ispell)
+	(setq ispell-dictionary "british"))
 
 ;; gradle-mode
-(defun asim/gradle ()
+(defun as/gradle ()
 	(require 'gradle-mode)
 	(gradle-mode 1))
+
+;; dashboard
+(defun as/dashboard ()
+	(require 'dashboard)
+	(dashboard-setup-startup-hook)
+
+	;; to show dashboard in frames created with 'emacsclient -c'
+	(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+	(setq dashboard-banner-logo-title "Welcome to Emacs!")
+	(setq dashboard-startup-banner 'logo)
+	(setq dashboard-items '((recents . 5)
+													(bookmarks . 5)
+													(projects . 5)
+													(agenda . 5)
+													(registers . 5))))
 
 ;;; key-bindings
 
@@ -321,6 +340,7 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "<f8>") 'ispell-word)
 (global-set-key (kbd "C-<f8>") 'flyspell-mode)
+(global-set-key (kbd "C-c i") 'imenu)
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;;(define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
 ;;(define-key adoc-mode-map (kbd "M-+") 'increment-clojure-cookbook)
@@ -331,35 +351,37 @@
 
 ;;; toggle on/off configurations
 
-(asim/personal-information)
-(asim/packages)
-(asim/indicate-empty-lines)
-(asim/window-system)
-(asim/winner-mode)
-(asim/utf8-encoding)
-(asim/other)
-(asim/ido)
-(asim/org)
-(asim/magit)
-(asim/plantuml)
-(asim/flx-ido)
-(asim/projectile)
-(asim/powerline)
-(asim/beacon)
-;;(asim/clojure-dev)
-(asim/cider)
-(asim/which-key)
-(asim/adoc)
-(asim/totd)
-;;(asim/python-dev)
-(asim/find-dired)
-(asim/clojure)
-(asim/clojure-cookbook)
-(asim/linum)
-(asim/gradle)
+(as/personal-information)
+(as/packages)
+(as/indicate-empty-lines)
+(as/window-system)
+(as/winner-mode)
+(as/utf8-encoding)
+(as/other)
+(as/ido)
+(as/org)
+(as/magit)
+(as/plantuml)
+(as/flx-ido)
+(as/projectile)
+(as/powerline)
+(as/beacon)
+;;(as/clojure-dev)
+(as/cider)
+(as/which-key)
+(as/adoc)
+(as/totd)
+;;(as/python-dev)
+(as/find-dired)
+(as/clojure)
+;;(as/clojure-cookbook)
+;;(as/linum)
+(as/gradle)
+(as/ispell)
+(as/dashboard)
 
 ;; clojure-mode-hooks
-(add-hook 'clojure-mode-hook #'asim/clojure-mode-hook)
+(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
 
 ;;; utilities/helpers
 
