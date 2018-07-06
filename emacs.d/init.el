@@ -34,6 +34,7 @@
 														json-reformat
 														gradle-mode
 														dashboard
+														clj-refactor
 														powerline))
 
   ;; Init packages and add package archives
@@ -49,31 +50,29 @@
       (setq refresh t))
     (dolist (pkg as/use-packages)
       (when (and (not (package-installed-p pkg))
-		 (assoc pkg package-archive-contents))
-	(unless refreshed
-	  (package-refresh-contents)
-	  (setq refreshed t))
-	(package-install pkg)))))
+								 (assoc pkg package-archive-contents))
+				(unless refreshed
+					(package-refresh-contents)
+					(setq refreshed t))
+				(package-install pkg)))))
 
 (defun as/indicate-empty-lines ()
   (setq-default indicate-empty-lines t)
   (when (not indicate-empty-lines)
     (toggle-indicate-empty-lines)))
 
-;; windows configuration
-(defun as/window-system ()
-  (when window-system
-		(tooltip-mode -1)
-		(setq tooltip-use-echo-area t)
-		(tool-bar-mode -1)
-		(menu-bar-mode 1)
-		(scroll-bar-mode -1))
+;; ui and theme
+(defun as/ui-and-theme ()
+	(tooltip-mode -1)
+	(setq tooltip-use-echo-area t)
+	(tool-bar-mode -1)
+	(menu-bar-mode 1)
+	(scroll-bar-mode -1)
+
 	;; theme
 	;;				(load-theme 'atom-one-dark t)
 	(load-theme 'leuven t)
 
-;;  (require 'twilight-bright-theme)
-;;  (load-theme 'twilight-bright t)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 
 ;; winner-mode
@@ -96,7 +95,7 @@
 	(require 'clj-refactor)
 
 	(clj-refactor-mode 1)
-	(yas-minor-mode)	;;;; for adding require/use/import statements
+	(yas-minor-mode)	;; for adding require/use/import statements
 	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; other misc configuration
@@ -354,7 +353,7 @@
 (as/personal-information)
 (as/packages)
 (as/indicate-empty-lines)
-(as/window-system)
+(as/ui-and-theme)
 (as/winner-mode)
 (as/utf8-encoding)
 (as/other)
