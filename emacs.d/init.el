@@ -40,8 +40,8 @@
   ;; Init packages and add package archives
   (require 'package)
   (package-initialize)
-  (add-to-list 'package-archives '("melpa"	. "http://melpa.org/packages/") t)
-	(add-to-list 'package-archives '("org"	. "http://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
   ;; install any packages listed in asim-packages if they are not installed
   (let ((refreshed nil))
@@ -185,7 +185,7 @@
 
   ;; disable ido faces to see flx highlights
   (setq ido-enable-flex-matching t
-		ido-use-faces nil))
+				ido-use-faces nil))
 
 ;; org-babel
 (defun as/plantuml ()
