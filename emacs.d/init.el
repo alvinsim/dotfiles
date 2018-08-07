@@ -35,6 +35,8 @@
 														gradle-mode
 														dashboard
 														clj-refactor
+														engine-mode
+														expand-region
 														powerline))
 
   ;; Init packages and add package archives
@@ -149,6 +151,7 @@
 				org-agenda-todo-ignore-scheduled t
 				org-agenda-todo-ignore-timestamp t
 				org-agenda-todo-ignore-with-date t)
+	(setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
 
   ;; keybindings
   (global-set-key "\C-cl" 'org-store-link)
@@ -279,8 +282,9 @@
 			 (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
 			 (add-hook 'clojurescript-mode-hook 'clojure-paredit-hook)
 
-			 (define-key clojure-mode-map "{" 'paredit-open-brace)
-			 (define-key clojure-mode-map "}" 'paredit-close-brace)))
+;			 (define-key clojure-mode-map "{" 'paredit-open-brace)
+																				;			 (define-key clojure-mode-map "}" 'paredit-close-brace)))
+			 ))
 
 	;; clj-refcctor
 	(require 'clj-refactor)
@@ -328,6 +332,29 @@
 													(projects . 5)
 													(agenda . 5)
 													(registers . 5))))
+
+;; engine mode
+(defun as/engine-mode ()
+	(require 'engine-mode)
+
+	(defengine duckduckgo
+		"https://duckduckgo.com/?q=%s"
+		:keybinding "d")
+
+	(defengine google
+		"https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+		:keybinding "g")
+
+	(defengine wikipedia
+		"https://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+		:keybinding "w")
+
+	(engine-mode t))
+
+;; expand region
+(defun as/expand-region ()
+	(require 'expand-region)
+	(global-set-key (kbd "C-=") 'er/expand-region))
 
 ;;; key-bindings
 
@@ -378,6 +405,8 @@
 (as/gradle)
 (as/ispell)
 (as/dashboard)
+(as/engine-mode)
+(as/expand-region)
 
 ;; clojure-mode-hooks
 (add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
