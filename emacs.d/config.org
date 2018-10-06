@@ -1,0 +1,515 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Alvin Sim
+#+TOC: true
+#+STARTUP: showall
+
+* Configure =use-package=
+
+Install =use-package= if it is not already installed.
+
+#+BEGIN_SRC emacs-lisp
+	(unless (package-installed-p 'use-package)
+		(package-refresh-contents)
+		(package-install 'usr-package))
+
+	(setq use-package-verbose t)
+	(setq use-package-always-ensure t)
+
+	(require 'use-package)
+#+END_SRC
+
+Always compile packages and use the newest version available.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package auto-compile
+		:config (auto-compile-on-load-mode))
+
+	(setq load-prefer-newer t)
+#+END_SRC
+
+* Set Personal Information
+
+#+BEGIN_SRC emacs-lisp
+	(setq user-full-name "Alvin Sim Wee Lee"
+				user-mail-address "sim.alvin@gmail.com")
+#+END_SRC
+
+* Add Package Sources
+
+#+BEGIN_SRC emacs-lisp
+	(add-to-list 'package-archives '("melpa"	. "https://melpa.org/packages/") t)
+	(add-to-list 'package-archives '("org"	. "http://orgmode.org/elpa/") t)
+#+END_SRC
+
+* UI Preferences
+
+** Tweak Window Chrome
+
+#+BEGIN_SRC emacs-lisp
+	(tooltip-mode -1)
+	(tool-bar-mode -1)
+	(menu-bar-mode 1)
+	(scroll-bar-mode -1)
+#+END_SRC
+
+Disable tiny scroll bar in the minibuffer window.
+
+#+BEGIN_SRC emacs-lisp
+	(set-window-scroll-bars (minibuffer-window) nil nil)
+#+END_SRC
+
+Bind current project's name to the default frame title.
+
+#+BEGIN_SRC emacs-lisp
+	(setq frame-title-format '((:eval (projectile-project-name))))
+#+END_SRC
+
+Remove trailing whitespaces when saving the file and also show the trailing whitespace.
+
+#+BEGIN_SRC emacs-lisp
+	(add-to-list 'write-file-functions 'delete-trailing-whitespace)
+	(setq show-trailing-whitespace t)
+#+END_SRC
+
+Use UTF-8 encoding.
+
+#+BEGIN_SRC emacs-lisp
+	(prefer-coding-system 'utf-8)
+	(when (display-graphic-p)
+		(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING)))
+#+END_SRC
+
+Setting tabs appropriately.
+
+#+BEGIN_SRC emacs-lisp
+	(setq-default tab-width 2)
+  (setq indent-tabs-mode t)
+#+END_SRC
+
+Use =aggressive-indent-mode= to automatically indent code while writing.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package aggressive-indent)
+#+END_SRC
+
+Do not show splash screen when emacs first starts up.
+
+#+BEGIN_SRC emacs-lisp
+	(setq inhibit-splash-screen t)
+#+END_SRC
+
+Display the column number in the mode line.
+
+#+BEGIN_SRC emacs-lisp
+	(setq column-number-mode t)
+#+END_SRC
+
+Disable the use of dialog box.
+
+#+BEGIN_SRC emacs-lisp
+	(setq use-dialog-box nil)
+#+END_SRC
+
+Add new line when =next-line= is called.
+
+#+BEGIN_SRC emacs-lisp
+	(setq next-line-add-newlines t)
+#+END_SRC
+
+When deleting a file, move them to the OS' trash instead
+
+#+BEGIN_SRC emacs-lisp
+	(setq delete-by-moving-to-trash t)
+#+END_SRC
+
+Toggle visualisation of matching =parens= using paredit.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package paredit
+		:diminish paredit-mode
+		:config
+		(show-paren-mode t))
+#+END_SRC
+
+Make all "yes or no" to "y or n" for more convenience.
+
+#+BEGIN_SRC emacs-lisp
+	(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+Toggle word wrap globally.
+
+#+BEGIN_SRC emacs-lisp
+	(global-visual-line-mode 1)
+#+END_SRC
+
+Highlights the current line.
+
+#+BEGIN_SRC emacs-lisp
+	(global-hl-line-mode)
+#+END_SRC
+
+Replace lambdas with pretty symbols.
+
+#+BEGIN_SRC emacs-lisp
+	(global-prettify-symbols-mode 1)
+#+END_SRC
+
+Disables the audio bell
+
+#+BEGIN_SRC emacs-lisp
+	(setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Load Theme
+
+#+BEGIN_SRC emacs-lisp
+	(use-package atom-one-dark-theme
+		:config
+		(load-theme 'atom-one-dark t))
+#+END_SRC
+
+** Winner Mode
+
+=winner-mode= lets us to switch between window configurations by using =C-c <left>= and =C-c <right>=.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package winner
+		:defer t)
+#+END_SRC
+
+** Powerline
+
+#+BEGIN_SRC emacs-lisp
+	(use-package powerline
+		:config
+		(powerline-default-theme))
+#+END_SRC
+
+** Which key
+
+Displays possible completions for a long keybinding.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package which-key
+		:diminish
+		:config
+		(which-key-mode))
+#+END_SRC
+
+** Diminish
+
+A mode to hide or abbreviate the mode line displays of minor modes.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package diminish)
+#+END_SRC
+
+** Autocomplete
+
+Add autocomplete to only programming-related major modes using Company.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package company
+		:diminish
+		:config
+		(add-hook 'prog-mode-hook 'company-mode))
+#+END_SRC
+
+** Expand-region
+
+Expands the region around the cursor semantically depending on the mode.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package expand-region
+		:bind ("C-=" . er/expand-region))
+#+END_SRC
+
+** Dashboard
+
+Displays recent open files, bookmarks, projects, agenda, etc.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package dashboard
+		:after projectile
+		:config
+		(dashboard-setup-startup-hook))
+
+	(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+	(setq dashboard-banner-logo-title "Welcome to Emacs!")
+	(setq dashboard-startup-banner 'logo)
+	(setq dashboard-items '((recents . 5)
+													(bookmarks . 5)
+													(projects . 5)
+													(agenda . 5)
+													(registers . 5)))
+#+END_SRC
+
+** Rainbow-delimiter
+
+Highlights delimiters like parentheses, brackets or braces by their depth
+
+#+BEGIN_SRC emacs-lisp
+	(use-package rainbow-delimiters)
+#+END_SRC
+
+* Ido and flx-ido
+
+For better navigation.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package ido
+		:config
+		(ido-mode 1))
+
+	(setq ido-enable-flex-matching t
+				ido-everywhere t
+				ido-create-new-buffer 'always
+				ido-ignore-extensions t)
+
+	(use-package flx-ido
+		:config
+		(ido-mode 1)
+		(ido-everywhere 1)
+		(flx-ido-mode 1))
+#+END_SRC
+
+* Org
+
+To manage my TODO tasks and agenda.
+
+#+BEGIN_SRC emacs-lisp
+		(setq other-org-files '("/Users/alvin/Dropbox/home/someday.org"))
+		(setq org-agenda-files
+					'("/Users/alvin/Dropbox/home/me.org"
+						"/Users/alvin/Dropbox/home/pay.org"
+						"/Users/alvin/Dropbox/home/australia.org"))
+		(setq org-todo-keywords
+					'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
+						(sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
+						(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)")
+						(sequence "TODO(t)" "APPLIED(a)" "WAITING(w)" "|" "REJECTED(R)" "OFFERED(O)")))
+		(setq org-src-fontify-natively t)
+		(setq org-hierarchical-todo-statistics nil
+					org-agenda-todo-ignore-deadlines t
+					org-agenda-todo-ignore-scheduled t
+					org-agenda-todo-ignore-timestamp t
+					org-agenda-todo-ignore-with-date t)
+		(setq org-refile-targets '((org-agenda-files :maxlevel . 1)
+															 (other-org-files :maxlevel . 1)))
+
+		;; keybindings
+		(global-set-key "\C-cl" 'org-store-link)
+		(global-set-key "\C-cc" 'org-capture)
+		(global-set-key "\C-ca" 'org-agenda)
+		(global-set-key "\C-cb" 'org-iswitchb)
+
+		(eval-after-load "org"  '(require 'ox-md nil t))
+
+		;; org capture
+		(setq org-capture-templates
+					'(("m" "me tasks" entry
+						 (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
+						 "** TODO %? %^g")
+						("s" "someday tasks" entry
+						 (file+headline "/Users/alvin/Dropbox/home/someday.org" "Tasks")
+						 "** TODO %? %^g")
+						("a" "australia tasks" entry
+						 (file+headline "/Users/alvin/Dropbox/home/australia.org" "Tasks")
+						 "** TODO %? %^g")))
+
+		(setq org-catch-invisible-edits 1
+					org-hide-emphasis-markers t
+					org-ellipsis "..")
+#+END_SRC
+
+* Plantuml
+
+For drawing UML diagrams
+
+#+BEGIN_SRC emacs-lisp
+		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
+		(setq org-plantuml-jar-path
+					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar")
+#+END_SRC
+
+* Projectile
+
+Easily find files in a project
+
+#+BEGIN_SRC emacs-lisp
+	(use-package projectile
+		:bind-keymap
+		("C-c p" . projectile-command-map)
+		:config
+		(projectile-global-mode))
+#+END_SRC
+
+* Yasnippet
+
+Manage code snippets.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package yasnippet
+		:diminish yas-minor-mode
+		:config
+		(yas-global-mode 1)
+		(global-set-key (kbd "M-/") 'company-yasnippet))
+#+END_SRC
+
+* Magit
+
+Interface to git.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package magit
+		:config
+		(global-magit-file-mode)
+		:bind
+		("C-x g" . magit-status)
+		("C-x M-g" . magit-dispatch-popup)
+		("C-c M-g" . magit-file-popup))
+#+END_SRC
+
+* Coding Environment
+
+Packages or configuration needed when in coding mode.
+
+** Flycheck
+
+Check code syntax on the fly.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package flycheck)
+#+END_SRC
+
+** Elisp
+
+Adding some hooks for better coding in elisp.
+
+#+BEGIN_SRC emacs-lisp
+	(add-hook 'emacs-lisp-mode-hook #'subword-mode)
+	(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+	(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+	(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+	(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+
+	(diminish 'emacs-lisp-mode "elisp")
+#+END_SRC
+
+** Clojure
+
+#+BEGIN_SRC emacs-lisp
+	(use-package clojure-mode
+		:init
+		(add-hook 'clojure-mode-hook #'subword-mode)
+		(add-hook 'clojure-mode-hook #'paredit-mode)
+		(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+		(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+		(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
+		(add-hook 'clojurescript-mode-hook #'subword-mode)
+		(add-hook 'clojurescript-mode-hook #'paredit-mode)
+		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
+		(add-hook 'clojurescript-mode-hook #'aggressive-indent-mode)
+		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook))
+#+END_SRC
+
+*** =clj-refactoring=
+
+To refactor clojure code.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package clj-refactor)
+
+	(defun as/clojure-mode-hook ()
+		(clj-refactor-mode 1)
+		(yas-minor-mode 1)	; for adding require/use/import statements
+		;; This choice of keybinding leaves cider-macroexpand-1 unbound
+		(cljr-add-keybindings-with-prefix "C-c C-m"))
+#+END_SRC
+
+*** Cider
+
+REPL for clojure.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package cider
+		:config
+		(setq cider-repl-pop-to-buffer-on-connect nil)
+		:init
+		(add-hook 'cider-repl-mode-hook #'eldoc-mode))
+#+END_SRC
+
+* Tips of the day
+
+Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package totd
+		:after
+		(totd-start))
+#+END_SRC
+
+* Ispell
+
+Spell check functionality.
+
+#+BEGIN_SRC emacs-lisp
+	(add-to-list 'exec-path "C:/Users/alvin/.bin/cygwin64/bin/aspell.exe")
+	(setq ispell-program-name "aspell"
+				text-mode-hook '(lambda () (flyspell-mode t)))
+
+	(require 'ispell)
+	(setq ispell-dictionary "british")
+#+END_SRC
+
+* Gradle
+
+Gradle build tool for Java projects.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package gradle-mode
+		:config
+		(gradle-mode 1))
+#+END_SRC
+
+* Utilities or helper methods
+
+** Directly load emacs' config file
+
+#+BEGIN_SRC emacs-lisp
+	(defun as/find-config ()
+		"find and open emacs' config file"
+		(interactive)
+		(find-file "~/.emacs.d/init.el"))
+#+END_SRC
+
+** Create a new scratch file
+
+#+BEGIN_SRC emacs-lisp
+	(defun as/create-scratch-buffer nil
+		"create a scratch buffer"
+		(interactive)
+		(switch-to-buffer (get-buffer-create "*scratch*"))
+		(lisp-interaction-mode)
+		(insert initial-scratch-message))
+#+END_SRC
+
+* Keybindings
+
+#+BEGIN_SRC emacs-lisp
+	(global-set-key (kbd "C-+") 'text-scale-increase)
+	(global-set-key (kbd "C--") 'text-scale-decrease)
+	(global-set-key (kbd "C-x C-b") 'ibuffer)
+	(global-set-key (kbd "RET") 'newline-and-indent)
+	(global-set-key (kbd "C-:") 'comment-or-uncomment-region)
+	(global-set-key (kbd "M-/") 'hippie-expand)
+	(global-set-key (kbd "<f8>") 'ispell-word)
+	(global-set-key (kbd "C-<f8>") 'flyspell-mode)
+	(global-set-key (kbd "C-c i") 'imenu)
+	(define-key global-map (kbd "RET") 'newline-and-indent)
+
+	;; move line of text up or down
+	(global-set-key [M-up] 'move-text-up)
+	(global-set-key [M-down] 'move-text-down)
+#+END_SRC
