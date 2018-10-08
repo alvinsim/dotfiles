@@ -3,24 +3,41 @@
 #+TOC: true
 #+STARTUP: showall
 
+* Tasks [0%]
+** TODO projectile configuration is causing problems with displaying the =*dashboard*= buffer.
+** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
+** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
+** TODO install undo-tree
+** TODO install =writegood-mode=
+** TODO install slack?
+** TODO install engine-mode?
+** TODO install ace-window
+
+* Add Package Sources
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (package-refresh-contents)
+#+END_SRC
+
 * Configure =use-package=
 
 Install =use-package= if it is not already installed.
 
 #+BEGIN_SRC emacs-lisp
 	(unless (package-installed-p 'use-package)
-		(package-refresh-contents)
-		(package-install 'usr-package))
+		(package-install 'use-package))
 
 	(setq use-package-verbose t)
 	(setq use-package-always-ensure t)
-
-	(require 'use-package)
 #+END_SRC
 
 Always compile packages and use the newest version available.
 
 #+BEGIN_SRC emacs-lisp
+	(require 'use-package)
 	(use-package auto-compile
 		:config (auto-compile-on-load-mode))
 
@@ -34,11 +51,12 @@ Always compile packages and use the newest version available.
 				user-mail-address "sim.alvin@gmail.com")
 #+END_SRC
 
-* Add Package Sources
+* Set Customised Settings To Different File
+
+This stops emacs from adding customised settings to =init.el=. Creating it as a temporary file disables it i.e. any changes are session local.
 
 #+BEGIN_SRC emacs-lisp
-	(add-to-list 'package-archives '("melpa"	. "https://melpa.org/packages/") t)
-	(add-to-list 'package-archives '("org"	. "http://orgmode.org/elpa/") t)
+	(setq custom-file (make-temp-file "emacs-custom"))
 #+END_SRC
 
 * UI Preferences
@@ -137,7 +155,7 @@ Make all "yes or no" to "y or n" for more convenience.
 	(defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
-Toggle word wrap globally.
+Word-wrap always.
 
 #+BEGIN_SRC emacs-lisp
 	(global-visual-line-mode 1)
@@ -155,10 +173,21 @@ Replace lambdas with pretty symbols.
 	(global-prettify-symbols-mode 1)
 #+END_SRC
 
-Disables the audio bell
+Disables the audio bell.
 
 #+BEGIN_SRC emacs-lisp
 	(setq ring-bell-function 'ignore)
+#+END_SRC
+
+Change how emacs backup files.
+
+#+BEGIN_SRC emacs-lisp
+	(setq backup-directory-alist '(("." . ".backup"))
+				backup-by-copying t		;; Don't delete hardlinks
+				version-control t			;; Use version numbers on backups
+				delete-old-versions t	;; Delete excess backups
+				kept-new-versions 20	;; Number of new backups to keep
+				kept-old-versions 5) 	;; Number of old backups to keep
 #+END_SRC
 
 ** Load Theme
@@ -183,7 +212,8 @@ Disables the audio bell
 #+BEGIN_SRC emacs-lisp
 	(use-package powerline
 		:config
-		(powerline-default-theme))
+		(powerline-default-theme)
+		(setq powerline-default-separator 'utf-8))
 #+END_SRC
 
 ** Which key
@@ -192,9 +222,9 @@ Displays possible completions for a long keybinding.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package which-key
-		:diminish
+		:diminish which-key-mode
 		:config
-		(which-key-mode))
+		(add-hook 'after-init-hook 'which-key-mode))
 #+END_SRC
 
 ** Diminish
@@ -250,7 +280,9 @@ Displays recent open files, bookmarks, projects, agenda, etc.
 Highlights delimiters like parentheses, brackets or braces by their depth
 
 #+BEGIN_SRC emacs-lisp
-	(use-package rainbow-delimiters)
+	(use-package rainbow-delimiters
+		:config
+		(add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
 
 * Ido and flx-ido
@@ -335,14 +367,16 @@ For drawing UML diagrams
 
 * Projectile
 
-Easily find files in a project
+
+Easily find files in a project.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package projectile
 		:bind-keymap
 		("C-c p" . projectile-command-map)
+		("s-p" . projectile-command-map)
 		:config
-		(projectile-global-mode))
+		(projectile-mode +1))
 #+END_SRC
 
 * Yasnippet
@@ -375,12 +409,19 @@ Interface to git.
 
 Packages or configuration needed when in coding mode.
 
+** Add matching delimiters using =electric-pair-mode=
+
+#+BEGIN_SRC emacs-lisp
+	(add-hook 'prog-mode-hook 'electric-pair-mode)
+#+END_SRC
+
 ** Flycheck
 
 Check code syntax on the fly.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package flycheck)
+	(use-package flycheck
+		:diminish)
 #+END_SRC
 
 ** Elisp
@@ -440,6 +481,17 @@ REPL for clojure.
 		(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 #+END_SRC
 
+** Gradle
+
+ Gradle build tool for Java projects.
+
+ #+BEGIN_SRC emacs-lisp
+	 (use-package gradle-mode
+		 :diminish
+		 :config
+		 (gradle-mode 1))
+ #+END_SRC
+
 * Tips of the day
 
 Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
@@ -463,25 +515,17 @@ Spell check functionality.
 	(setq ispell-dictionary "british")
 #+END_SRC
 
-* Gradle
-
-Gradle build tool for Java projects.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package gradle-mode
-		:config
-		(gradle-mode 1))
-#+END_SRC
-
 * Utilities or helper methods
 
-** Directly load emacs' config file
+** Load Emacs' Configuration File
+
+Which is this config file - =config.org=.
 
 #+BEGIN_SRC emacs-lisp
 	(defun as/find-config ()
 		"find and open emacs' config file"
 		(interactive)
-		(find-file "~/.emacs.d/init.el"))
+		(find-file "~/.emacs.d/config.org"))
 #+END_SRC
 
 ** Create a new scratch file
