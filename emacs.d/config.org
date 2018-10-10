@@ -3,8 +3,8 @@
 #+TOC: true
 #+STARTUP: showall
 
-* Tasks [0%]
-** TODO projectile configuration is causing problems with displaying the =*dashboard*= buffer.
+* Tasks [12%]
+** DONE projectile configuration is causing problems with displaying the =*dashboard*= buffer.
 ** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
 ** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
 ** TODO install undo-tree
@@ -79,7 +79,7 @@ Disable tiny scroll bar in the minibuffer window.
 Bind current project's name to the default frame title.
 
 #+BEGIN_SRC emacs-lisp
-	(setq frame-title-format '((:eval (projectile-project-name))))
+;;	(setq frame-title-format '((:eval (projectile-project-name))))
 #+END_SRC
 
 Remove trailing whitespaces when saving the file and also show the trailing whitespace.
@@ -261,18 +261,18 @@ Displays recent open files, bookmarks, projects, agenda, etc.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package dashboard
+		:disabled
 		:after projectile
 		:config
-		(dashboard-setup-startup-hook))
-
-	(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-	(setq dashboard-banner-logo-title "Welcome to Emacs!")
-	(setq dashboard-startup-banner 'logo)
-	(setq dashboard-items '((recents . 5)
-													(bookmarks . 5)
-													(projects . 5)
-													(agenda . 5)
-													(registers . 5)))
+		(dashboard-setup-startup-hook)
+		(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+		(setq dashboard-banner-logo-title "Welcome to Emacs!")
+		(setq dashboard-startup-banner 'logo)
+		(setq dashboard-items '((recents . 5)
+														(bookmarks . 5)
+														(projects . 5)
+														(agenda . 5)
+														(registers . 5))))
 #+END_SRC
 
 ** Rainbow-delimiter
