@@ -11,6 +11,7 @@
 ** TODO install =writegood-mode=
 ** TODO install slack?
 ** TODO install engine-mode?
+** TODO install =langtool= for grammar check
 ** TODO install ace-window
 
 * Add Package Sources
