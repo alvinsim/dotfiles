@@ -264,7 +264,7 @@ Expands the region around the cursor semantically depending on the mode.
 
 Displays recent open files, bookmarks, projects, agenda, etc.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	(use-package dashboard
 		:disabled
 		:after projectile
