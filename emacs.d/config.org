@@ -3,7 +3,7 @@
 #+TOC: true
 #+STARTUP: showall
 
-* Tasks [12%]
+* Tasks [7%]
 ** DONE projectile configuration is causing problems with displaying the =*dashboard*= buffer.
 ** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
 ** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
@@ -12,7 +12,11 @@
 ** TODO install slack?
 ** TODO install engine-mode?
 ** TODO install =langtool= for grammar check
+** TODO install ace-jump
 ** TODO install ace-window
+** TODO set default encoding in =init.el=
+** TODO install rainbow mode
+** TODO sync snippets in yasnippets
 
 * Add Package Sources
 
@@ -60,7 +64,24 @@ This stops emacs from adding customised settings to =init.el=. Creating it as a 
 	(setq custom-file (make-temp-file "emacs-custom"))
 #+END_SRC
 
+* Set =prefer-coding-system= to =utf-8= as default
+
+Use UTF-8 encoding.
+
+#+BEGIN_SRC emacs-lisp
+	(prefer-coding-system 'utf-8)
+	(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))
+#+END_SRC
+
 * UI Preferences
+
+** Diminish
+
+A mode to hide or abbreviate the mode line displays of minor modes.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package diminish)
+#+END_SRC
 
 ** Tweak Window Chrome
 
@@ -88,14 +109,6 @@ Remove trailing whitespaces when saving the file and also show the trailing whit
 #+BEGIN_SRC emacs-lisp
 	(add-to-list 'write-file-functions 'delete-trailing-whitespace)
 	(setq show-trailing-whitespace t)
-#+END_SRC
-
-Use UTF-8 encoding.
-
-#+BEGIN_SRC emacs-lisp
-	(prefer-coding-system 'utf-8)
-	(when (display-graphic-p)
-		(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING)))
 #+END_SRC
 
 Setting tabs appropriately.
@@ -213,8 +226,7 @@ Change how emacs backup files.
 #+BEGIN_SRC emacs-lisp
 	(use-package powerline
 		:config
-		(powerline-default-theme)
-		(setq powerline-default-separator 'utf-8))
+		(powerline-default-theme))
 #+END_SRC
 
 ** Which key
@@ -226,14 +238,6 @@ Displays possible completions for a long keybinding.
 		:diminish which-key-mode
 		:config
 		(add-hook 'after-init-hook 'which-key-mode))
-#+END_SRC
-
-** Diminish
-
-A mode to hide or abbreviate the mode line displays of minor modes.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package diminish)
 #+END_SRC
 
 ** Autocomplete
