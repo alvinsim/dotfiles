@@ -16,6 +16,7 @@
 ** TODO install ace-window
 ** TODO set default encoding in =init.el=
 ** TODO install rainbow mode
+** TODO diminish eldoc
 ** TODO sync snippets in yasnippets
 
 * Add Package Sources
@@ -226,7 +227,9 @@ Change how emacs backup files.
 #+BEGIN_SRC emacs-lisp
 	(use-package powerline
 		:config
-		(powerline-default-theme))
+		(powerline-default-theme)
+		(when (display-graphic-p)
+			(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))))
 #+END_SRC
 
 ** Which key
@@ -246,7 +249,7 @@ Add autocomplete to only programming-related major modes using Company.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package company
-		:diminish
+		:diminish company-mode
 		:config
 		(add-hook 'prog-mode-hook 'company-mode))
 #+END_SRC
@@ -264,8 +267,8 @@ Expands the region around the cursor semantically depending on the mode.
 
 Displays recent open files, bookmarks, projects, agenda, etc.
 
-#+BEGIN_SRC emacs-lisp :tangle no
-	(use-package dashboard
+#+BEGIN_SRC emacs-lisp
+	(use-package dashboard :tangle no
 		:disabled
 		:after projectile
 		:config
@@ -426,7 +429,7 @@ Check code syntax on the fly.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package flycheck
-		:diminish)
+		:diminish flycheck-mode)
 #+END_SRC
 
 ** Elisp
@@ -492,7 +495,7 @@ REPL for clojure.
 
  #+BEGIN_SRC emacs-lisp
 	 (use-package gradle-mode
-		 :diminish
+		 :diminish gradle-mode
 		 :config
 		 (gradle-mode 1))
  #+END_SRC
