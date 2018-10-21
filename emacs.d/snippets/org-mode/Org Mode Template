@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Org Mode Template
+# key: new-org
+# --
+#+TITLE: Some Title
+#+STARTUP: showall

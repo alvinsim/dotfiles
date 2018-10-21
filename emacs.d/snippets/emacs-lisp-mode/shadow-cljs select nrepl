@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: shadow-cljs select nrepl
+# key: shadow-cljs-select-nrepl
+# --
+(shadow.cljs.devtools.api/nrepl-select :app)
+
+isa 0386416808
