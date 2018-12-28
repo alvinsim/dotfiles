@@ -365,7 +365,7 @@ To manage my TODO tasks and agenda.
 
 * Plantuml
 
-For drawing UML diagrams
+A handy tool for drawing UML diagrams.
 
 #+BEGIN_SRC emacs-lisp
 		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
@@ -527,10 +527,10 @@ Spell check functionality.
 
 ** Load Emacs' Configuration File
 
-Which is this config file - =config.org=.
+Opens the emacs' config file, which is this config file - =config.org=.
 
 #+BEGIN_SRC emacs-lisp
-	(defun as/find-config ()
+	(defun as/config ()
 		"find and open emacs' config file"
 		(interactive)
 		(find-file "~/.emacs.d/config.org"))
