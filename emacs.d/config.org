@@ -71,7 +71,7 @@ Use UTF-8 encoding.
 
 #+BEGIN_SRC emacs-lisp
 	(prefer-coding-system 'utf-8)
-	(setq x-select-request-type '(UTF8-STRING_COMPOUND_TEXT TEXT STRING))
+	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
 * UI Preferences
