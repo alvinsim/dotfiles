@@ -3,7 +3,7 @@
 #+TOC: true
 #+STARTUP: showall
 
-* Tasks [7%]
+* Tasks [15%]
 ** DONE projectile configuration is causing problems with displaying the =*dashboard*= buffer.
 ** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
 ** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
@@ -14,10 +14,15 @@
 ** TODO install =langtool= for grammar check
 ** TODO install ace-jump
 ** TODO install ace-window
-** TODO set default encoding in =init.el=
-** TODO install rainbow mode
+** DONE set default encoding in =init.el=
+** CANCEL install rainbow mode
 ** TODO diminish eldoc
-** TODO sync snippets in yasnippets
+** TODO Dominion Flyspell/flycheck
+** TODO disable flyspell for global mode. only trigger when needed.
+** TODO troubleshoot slowness when editing ReactJS file
+** TODO find how to change the font colour of the current date in the org agenda view
+** TODO Add more remarks/comments/notes for each =emacs-lisp= code
+** TODO do not load theme when emacs is run in terminal/cmd
 
 * Add Package Sources
 
@@ -71,6 +76,8 @@ Use UTF-8 encoding.
 
 #+BEGIN_SRC emacs-lisp
 	(prefer-coding-system 'utf-8)
+	(set-language-environment 'utf-8)
+	(set-selection-coding-system 'utf-8)
 	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
@@ -285,7 +292,7 @@ Displays recent open files, bookmarks, projects, agenda, etc.
 
 ** Rainbow-delimiter
 
-Highlights delimiters like parentheses, brackets or braces by their depth
+Highlights delimiters like parentheses, brackets or braces by their depth.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package rainbow-delimiters
@@ -375,7 +382,6 @@ A handy tool for drawing UML diagrams.
 
 * Projectile
 
-
 Easily find files in a project.
 
 #+BEGIN_SRC emacs-lisp
@@ -411,6 +417,18 @@ Interface to git.
 		("C-x g" . magit-status)
 		("C-x M-g" . magit-dispatch-popup)
 		("C-c M-g" . magit-file-popup))
+#+END_SRC
+
+* Markdown
+
+A mode that makes it easy to read files written using markdown.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package markdown-mode
+		:mode (("README\\.md\\'" . gfm-mode)
+					 ("\\.md\\'" . markdown-mode)
+					 ("\\.markdown\\'" . markdown-mode))
+		:init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
 * Coding Environment
@@ -491,7 +509,7 @@ REPL for clojure.
 
 ** Gradle
 
- Gradle build tool for Java projects.
+Gradle build tool for Java projects.
 
  #+BEGIN_SRC emacs-lisp
 	 (use-package gradle-mode
