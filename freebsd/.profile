@@ -34,4 +34,4 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_HIDE_IF_PWD_IGNORED=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
-export PS1='[\u@\h \w$(__git_ps1 " (%s)")]\$ '
+export PS1='[\u@\h \w$(__git_ps1 " (%s) ")]\$ '
