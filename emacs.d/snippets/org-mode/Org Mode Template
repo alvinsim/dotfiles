@@ -3,4 +3,5 @@
 # key: new-org
 # --
 #+TITLE: Some Title
-#+STARTUP: showall
+#+STARTUP: overview
+#+FILETAGS:
