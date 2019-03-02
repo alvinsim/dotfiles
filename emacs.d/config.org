@@ -1,30 +1,29 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Alvin Sim
 #+TOC: true
-#+STARTUP: showall
+#+STARTUP: overview
 
 * Tasks [15%]
-** DONE projectile configuration is causing problems with displaying the =*dashboard*= buffer.
+	:PROPERTIES:
+	:ARCHIVE:  %s_archive::* Tasks
+	:END:
 ** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
 ** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
 ** TODO install undo-tree
 ** TODO install =writegood-mode=
-** TODO install slack?
 ** TODO install engine-mode?
 ** TODO install =langtool= for grammar check
 ** TODO install ace-jump
 ** TODO install ace-window
 ** DONE set default encoding in =init.el=
+** TODO disable flyspell for global mode. only trigger when needed.
 ** CANCEL install rainbow mode
 ** TODO diminish eldoc
-** TODO Dominion Flyspell/flycheck
-** TODO disable flyspell for global mode. only trigger when needed.
-** TODO troubleshoot slowness when editing ReactJS file
-** TODO find how to change the font colour of the current date in the org agenda view
-** TODO Add more remarks/comments/notes for each =emacs-lisp= code
-** TODO do not load theme when emacs is run in terminal/cmd
-
+** TODO Setup =company-box= - [[https://github.com/rememberYou/.emacs.d/blob/master/config.org#javascript]]
+** TODO Clean-up
 * Add Package Sources
+
+Configure the package sources to install packages.
 
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -35,7 +34,7 @@
 
 * Configure =use-package=
 
-Install =use-package= if it is not already installed.
+Install =use-package= if it is not already installed. =use-package= is used to manage the configuration of packages.
 
 #+BEGIN_SRC emacs-lisp
 	(unless (package-installed-p 'use-package)
@@ -106,12 +105,6 @@ Disable tiny scroll bar in the minibuffer window.
 	(set-window-scroll-bars (minibuffer-window) nil nil)
 #+END_SRC
 
-Bind current project's name to the default frame title.
-
-#+BEGIN_SRC emacs-lisp
-;;	(setq frame-title-format '((:eval (projectile-project-name))))
-#+END_SRC
-
 Remove trailing whitespaces when saving the file and also show the trailing whitespace.
 
 #+BEGIN_SRC emacs-lisp
@@ -129,7 +122,13 @@ Setting tabs appropriately.
 Use =aggressive-indent-mode= to automatically indent code while writing.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package aggressive-indent)
+	(use-package aggressive-indent
+		:hook ((css-mode . aggressive-indent-mode)
+					 (emacs-lisp-mode . aggressive-indent-mode)
+					 (js-mode . aggressive-indent-mode)
+					 (clojure-mode . aggressive-indent-mode)
+					 (clojurescript-mode . aggressive-indent-mode))
+		:custom (aggressive-indent-comments-too))
 #+END_SRC
 
 Do not show splash screen when emacs first starts up.
@@ -189,7 +188,7 @@ Highlights the current line.
 	(global-hl-line-mode)
 #+END_SRC
 
-Replace lambdas with pretty symbols.
+Replace lambdas and other forms with pretty symbols.
 
 #+BEGIN_SRC emacs-lisp
 	(global-prettify-symbols-mode 1)
@@ -212,12 +211,34 @@ Change how emacs backup files.
 				kept-old-versions 5) 	;; Number of old backups to keep
 #+END_SRC
 
+Focus help windows when they are opened.
+
+#+BEGIN_SRC emacs-lisp
+	(setq help-window-select t)
+#+END_SRC
+
 ** Load Theme
 
 #+BEGIN_SRC emacs-lisp
-	(use-package atom-one-dark-theme
+	(use-package atom-one-dark-theme)
+
+	(use-package solarized-theme
 		:config
-		(load-theme 'atom-one-dark t))
+		(setq solarized-distinct-fringe-background t
+					solarized-use-variable-pitch nil
+					solarized-high-contrast-mode-line t
+					solarized-use-less-bold t
+					solarized-use-more-italic t
+					solarized-emphasize-indicators nil
+					solarized-scale-org-headlines nil
+					solarized-height-minus-1 1.0
+					solarized-height-plus-1 1.0
+					solarized-height-plus-2 1.0
+					solarized-height-plus-3 1.0
+					solarized-height-plus-4 1.0
+					x-underline-at-descent-line t))
+
+	(load-theme 'solarized-light t)
 #+END_SRC
 
 ** Winner Mode
@@ -258,7 +279,14 @@ Add autocomplete to only programming-related major modes using Company.
 	(use-package company
 		:diminish company-mode
 		:config
-		(add-hook 'prog-mode-hook 'company-mode))
+		(add-hook 'prog-mode-hook 'company-mode)
+		:custom
+		(company-begin-commands '(self-insert-command))
+		(company--idle-delay .1)
+		(company-minimum-prefix-length 2)
+		(company-show-numbers t)
+		(company-tooltip-align-annotations 't)
+		(global-company-mode t))
 #+END_SRC
 
 ** Expand-region
@@ -267,15 +295,16 @@ Expands the region around the cursor semantically depending on the mode.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package expand-region
-		:bind ("C-=" . er/expand-region))
+		:bind (("C-=" . er/expand-region)
+					 ("C-+" . er/contract-regions)))
 #+END_SRC
 
 ** Dashboard
 
 Displays recent open files, bookmarks, projects, agenda, etc.
 
-#+BEGIN_SRC emacs-lisp
-	(use-package dashboard :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
+	(use-package dashboard
 		:disabled
 		:after projectile
 		:config
@@ -296,8 +325,38 @@ Highlights delimiters like parentheses, brackets or braces by their depth.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package rainbow-delimiters
-		:config
-		(add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+		:hook	(prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+
+** =rainbow-mode=
+
+Colour the text with their value.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package rainbow-mode
+		:delight
+		:hook (prog-mode))
+#+END_SRC
+
+** =switch-window=
+
+#+BEGIN_SRC emacs-lisp :tangle no
+	(use-package switch-window
+		:disabled
+		:bind (("C-x o" . switch-window)
+					 ("C-x w" . switch-window-then-swap-buffer)))
+#+END_SRC
+
+** Word Wrap
+
+#+BEGIN_SRC emacs-lisp
+	(use-package simple
+		:ensure nil
+		:delight (auto-fill-function)
+		:bind ("C-x p" . pop-to-mark-command)
+		:hook ((prog-mode . turn-on-auto-fill)
+					 (text-mode . turn-on-auto-fill))
+		:custom (set-mark-command-repeat-pop t))
 #+END_SRC
 
 * Ido and flx-ido
@@ -389,8 +448,12 @@ Easily find files in a project.
 		:bind-keymap
 		("C-c p" . projectile-command-map)
 		("s-p" . projectile-command-map)
+		:custom
+		(projectile-enable-caching t)
+		(projectile-mode-line '(:eval (projectile-project-name)))
 		:config
-		(projectile-mode +1))
+		(projectile-mode +1)
+		(add-to-list 'projectile-globally-ignored-directories "node_modules"))
 #+END_SRC
 
 * Yasnippet
@@ -419,18 +482,6 @@ Interface to git.
 		("C-c M-g" . magit-file-popup))
 #+END_SRC
 
-* Markdown
-
-A mode that makes it easy to read files written using markdown.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package markdown-mode
-		:mode (("README\\.md\\'" . gfm-mode)
-					 ("\\.md\\'" . markdown-mode)
-					 ("\\.markdown\\'" . markdown-mode))
-		:init (setq markdown-command "multimarkdown"))
-#+END_SRC
-
 * Coding Environment
 
 Packages or configuration needed when in coding mode.
@@ -441,16 +492,33 @@ Packages or configuration needed when in coding mode.
 	(add-hook 'prog-mode-hook 'electric-pair-mode)
 #+END_SRC
 
-** Flycheck
+** =flycheck=
 
 Check code syntax on the fly.
 
+When having problems with React code, check the following:
+- Verify the path to the global =eslint=.
+- Install =npm= globally - =npm install -g npm=.
+- Install =webpack= and =eslint-import-resolver-webpack= globally.
+
 #+BEGIN_SRC emacs-lisp
 	(use-package flycheck
-		:diminish flycheck-mode)
+		:diminish flycheck-mode
+		:config
+		(flycheck-add-mode 'javascript-eslint 'web-mode)
+		(setq-default flycheck-disabled-checkers
+									(append	flycheck-disabled-checkers
+													'(javascript-jshint)))
+		(setq-default flycheck-disabled-checkers
+									(append flycheck-disabled-checkers
+													'(json-jsonlint)))
+		(setq-default flycheck-temp-prefix ".flycheck")
+		(setq-local flycheck-javascript-eslint-executable "/usr/local/lib/node_modules/eslint/bin/eslint.js")
+		:init
+		(add-hook 'after-init-hook #'global-flycheck-mode))
 #+END_SRC
 
-** Elisp
+** Emacs Lisp
 
 Adding some hooks for better coding in elisp.
 
@@ -458,10 +526,34 @@ Adding some hooks for better coding in elisp.
 	(add-hook 'emacs-lisp-mode-hook #'subword-mode)
 	(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
 	(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-	(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 	(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 
 	(diminish 'emacs-lisp-mode "elisp")
+#+END_SRC
+
+** Eldoc
+
+Provides minibuffer hints when working with Emacs Lisp.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package eldoc
+		:delight)
+#+END_SRC
+
+** HTML
+
+#+BEGIN_SRC emacs-lisp
+	(use-package sgml-mode
+		:delight html-mode "HTML"
+		:hook
+		((html-mode . as/html-set-pretty-print-function)
+		 (html-mode . sgml-electric-tag-pair-mode)
+		 (html-mode . sgml-name-8bit-mode)
+		 (html-mode . toggle-truncate-lines))
+		:custom (sgml-basic-offset 2)
+		:preface
+		(defun as/html-set-pretty-print-function ()
+			(setq as/pretty-print-function #'sgml-pretty-print)))
 #+END_SRC
 
 ** Clojure
@@ -472,12 +564,10 @@ Adding some hooks for better coding in elisp.
 		(add-hook 'clojure-mode-hook #'subword-mode)
 		(add-hook 'clojure-mode-hook #'paredit-mode)
 		(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 		(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
 		(add-hook 'clojurescript-mode-hook #'subword-mode)
 		(add-hook 'clojurescript-mode-hook #'paredit-mode)
 		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojurescript-mode-hook #'aggressive-indent-mode)
 		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook))
 #+END_SRC
 
@@ -511,34 +601,167 @@ REPL for clojure.
 
 Gradle build tool for Java projects.
 
- #+BEGIN_SRC emacs-lisp
+ #+BEGIN_SRC emacs-lisp :tangle no
 	 (use-package gradle-mode
+		 :disabled
 		 :diminish gradle-mode
-		 :config
-		 (gradle-mode 1))
+		 :mode "\\.gradle\\'"
+		 :interpreter ("gradle" . gradle-mode))
  #+END_SRC
+
+** =web-mode=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package web-mode
+		:delight "☸ "
+		:hook ((css-mode web-mode) . rainbow-mode)
+		:mode (("\\.html?\\'" . web-mode)
+					 ("\\.jsx\\'" . web-mode))
+		:preface
+		(defun enable-minor-mode (my-pair)
+			"Enable minor mode if the filename matches the regexp."
+			(if (buffer-file-name)
+					(if (string-match (car my-pair) buffer-file-name)
+							(funcall (cdr my-pair)))))
+		:custom
+		(web-mode-attr-indent-offset 2)
+		(web-mode-block-padding 2)
+		(web-mode-css-indent-offset 2)
+		(web-mode-code-indent-offset 2)
+		(web-mode-comment-style 2)
+		(web-mode-enable-current-element-highlight t)
+		(web-mode-markup-indent-offset 2))
+
+	(add-hook 'web-mode-hook #'(lambda ()
+															 (enable-minor-mode
+																'("\\.js?\\'" . prettier-js-mode))))
+	(add-hook 'web-mode-hook #'(lambda ()
+															 (enable-minor-mode
+																'("\\.jsx?\\'" . prettier-js-mode))))
+#+END_SRC
+
+** JavaScript
+
+*** =prettier-js=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package prettier-js :tangle no
+		:delight
+		:disabled
+		:custom
+		(prettier-js-args '("--print-width" "100"
+												"--single-quote" "true"
+												"--trailing-comma" "all")))
+#+END_SRC
+
+*** =js2-mode=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package js2-mode
+		:delight "JS "
+		:hook ((js2-mode . js2-imenu-extra-mode)
+			;		 (js2-mode . prettier-js-mode)
+					 )
+		:mode "\\.js\\'"
+		:custom (js-indent-line 2))
+#+END_SRC
+
+*** =js2-refactor=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package js2-refactor
+	  :delight
+		:bind (:map js2-mode-map
+								("C-k" . js2r-kill)
+								("M-." . nill))
+		:hook ((js2-mode . js2-refactor-mode)
+					 (js2-mode . (lambda ()
+												 (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+		:config (js2r-add-keybindings-with-prefix "C-c C-r"))
+#+END_SRC
+
+*** =xref-js2=
+
+Makes it easy to jump to function references or definitions.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package xref-js2
+		:delight)
+#+END_SRC
+
+*** JSON
+
+#+BEGIN_SRC emacs-lisp
+	(use-package json-mode
+		:mode "\\.json\\'"
+		:hook (before-save . as/json-mode-before-save-hook)
+		:preface
+		(defun as/json-mode-before-save-hook ()
+			(when (eq major-mode 'json-mode)
+				(json-pretty-print-buffer))))
+#+END_SRC
+
+*** React
+
+		#+BEGIN_SRC emacs-lisp :tangle no
+			;; (use-package jsx-mode
+			;; 	:disabled
+			;; 	:config
+			;; 	(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
+			;; 	(autoload 'jsx-mode "jsx-mode" "JSC mode" t))
+		#+END_SRC
+
+** CSS
+
+#+BEGIN_SRC emacs-lisp
+	(use-package css-mode
+		:custom (css-indent-offset 2))
+#+END_SRC
+
+** =emmet-mode=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package emmet-mode
+		:delight
+		:hook (sgml-mode css-mode web-mode))
+#+END_SRC
+
+** CSV
+
+#+BEGIN_SRC emacs-lisp :tangle no
+	(use-package csv-mode)
+#+END_SRC
 
 * Tips of the day
 
 Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	(use-package totd
 		:after
 		(totd-start))
 #+END_SRC
 
-* Ispell
+* Spelling
 
-Spell check functionality.
+** Ispell
+
+ Spell check functionality.
+
+ #+BEGIN_SRC emacs-lisp
+	 (add-to-list 'exec-path "/usr/bin/aspell")
+	 (setq ispell-program-name "aspell"
+				 text-mode-hook '(lambda () (flyspell-mode t)))
+
+	 (require 'ispell)
+	 (setq ispell-dictionary "british")
+ #+END_SRC
+
+** Flyspell
 
 #+BEGIN_SRC emacs-lisp
-	(add-to-list 'exec-path "C:/Users/alvin/.bin/cygwin64/bin/aspell.exe")
-	(setq ispell-program-name "aspell"
-				text-mode-hook '(lambda () (flyspell-mode t)))
-
-	(require 'ispell)
-	(setq ispell-dictionary "british")
+	(use-package flyspell
+		:diminish flyspell-mode)
 #+END_SRC
 
 * Utilities or helper methods
@@ -563,6 +786,16 @@ Opens the emacs' config file, which is this config file - =config.org=.
 		(switch-to-buffer (get-buffer-create "*scratch*"))
 		(lisp-interaction-mode)
 		(insert initial-scratch-message))
+#+END_SRC
+
+** Change Emacs' look when it is opened in the terminal via the =-nw= paramater
+
+#+BEGIN_SRC emacs-lisp
+	(defun as/terminal-init-screen ()
+		"Terminal initialization function for screen"
+		(interactive)
+		(tty-run-terminal-initialization (selected-frame) "rxvt")
+		(tty-run-terminal-initialization (selected-frame) "xterm"))
 #+END_SRC
 
 * Keybindings
