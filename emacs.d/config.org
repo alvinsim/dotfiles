@@ -82,15 +82,18 @@ Use UTF-8 encoding.
 
 * UI Preferences
 
-** Diminish
+** Diminish and Delight
 
 A mode to hide or abbreviate the mode line displays of minor modes.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package diminish)
+	(use-package delight)
 #+END_SRC
 
 ** Tweak Window Chrome
+
+Disable the tooltip, toolbar and scroll bar.
 
 #+BEGIN_SRC emacs-lisp
 	(tooltip-mode -1)
@@ -431,9 +434,11 @@ To manage my TODO tasks and agenda.
 
 * Plantuml
 
-A handy tool for drawing UML diagrams.
+A tool for drawing UML diagrams - [[https://www.plantuml.com]]
 
 #+BEGIN_SRC emacs-lisp
+	(use-package plantuml-mode
+		:config
 		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
 		(setq org-plantuml-jar-path
 					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar")
