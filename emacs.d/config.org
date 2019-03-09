@@ -441,7 +441,7 @@ A tool for drawing UML diagrams - [[https://www.plantuml.com]]
 		:config
 		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
 		(setq org-plantuml-jar-path
-					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar")
+					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"))
 #+END_SRC
 
 * Projectile
