@@ -3,7 +3,7 @@
 #+TOC: true
 #+STARTUP: overview
 
-* Tasks [15%]
+* Tasks [7%]
 	:PROPERTIES:
 	:ARCHIVE:  %s_archive::* Tasks
 	:END:
@@ -80,7 +80,7 @@ Use UTF-8 encoding.
 	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
-* UI Preferences
+* UI Customisation
 
 ** Diminish and Delight
 
@@ -617,32 +617,27 @@ Gradle build tool for Java projects.
 ** =web-mode=
 
 #+BEGIN_SRC emacs-lisp
-	(use-package web-mode
-		:delight "☸ "
-		:hook ((css-mode web-mode) . rainbow-mode)
-		:mode (("\\.html?\\'" . web-mode)
-					 ("\\.jsx\\'" . web-mode))
-		:preface
-		(defun enable-minor-mode (my-pair)
-			"Enable minor mode if the filename matches the regexp."
-			(if (buffer-file-name)
-					(if (string-match (car my-pair) buffer-file-name)
-							(funcall (cdr my-pair)))))
-		:custom
-		(web-mode-attr-indent-offset 2)
-		(web-mode-block-padding 2)
-		(web-mode-css-indent-offset 2)
-		(web-mode-code-indent-offset 2)
-		(web-mode-comment-style 2)
-		(web-mode-enable-current-element-highlight t)
-		(web-mode-markup-indent-offset 2))
-
-	(add-hook 'web-mode-hook #'(lambda ()
-															 (enable-minor-mode
-																'("\\.js?\\'" . prettier-js-mode))))
-	(add-hook 'web-mode-hook #'(lambda ()
-															 (enable-minor-mode
-																'("\\.jsx?\\'" . prettier-js-mode))))
+  (use-package web-mode
+    :delight "☸ "
+    :hook ((css-mode web-mode) . rainbow-mode)
+    :mode (("\\.html?\\'" . web-mode)
+           ("\\.jsx\\'" . web-mode)
+           ("\\.js\\'" . web-mode))
+    :preface
+    (defun enable-minor-mode (my-pair)
+      "Enable minor mode if the filename matches the regexp."
+      (if (buffer-file-name)
+          (if (string-match (car my-pair) buffer-file-name)
+              (funcall (cdr my-pair)))))
+    :custom
+    (web-mode-attr-indent-offset 2)
+    (web-mode-block-padding 2)
+    (web-mode-css-indent-offset 2)
+    (web-mode-code-indent-offset 2)
+    (web-mode-comment-style 2)
+    (web-mode-enable-current-element-highlight t)
+    (web-mode-markup-indent-offset 2)
+    (indent-tabs-mode nil))
 #+END_SRC
 
 ** JavaScript
@@ -664,11 +659,10 @@ Gradle build tool for Java projects.
 #+BEGIN_SRC emacs-lisp
 	(use-package js2-mode
 		:delight "JS "
-		:hook ((js2-mode . js2-imenu-extra-mode)
-			;		 (js2-mode . prettier-js-mode)
-					 )
+		:hook ((js2-mode . js2-imenu-extra-mode))
 		:mode "\\.js\\'"
-		:custom (js-indent-line 2))
+		:custom ((js-indent-line 2)
+						 (js2-basic-offset 2)))
 #+END_SRC
 
 *** =js2-refactor=
