@@ -388,48 +388,49 @@ For better navigation.
 To manage my TODO tasks and agenda.
 
 #+BEGIN_SRC emacs-lisp
-		(setq other-org-files '("/Users/alvin/Dropbox/home/someday.org"))
-		(setq org-agenda-files
-					'("/Users/alvin/Dropbox/home/me.org"
-						"/Users/alvin/Dropbox/home/pay.org"
-						"/Users/alvin/Dropbox/home/australia.org"))
-		(setq org-todo-keywords
-					'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
-						(sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
-						(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)")
-						(sequence "TODO(t)" "APPLIED(a)" "WAITING(w)" "|" "REJECTED(R)" "OFFERED(O)")))
-		(setq org-src-fontify-natively t)
-		(setq org-hierarchical-todo-statistics nil
-					org-agenda-todo-ignore-deadlines t
-					org-agenda-todo-ignore-scheduled t
-					org-agenda-todo-ignore-timestamp t
-					org-agenda-todo-ignore-with-date t)
-		(setq org-refile-targets '((org-agenda-files :maxlevel . 1)
-															 (other-org-files :maxlevel . 1)))
+	(setq other-org-files '("/Users/alvin/Dropbox/home/someday.org"))
+	(setq org-agenda-files
+				'("/Users/alvin/Dropbox/home/me.org"
+					"/Users/alvin/Dropbox/home/pay.org"
+					"/Users/alvin/Dropbox/home/australia.org"))
+	(setq org-todo-keywords
+				'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
+					(sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
+					(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)")
+					(sequence "TODO(t)" "APPLIED(a)" "WAITING(w)" "|" "REJECTED(R)" "OFFERED(O)")))
+	(setq org-src-fontify-natively t)
+	(setq org-hierarchical-todo-statistics nil
+				org-agenda-todo-ignore-deadlines t
+				org-agenda-todo-ignore-scheduled t
+				org-agenda-todo-ignore-timestamp t
+				org-agenda-todo-ignore-with-date t)
+	(setq org-refile-targets '((org-agenda-files :maxlevel . 1)
+														 (other-org-files :maxlevel . 1)))
 
-		;; keybindings
-		(global-set-key "\C-cl" 'org-store-link)
-		(global-set-key "\C-cc" 'org-capture)
-		(global-set-key "\C-ca" 'org-agenda)
-		(global-set-key "\C-cb" 'org-iswitchb)
+	;; keybindings
+	(global-set-key "\C-cl" 'org-store-link)
+	(global-set-key "\C-cc" 'org-capture)
+	(global-set-key "\C-ca" 'org-agenda)
+	(global-set-key "\C-cb" 'org-iswitchb)
+	(global-set-key (kbd "C-c C-.") 'org-time-stamp-inactive)
 
-		(eval-after-load "org"  '(require 'ox-md nil t))
+	(eval-after-load "org"  '(require 'ox-md nil t))
 
-		;; org capture
-		(setq org-capture-templates
-					'(("m" "me tasks" entry
-						 (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
-						 "** TODO %? %^g")
-						("s" "someday tasks" entry
-						 (file+headline "/Users/alvin/Dropbox/home/someday.org" "Tasks")
-						 "** TODO %? %^g")
-						("a" "australia tasks" entry
-						 (file+headline "/Users/alvin/Dropbox/home/australia.org" "Tasks")
-						 "** TODO %? %^g")))
+	;; org capture
+	(setq org-capture-templates
+				'(("m" "me tasks" entry
+					 (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
+					 "** TODO %? %^g")
+					("s" "someday tasks" entry
+					 (file+headline "/Users/alvin/Dropbox/home/someday.org" "Tasks")
+					 "** TODO %? %^g")
+					("a" "australia tasks" entry
+					 (file+headline "/Users/alvin/Dropbox/home/australia.org" "Tasks")
+					 "** TODO %? %^g")))
 
-		(setq org-catch-invisible-edits 1
-					org-hide-emphasis-markers t
-					org-ellipsis "..")
+	(setq org-catch-invisible-edits 1
+				org-hide-emphasis-markers t
+				org-ellipsis "..")
 #+END_SRC
 
 * Plantuml
@@ -441,7 +442,7 @@ A tool for drawing UML diagrams - [[https://www.plantuml.com]]
 		:config
 		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
 		(setq org-plantuml-jar-path
-					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar")
+					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"))
 #+END_SRC
 
 * Projectile
