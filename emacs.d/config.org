@@ -492,6 +492,18 @@ Interface to git.
 		("C-c M-g" . magit-file-popup))
 #+END_SRC
 
+* Markdown
+
+A mode that makes it easy to read files written using markdown.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package markdown-mode
+		:mode (("README\\.md\\'" . gfm-mode)
+					 ("\\.md\\'" . markdown-mode)
+					 ("\\.markdown\\'" . markdown-mode))
+		:init (setq markdown-command "multimarkdown"))
+#+END_SRC
+
 * Coding Environment
 
 Packages or configuration needed when in coding mode.
