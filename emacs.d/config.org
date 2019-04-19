@@ -20,7 +20,11 @@
 ** CANCEL install rainbow mode
 ** TODO diminish eldoc
 ** TODO Setup =company-box= - [[https://github.com/rememberYou/.emacs.d/blob/master/config.org#javascript]]
-** TODO Clean-up
+** TODO Remove unnecessary packages
+** TODO =org-super-agenda=
+** TODO =dap-mode=
+** TODO Mission Control
+** TODO Beautifying the Mode Line
 * Add Package Sources
 
 Configure the package sources to install packages.
@@ -80,7 +84,7 @@ Use UTF-8 encoding.
 	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
-* UI Customisation
+* UI Preferences
 
 ** Diminish and Delight
 
@@ -223,7 +227,7 @@ Focus help windows when they are opened.
 ** Load Theme
 
 #+BEGIN_SRC emacs-lisp
-	(use-package atom-one-dark-theme)
+	;; (use-package atom-one-dark-theme)
 
 	(use-package solarized-theme
 		:config
