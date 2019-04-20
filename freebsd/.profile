@@ -27,7 +27,7 @@ if [ -x /usr/bin/fortune ] ; then /usr/bin/fortune freebsd-tips ; fi
 export TERM=xterm-256color
 
 # change value of PS1 to show git status of a git repo
-source ~/.git-prompt.sh
+source /usr/local/share/git-core/contrib/completion/git-prompt.sh
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUPSTREAM="auto"
@@ -35,3 +35,11 @@ export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_HIDE_IF_PWD_IGNORED=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export PS1='[\u@\h \w$(__git_ps1 " (%s) ")]\$ '
+
+# set LANG to use UTF-8 for powerline-fonts to work in tmux
+export LANG=en_US.UTF-8
+#export LC_CTYPE=en_US.UTF8
+
+# set JAVA_HOME
+export JAVA_HOME=/usr/local/openjdk12
+export PATH=$PATH:$JAVA_HOME
