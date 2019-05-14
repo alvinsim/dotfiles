@@ -814,28 +814,6 @@ Opens the emacs' config file, which is this config file - =config.org=.
 		(tty-run-terminal-initialization (selected-frame) "xterm"))
 #+END_SRC
 
-** Toggle line wrap used especially for writing documents or blog posts.
-
-Got this code snippet from [[http://ergoemacs.org/emacs/emacs_novel_reading_mode.html]] with a few changes.
-
-#+BEGIN_SRC emacs-lisp
-  (defun as/toggle-line-wrap ()
-    "Toggle line wrap used expecially for writing documents or blog
-  posts.
-
-    Calling it will toggle it back to its former state"
-    (interactive)
-    (let ()
-      (if (eq (frame-parameter (selected-frame) 'width) 80)
-        (progn
-            (set-frame-parameter (selected-frame) 'width 106)
-            (setq word-wrap nil))
-        (progn
-          (set-frame-parameter (selected-frame) 'width 80)
-          (setq word-wrap t))))
-    (redraw-frame (selected-frame)))
-#+END_SRC
-
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
