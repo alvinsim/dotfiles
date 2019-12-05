@@ -174,7 +174,18 @@ Toggle visualisation of matching =parens= using paredit.
 	(use-package paredit
 		:diminish paredit-mode
 		:config
-		(show-paren-mode t))
+		(show-paren-mode t)
+		(dolist (m '(emacs-lisp-mode-hook
+								 racket-mode-hook
+								 racket-repl-mode-hook))
+			(add-hook m #'paredit-mode))
+		(bind-keys :map paredit-mode-map
+							 ("{" . paredit-open-curly)
+							 ("}" . paredit-close-curly))
+		(unless terminal-frame
+			(bind-keys :map paredit-mode-map
+								 ("M-[" . paredit-wrap-square)
+								 ("M-}" . paredit-wrap-curly))))
 #+END_SRC
 
 Make all "yes or no" to "y or n" for more convenience.
@@ -197,7 +208,7 @@ Highlights the current line.
 
 Replace lambdas and other forms with pretty symbols.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	(global-prettify-symbols-mode 1)
 #+END_SRC
 
@@ -667,7 +678,8 @@ Gradle build tool for Java projects.
 		(setq web-mode-enable-current-element-highlight t)
 		(setq web-mode-markup-indent-offset 2)
 		(setq web-mode-script-padding 2)
-		(setq web-mode-style-padding 2))
+		(setq web-mode-style-padding 2)
+		(setq-default indent-tabs-mode nil))
 #+END_SRC
 
 ** =tide=
@@ -690,6 +702,11 @@ Gradle build tool for Java projects.
 
 ** JavaScript
 
+#+begin_src emacs-lisp
+	;; setting this because 'json-reformat:indent-width' matches this variable
+	(setq js-indent-level 2)
+#+end_src
+
 *** JSON
 
 #+BEGIN_SRC emacs-lisp
@@ -707,7 +724,7 @@ Gradle build tool for Java projects.
 
 ** =emmet-mode=
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 	(use-package emmet-mode
 		:delight
 		:hook (sgml-mode css-mode web-mode))
@@ -718,6 +735,18 @@ Gradle build tool for Java projects.
 #+BEGIN_SRC emacs-lisp :tangle no
 	(use-package csv-mode)
 #+END_SRC
+
+** PHP
+
+#+begin_src emacs-lisp
+	(use-package php-mode)
+#+end_src
+
+** Racket
+
+#+begin_src emacs-lisp
+	(use-package racket-mode)
+#+end_src
 
 * Tips of the day
 
