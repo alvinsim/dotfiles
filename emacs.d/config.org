@@ -259,6 +259,14 @@ Focus help windows when they are opened.
 	(load-theme 'solarized-light t)
 #+END_SRC
 
+** Font
+
+Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
+
+#+begin_src emacs-lisp
+	(set-frame-font "JetBrains Mono Medium" nil t)
+#+end_src
+
 ** Winner Mode
 
 =winner-mode= lets us to switch between window configurations by using =C-c <left>= and =C-c <right>=.
@@ -678,8 +686,7 @@ Gradle build tool for Java projects.
 		(setq web-mode-enable-current-element-highlight t)
 		(setq web-mode-markup-indent-offset 2)
 		(setq web-mode-script-padding 2)
-		(setq web-mode-style-padding 2)
-		(setq-default indent-tabs-mode nil))
+		(setq web-mode-style-padding 2))
 #+END_SRC
 
 ** =tide=
@@ -701,11 +708,6 @@ Gradle build tool for Java projects.
 #+end_src
 
 ** JavaScript
-
-#+begin_src emacs-lisp
-	;; setting this because 'json-reformat:indent-width' matches this variable
-	(setq js-indent-level 2)
-#+end_src
 
 *** JSON
 
