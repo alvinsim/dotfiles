@@ -130,6 +130,7 @@ Use =aggressive-indent-mode= to automatically indent code while writing.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package aggressive-indent
+		:delight
 		:hook ((css-mode . aggressive-indent-mode)
 					 (emacs-lisp-mode . aggressive-indent-mode)
 					 (js-mode . aggressive-indent-mode)
@@ -264,7 +265,7 @@ Focus help windows when they are opened.
 Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
 
 #+begin_src emacs-lisp
-	(set-frame-font "JetBrains Mono Medium" nil t)
+;;	(set-frame-font "JetBrains Mono" nil t)
 #+end_src
 
 ** Winner Mode
@@ -303,7 +304,7 @@ Add autocomplete to only programming-related major modes using Company.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package company
-		:diminish company-mode
+		:delight
 		:config
 		(add-hook 'prog-mode-hook 'company-mode)
 		:custom
@@ -375,7 +376,7 @@ Colour the text with their value.
 
 ** Word Wrap
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	(use-package simple
 		:ensure nil
 		:delight (auto-fill-function)
@@ -564,7 +565,7 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	(use-package flycheck
 		:after (add-node-modules-path)
-		:diminish flycheck-mode
+		:delight
 		:config
 		(flycheck-add-mode 'javascript-eslint 'web-mode)
 		(setq-default flycheck-disabled-checkers
@@ -590,6 +591,8 @@ Adding some hooks for better coding in elisp.
 	(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 
 	(diminish 'emacs-lisp-mode "elisp")
+	(diminish 'subword-mode)
+	(diminish 'visual-line-mode)
 #+END_SRC
 
 ** Eldoc
