@@ -763,6 +763,15 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 		(totd-start))
 #+END_SRC
 
+* Writing
+
+** =ox-hugo=
+
+#+begin_src emacs-lisp
+	(use-package ox-hugo
+		:after ox)
+#+end_src
+
 * Spelling
 
 ** Ispell
