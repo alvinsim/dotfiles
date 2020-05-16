@@ -92,6 +92,8 @@ A mode to hide or abbreviate the mode line displays of minor modes.
 
 #+BEGIN_SRC emacs-lisp
 	(use-package diminish)
+	(diminish 'auto-revert-mode)
+
 	(use-package delight)
 #+END_SRC
 
@@ -578,6 +580,8 @@ When having problems with React code, check the following:
 		(setq flycheck-local-config-file-functions ".eslintrc.*")
 		(setq flycheck-javascript-eslint-executable "/home/alvinsim/.yarn/bin/eslint")
 		:init	(global-flycheck-mode))
+
+	(use-package flycheck-clj-kondo)
 #+END_SRC
 
 ** Emacs Lisp
@@ -632,7 +636,9 @@ Provides minibuffer hints when working with Emacs Lisp.
 		(add-hook 'clojurescript-mode-hook #'subword-mode)
 		(add-hook 'clojurescript-mode-hook #'paredit-mode)
 		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook))
+		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook)
+		:config
+		(require 'flycheck-clj-kondo))
 #+END_SRC
 
 *** =clj-refactoring=
@@ -743,7 +749,7 @@ Gradle build tool for Java projects.
 
 ** PHP
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 	(use-package php-mode)
 #+end_src
 
@@ -763,7 +769,7 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 		(totd-start))
 #+END_SRC
 
-* Writing
+* Blog/Website
 
 ** =ox-hugo=
 
