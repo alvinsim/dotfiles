@@ -1,9 +1,9 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Alvin Sim
 #+TOC: true
-#+STARTUP: overview
+#+STARTUP: showall
 
-* Tasks [7%]
+* Tasks [16%]
 	:PROPERTIES:
 	:ARCHIVE:  %s_archive::* Tasks
 	:END:
@@ -22,7 +22,7 @@
 ** TODO Setup =company-box= - [[https://github.com/rememberYou/.emacs.d/blob/master/config.org#javascript]]
 ** TODO Remove unnecessary packages
 ** TODO =org-super-agenda=
-** TODO =dap-mode=
+** DONE =dap-mode=
 ** TODO Mission Control
 ** TODO Beautifying the Mode Line
 * Add Package Sources
@@ -30,10 +30,11 @@
 Configure the package sources to install packages.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (package-refresh-contents)
+	(require 'package)
+	(package-initialize)
+	(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+	(add-to-list 'package-archives '("elpa" . "http://elpa.gnu.org/packages/") t)
+	(package-refresh-contents)
 #+END_SRC
 
 * Configure =use-package=
@@ -93,6 +94,7 @@ A mode to hide or abbreviate the mode line displays of minor modes.
 #+BEGIN_SRC emacs-lisp
 	(use-package diminish)
 	(diminish 'auto-revert-mode)
+	(diminish 'abbrev-mode)
 
 	(use-package delight)
 #+END_SRC
@@ -485,7 +487,10 @@ Easily find files in a project.
 		(projectile-mode-line '(:eval (projectile-project-name)))
 		:config
 		(projectile-mode +1)
-		(add-to-list 'projectile-globally-ignored-directories "node_modules"))
+		(add-to-list 'projectile-globally-ignored-directories "node_modules")
+		:init
+		(add-hook 'projectile-after-switch-project-hook (lambda ()
+																											(projectile-invalidate-cache nil))))
 #+END_SRC
 
 * Yasnippet
@@ -757,6 +762,64 @@ Gradle build tool for Java projects.
 
 #+begin_src emacs-lisp
 	(use-package racket-mode)
+#+end_src
+
+** =lsp-mode=
+
+#+begin_src emacs-lisp
+	(use-package lsp-mode
+		:hook
+		((lsp-mode . lsp-enable-which-key-integration)
+		 (java-mode . lsp))
+		:config (setq lsp-completion-enable-additional-text-edit nil)
+		:commands lsp)
+#+end_src
+
+** Java via =lsp-mode=
+
+*** =lsp-java=
+
+Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]] and expand it to =$HOME/.emacs.d/eclipse.jdt.ls/server=.
+
+#+begin_src emacs-lisp
+	(use-package lsp-java
+		:config
+		(add-hook 'java-mode-hook #'lsp)
+		(add-hook 'java-mode-hook 'flycheck-mode)
+		(add-hook 'java-mode-hook 'company-mode)
+		:requires dap-java)
+#+end_src
+
+*** =dap-java=
+
+#+begin_src emacs-lisp
+	(use-package dap-java
+		:after dap-mode
+		:ensure nil)
+#+end_src
+
+** =company-lsp=
+
+#+begin_src emacs-lisp
+	(use-package company-lsp)
+	(push 'company-lsp company-backends)
+#+end_src
+
+** =lsp-ui=
+
+#+begin_src emacs-lisp
+	(use-package lsp-ui
+		:commands lsp-ui-mode)
+#+end_src
+
+** =dap-mode=
+
+#+begin_src emacs-lisp
+	(use-package dap-mode
+		:after lsp-mode
+		:config
+		(dap-mode t)
+		(dap-ui-mode t))
 #+end_src
 
 * Tips of the day
