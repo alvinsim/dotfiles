@@ -262,6 +262,14 @@ Focus help windows when they are opened.
 					x-underline-at-descent-line t))
 
 	(load-theme 'solarized-light t)
+
+	;; (load-theme 'leuven)
+	;; (use-package leuven-theme
+	;; 	:after org
+	;; 	:custom
+	;; 	(org-fontify-whole-heading-line t)
+	;; 	:config
+	;; 	(load-theme 'leuven t))
 #+END_SRC
 
 ** Font
@@ -441,6 +449,9 @@ To manage my TODO tasks and agenda.
 	(global-set-key "\C-ca" 'org-agenda)
 	(global-set-key "\C-cb" 'org-iswitchb)
 	(global-set-key (kbd "C-c C-.") 'org-time-stamp-inactive)
+
+	;; Turn on font lock for org mode
+	(add-hook 'org-mode-hook 'turn-on-font-lock)
 
 	(eval-after-load "org"  '(require 'ox-md nil t))
 
@@ -841,7 +852,7 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 		:after ox)
 #+end_src
 
-* Spelling
+* Writing
 
 ** Ispell
 
@@ -862,6 +873,39 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 	(use-package flyspell
 		:diminish flyspell-mode)
 #+END_SRC
+
+** Language Tool
+
+This is similar to Grammarly but has support for Emacs.
+
+#+begin_src emacs-lisp
+	(use-package langtool
+		:init
+		(setq langtool-language-tool-jar "C:/ProgramData/LanguageTool-4.9.1/languagetool-commandline.jar")
+		(setq langtool-language-tool-server-jar "c:/ProgramData/LanguageTool-4.9.1/languagetool-server.jar")
+		;; (setq langtool-http-server-host "localhost"
+		;; 			langtool-http-server-port 8082)
+		(setq langtool-http-server-stream-type 'tls)
+		(setq langtool-java-bin "c:/Program Files/AdoptOpenJDK/jre-14.0.1.7-hotspot/bin/java")
+		(setq langtool-default-language "en-AU")
+		(setq langtool-java-user-arguments '("-Dfile.encoding=UTF-8"))
+		(setq langtool-autoshow-message-function 'langtool-autoshow-detail-popup)
+		:config
+		(global-set-key "\C-x4w" 'langtool-check)
+		(global-set-key "\C-x4W" 'langtool-check-done)
+		(global-set-key "\C-x4l" 'langtool-switch-default-language)
+		(global-set-key "\C-x44" 'langtool-show-message-at-point)
+		(global-set-key "\C-x4c" 'langtool-correct-buffer)
+		:preface
+		(defun langtool-autoshow-detail-popup (overlays)
+			(when (require 'popup nil t)
+				;; Do not interrupt current popup
+				(unless (or popup-instances
+										;; suppress popup after type `C-g` .
+										(memq last-command '(keyboard-quit)))
+					(let ((msg (langtool-details-error-message overlays)))
+						(popup-tip msg))))))
+#+end_src
 
 * Utilities or helper methods
 
