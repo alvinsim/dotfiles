@@ -398,6 +398,22 @@ Colour the text with their value.
 		:custom (set-mark-command-repeat-pop t))
 #+END_SRC
 
+* Configuration specifically for MS Windows
+
+Replace the Windows' find program.
+
+#+begin_src emacs-lisp :tangle no
+	(when (string-equal system-type "windows-nt")
+		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
+										 "c:/WINDOWS/system32"
+										 "c:/Program Files/Git/bin"
+										 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
+			(setenv "PATH" (mapconcat 'identity mypaths ";"))
+			(setq exec-path (append mypaths (list "." exec-directory)))))
+
+;;	(setq find-program "C:/Users/alvin/.bin/cygwin64/bin/find.exe")
+#+end_src
+
 * Ido and flx-ido
 
 For better navigation.
@@ -492,13 +508,15 @@ Easily find files in a project.
 	(use-package projectile
 		:bind-keymap
 		("C-c p" . projectile-command-map)
-		("s-p" . projectile-command-map)
+		("S-p" . projectile-command-map)
 		:custom
 		(projectile-enable-caching t)
+		(projectile-indexing-method 'alien)
 		(projectile-mode-line '(:eval (projectile-project-name)))
 		:config
 		(projectile-mode +1)
 		(add-to-list 'projectile-globally-ignored-directories "node_modules")
+		(add-to-list 'projectile-globally-ignored-directories "target")
 		:init
 		(add-hook 'projectile-after-switch-project-hook (lambda ()
 																											(projectile-invalidate-cache nil))))
