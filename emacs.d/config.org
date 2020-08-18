@@ -853,12 +853,14 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 ** =lsp-mode=
 
 #+begin_src emacs-lisp
+	;; set prefix for lsp-command-keymap
+	(setq lsp-keymap-prefix "s-1")
+
 	(use-package lsp-mode
 		:hook
-		((lsp-mode . lsp-enable-which-key-integration)
-		 (java-mode . lsp))
+		((lsp-mode . lsp-enable-which-key-integration))
 		:config (setq lsp-completion-enable-additional-text-edit nil)
-		:commands lsp)
+		:commands (lsp lsp-deferred))
 #+end_src
 
 ** Java via =lsp-mode=
@@ -869,19 +871,15 @@ Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT
 
 #+begin_src emacs-lisp
 	(use-package lsp-java
-		:config
-		(add-hook 'java-mode-hook #'lsp)
-		(add-hook 'java-mode-hook 'flycheck-mode)
-		(add-hook 'java-mode-hook 'company-mode)
-		:requires dap-java)
-#+end_src
-
-*** =dap-java=
-
-#+begin_src emacs-lisp
-	(use-package dap-java
-		:after dap-mode
-		:ensure nil)
+		:after lsp-mode
+		:hook
+		((java-mode . lsp))
+		;; :config
+		;; (add-hook 'java-mode-hook #'lsp)
+		;; (add-hook 'java-mode-hook 'flycheck-mode)
+		;; (add-hook 'java-mode-hook 'company-mode)
+		;; :requires dap-java
+		)
 #+end_src
 
 ** =company-lsp=
@@ -904,8 +902,17 @@ Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT
 	(use-package dap-mode
 		:after lsp-mode
 		:config
-		(dap-mode t)
-		(dap-ui-mode t))
+		;; (dap-mode t)
+		;; (dap-ui-mode t)
+		(dap-auto-configure-mode))
+#+end_src
+
+*** =dap-java=
+
+#+begin_src emacs-lisp
+	(use-package dap-java
+		:after dap-mode
+		:ensure nil)
 #+end_src
 
 * Tips of the day
