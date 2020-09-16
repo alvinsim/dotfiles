@@ -610,16 +610,15 @@ When having problems with React code, check the following:
 		:after (add-node-modules-path)
 		:delight
 		:config
-		(flycheck-add-mode 'javascript-eslint 'web-mode)
-		(setq-default flycheck-disabled-checkers
-									(append	flycheck-disabled-checkers
-													'(javascript-jshint)))
+		;; (setq-default flycheck-disabled-checkers
+		;; 							(append	flycheck-disabled-checkers
+		;; 											'(javascript-jshint)))
 		;; (setq-default flycheck-disabled-checkers
 		;; 							(append flycheck-disabled-checkers
 		;; 											'(json-jsonlint)))
 		(setq-default flycheck-temp-prefix ".flycheck")
 		(setq flycheck-local-config-file-functions ".eslintrc.*")
-		(setq flycheck-javascript-eslint-executable "/home/alvinsim/.yarn/bin/eslint")
+		(setq flycheck-javascript-eslint-executable "$(npm bin)/eslint")
 		:init	(global-flycheck-mode))
 
 	(use-package flycheck-clj-kondo)
@@ -739,25 +738,83 @@ Gradle build tool for Java projects.
 		(setq web-mode-style-padding 2))
 #+END_SRC
 
+** =typescript-mode=
+
+#+begin_src emacs-lisp
+	(use-package typescript-mode
+		:mode ("\\.[jt]s\\'"))
+#+end_src
+
 ** =tide=
 
 =tide= is used together with =web-mode=
 
 #+begin_src emacs-lisp
 	(use-package tide
-		:after (web-mode company flycheck)
-		:hook ((web-mode . as/activate-tide-mode)
-					 (before-save . tide-format-before-save))
-		:preface
-		(defun as/activate-tide-mode ()
-			"Use hl-identifier-mode only on js or ts buffers."
-			(when (and (stringp buffer-file-name)
-								 (string-match "\\.[tj]sx?\\'" buffer-file-name))
-				(tide-setup)
-				(tide-hl-identifier-mode))))
+		:after (company flycheck typescript-mode)
+		:hook ((typescript-mode . tide-setup)
+					 (typescript-mode . tide-hl-identifier-mode)
+					 (before-save . tide-format-before-save)))
+
+	(defun as/setup-tide-mode ()
+		(interactive)
+		(tide-setup)
+		(flycheck-mode +1)
+		(setq flycheck-check-syntax-automatically '(save mode-enabled))
+		(eldoc-mode +1)
+		(tide-hl-identifier-mode +1)
+		;; company is an optional dependency. You have to
+		;; install it separately via package-install
+		;; `M-x package-install [ret] company`
+		(company-mode +1))
 #+end_src
 
 ** JavaScript
+
+Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =tsconfig.json= with =allowJs= attribute set to =true=.
+
+#+begin_src javascript :tangle no
+	{
+			"compilerOptions": {
+					"target": "es2017",
+					"allowSyntheticDefaultImports": true,
+					"noEmit": true,
+					"checkJs": true,
+					"jsx": "react",
+					"lib": [ "dom", "es2017" ]
+			}
+	}
+#+end_src
+
+*** TSX
+
+#+begin_src emacs-lisp
+	(require 'web-mode)
+	(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+	(add-hook 'web-mode-hook
+						(lambda ()
+							(when (string-equal "tsx" (file-name-extension buffer-file-name))
+								(as/setup-tide-mode))))
+
+	;; enable typescript-tslint checker
+	(flycheck-add-mode 'typescript-tslint 'web-mode)
+#+end_src
+
+*** JSX
+
+#+begin_src emacs-lisp
+	(require 'web-mode)
+	(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+	(add-hook 'web-mode-hook
+						(lambda ()
+							(when (string-equal "jsx" (file-name-extension buffer-file-name))
+								(as/setup-tide-mode))))
+
+	;; enable lint checker
+	;; TODO 'jsx-tide' and 'append' failed to be added to the flycheck-add-next-checker because it couldn't be found
+	(flycheck-add-mode 'javascript-eslint 'web-mode)
+	;; (flycheck-add-next-checker 'javascript-eslint)
+#+end_src
 
 *** JSON
 
@@ -784,7 +841,7 @@ Gradle build tool for Java projects.
 
 ** CSV
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 	(use-package csv-mode)
 #+END_SRC
 
@@ -803,12 +860,14 @@ Gradle build tool for Java projects.
 ** =lsp-mode=
 
 #+begin_src emacs-lisp
+	;; set prefix for lsp-command-keymap
+	(setq lsp-keymap-prefix "s-1")
+
 	(use-package lsp-mode
 		:hook
-		((lsp-mode . lsp-enable-which-key-integration)
-		 (java-mode . lsp))
+		((lsp-mode . lsp-enable-which-key-integration))
 		:config (setq lsp-completion-enable-additional-text-edit nil)
-		:commands lsp)
+		:commands (lsp lsp-deferred))
 #+end_src
 
 ** Go
@@ -838,19 +897,15 @@ Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT
 
 #+begin_src emacs-lisp
 	(use-package lsp-java
-		:config
-		(add-hook 'java-mode-hook #'lsp)
-		(add-hook 'java-mode-hook 'flycheck-mode)
-		(add-hook 'java-mode-hook 'company-mode)
-		:requires dap-java)
-#+end_src
-
-*** =dap-java=
-
-#+begin_src emacs-lisp
-	(use-package dap-java
-		:after dap-mode
-		:ensure nil)
+		:after lsp-mode
+		:hook
+		((java-mode . lsp))
+		;; :config
+		;; (add-hook 'java-mode-hook #'lsp)
+		;; (add-hook 'java-mode-hook 'flycheck-mode)
+		;; (add-hook 'java-mode-hook 'company-mode)
+		;; :requires dap-java
+		)
 #+end_src
 
 ** =company-lsp=
@@ -873,8 +928,17 @@ Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT
 	(use-package dap-mode
 		:after lsp-mode
 		:config
-		(dap-mode t)
-		(dap-ui-mode t))
+		;; (dap-mode t)
+		;; (dap-ui-mode t)
+		(dap-auto-configure-mode))
+#+end_src
+
+*** =dap-java=
+
+#+begin_src emacs-lisp
+	(use-package dap-java
+		:after dap-mode
+		:ensure nil)
 #+end_src
 
 * Tips of the day
@@ -922,7 +986,7 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 
 This is similar to Grammarly but has support for Emacs.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 	(use-package langtool
 		:init
 		(setq langtool-language-tool-jar "C:/ProgramData/LanguageTool-4.9.1/languagetool-commandline.jar")
