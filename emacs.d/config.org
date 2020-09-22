@@ -80,7 +80,8 @@ Use UTF-8 encoding.
 
 #+BEGIN_SRC emacs-lisp
 	(prefer-coding-system 'utf-8)
-	(set-language-environment 'utf-8)
+  ;; lookup language environments with 'describe-language-environment
+	(set-language-environment "UTF-8")
 	(set-selection-coding-system 'utf-8)
 	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
@@ -870,25 +871,6 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 		:commands (lsp lsp-deferred))
 #+end_src
 
-** Go
-
-#+begin_src emacs-lisp :tangle no
-	(use-package go-mode
-		:config
-		(autoload 'go-mode "go-mode" nil t)
-		(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
-	;; (add-to-list 'load-path "c:/Users/alvin/go/bin/goflymake.exe")
-	;; :requires go-flymake)
-
-	(use-package go-eldoc
-		:config
-		(add-hook 'go-mode-hook 'go-eldoc-setup)
-		(set-face-attribute 'eldoc-highlight-function-argument nil
-												:underline t
-												:foreground "green"
-												:weight 'bold))
-#+end_src
-
 ** Java via =lsp-mode=
 
 *** =lsp-java=
@@ -975,7 +957,7 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 	 (setq ispell-dictionary "british")
  #+END_SRC
 
-** Flyspell
+** Spell
 
 #+BEGIN_SRC emacs-lisp
 	(use-package flyspell
@@ -1013,6 +995,38 @@ This is similar to Grammarly but has support for Emacs.
 										(memq last-command '(keyboard-quit)))
 					(let ((msg (langtool-details-error-message overlays)))
 						(popup-tip msg))))))
+#+end_src
+
+** Chinese Input method using =pyim=
+
+#+begin_src emacs-lisp
+	(use-package pyim
+		:demand t
+		:config
+		(use-package pyim-basedict
+			:config (pyim-basedict-enable))
+
+		(setq pyim-default-scheme 'quanpin)
+
+		(setq-default pyim-english-input-switch-functions
+									'(pyim-probe-dynamic-english
+										pyim-probe-isearch-mode
+										pyim-probe-program-mode
+										pyim-probe-org-structure-template))
+
+		(setq-default pyim-punctuation-half-width-functions
+									'(pyim-probe-punctuation-line-beginning
+										pyim-probe-punctuation-after-punctuation))
+
+		(pyim-isearch-mode 1)
+
+		(setq pyim-page-tooltip 'popup)
+
+		(setq pyim-page-length 5)
+
+		:bind
+		(("M-j" . pyim-convert-string-at-point)
+		 ("C-;" . pyim-delete-word-from-personal-buffer)))
 #+end_src
 
 * Utilities or helper methods
