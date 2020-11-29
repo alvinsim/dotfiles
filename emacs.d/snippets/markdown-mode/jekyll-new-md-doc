@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: jekyll-new-md-doc
+# key: jkmd
+# --
+
+---
+title: $0
+layout: post
+tags:
+author: Alvin Sim
+date: $1
+published: false
+---
