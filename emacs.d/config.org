@@ -25,6 +25,7 @@
 ** DONE =dap-mode=
 ** TODO Mission Control
 ** TODO Beautifying the Mode Line
+
 * Add Package Sources
 
 Configure the package sources to install packages.
@@ -270,7 +271,28 @@ Focus help windows when they are opened.
 	;; 	:custom
 	;; 	(org-fontify-whole-heading-line t)
 	;; 	:config
-	;; 	(load-theme 'leuven t))
+	;; 	(setq solarized-distinct-fringe-background t
+	;; 				solarized-use-variable-pitch nil
+	;; 				solarized-high-contrast-mode-line t
+	;; 				solarized-use-less-bold t
+	;; 				solarized-use-more-italic t
+	;; 				solarized-emphasize-indicators nil
+	;; 				solarized-scale-org-headlines nil
+	;; 				solarized-height-minus-1 1.0
+	;; 				solarized-height-plus-1 1.0
+	;; 				solarized-height-plus-2 1.0
+	;; 				solarized-height-plus-3 1.0
+	;; 				solarized-height-plus-4 1.0
+	;; 				x-underline-at-descent-line t))
+
+	;; (load-theme 'solarized-light t)
+
+	(use-package leuven-theme
+		:after org
+		:custom
+		(org-fontify-whole-heading-line t)
+		:config
+		(load-theme 'leuven t))
 #+END_SRC
 
 ** Font
@@ -278,7 +300,7 @@ Focus help windows when they are opened.
 Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
 
 #+begin_src emacs-lisp
-;;	(set-frame-font "JetBrains Mono" nil t)
+;; (set-frame-font "Fira Code" nil t)
 #+end_src
 
 ** Winner Mode
@@ -708,18 +730,6 @@ REPL for clojure.
 		(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 #+END_SRC
 
-** Gradle
-
-Gradle build tool for Java projects.
-
- #+BEGIN_SRC emacs-lisp :tangle no
-	 (use-package gradle-mode
-		 :disabled
-		 :diminish gradle-mode
-		 :mode "\\.gradle\\'"
-		 :interpreter ("gradle" . gradle-mode))
- #+END_SRC
-
 ** =web-mode=
 
 #+BEGIN_SRC emacs-lisp
@@ -846,101 +856,13 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 	(use-package csv-mode)
 #+END_SRC
 
-** PHP
+** Go-lang
 
-#+begin_src emacs-lisp :tangle no
-	(use-package php-mode)
-#+end_src
-
-** Racket
-
-#+begin_src emacs-lisp
-	(use-package racket-mode)
-#+end_src
-
-** =lsp-mode=
-
-#+begin_src emacs-lisp
-	;; set prefix for lsp-command-keymap
-	(setq lsp-keymap-prefix "s-1")
-
-	(use-package lsp-mode
-		:hook
-		((lsp-mode . lsp-enable-which-key-integration))
-		:config (setq lsp-completion-enable-additional-text-edit nil)
-		:commands (lsp lsp-deferred))
-#+end_src
-
-** Java via =lsp-mode=
-
-*** =lsp-java=
-
-Download the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]] and expand it to =$HOME/.emacs.d/eclipse.jdt.ls/server=.
-
-#+begin_src emacs-lisp
-	(use-package lsp-java
-		:after lsp-mode
-		:hook
-		((java-mode . lsp))
-		;; :config
-		;; (add-hook 'java-mode-hook #'lsp)
-		;; (add-hook 'java-mode-hook 'flycheck-mode)
-		;; (add-hook 'java-mode-hook 'company-mode)
-		;; :requires dap-java
-		)
-#+end_src
-
-** =company-lsp=
-
-#+begin_src emacs-lisp
-	(use-package company-lsp)
-	(push 'company-lsp company-backends)
-#+end_src
-
-** =lsp-ui=
-
-#+begin_src emacs-lisp
-	(use-package lsp-ui
-		:commands lsp-ui-mode)
-#+end_src
-
-** =dap-mode=
-
-#+begin_src emacs-lisp
-	(use-package dap-mode
-		:after lsp-mode
-		:config
-		;; (dap-mode t)
-		;; (dap-ui-mode t)
-		(dap-auto-configure-mode))
-#+end_src
-
-*** =dap-java=
-
-#+begin_src emacs-lisp
-	(use-package dap-java
-		:after dap-mode
-		:ensure nil)
-#+end_src
-
-* Tips of the day
-
-Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-	(use-package totd
-		:after
-		(totd-start))
-#+END_SRC
-
-* Blog/Website
-
-** =ox-hugo=
-
-#+begin_src emacs-lisp
-	(use-package ox-hugo
-		:after ox)
-#+end_src
+	 #+begin_src emacs-lisp
+		 (use-package go-mode
+			 :config
+			 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
+	 #+end_src
 
 * Writing
 
@@ -964,39 +886,6 @@ Displays "Tips of the day" on a separate window during startup or at 9:00 AM.
 		:diminish flyspell-mode)
 #+END_SRC
 
-** Language Tool
-
-This is similar to Grammarly but has support for Emacs.
-
-#+begin_src emacs-lisp :tangle no
-	(use-package langtool
-		:init
-		(setq langtool-language-tool-jar "C:/ProgramData/LanguageTool-4.9.1/languagetool-commandline.jar")
-		(setq langtool-language-tool-server-jar "c:/ProgramData/LanguageTool-4.9.1/languagetool-server.jar")
-		;; (setq langtool-http-server-host "localhost"
-		;; 			langtool-http-server-port 8082)
-		(setq langtool-http-server-stream-type 'tls)
-		(setq langtool-java-bin "c:/Program Files/AdoptOpenJDK/jre-14.0.1.7-hotspot/bin/java")
-		(setq langtool-default-language "en-AU")
-		(setq langtool-java-user-arguments '("-Dfile.encoding=UTF-8"))
-		(setq langtool-autoshow-message-function 'langtool-autoshow-detail-popup)
-		:config
-		(global-set-key "\C-x4w" 'langtool-check)
-		(global-set-key "\C-x4W" 'langtool-check-done)
-		(global-set-key "\C-x4l" 'langtool-switch-default-language)
-		(global-set-key "\C-x44" 'langtool-show-message-at-point)
-		(global-set-key "\C-x4c" 'langtool-correct-buffer)
-		:preface
-		(defun langtool-autoshow-detail-popup (overlays)
-			(when (require 'popup nil t)
-				;; Do not interrupt current popup
-				(unless (or popup-instances
-										;; suppress popup after type `C-g` .
-										(memq last-command '(keyboard-quit)))
-					(let ((msg (langtool-details-error-message overlays)))
-						(popup-tip msg))))))
-#+end_src
-
 ** Chinese Input method using =pyim=
 
 #+begin_src emacs-lisp
@@ -1010,7 +899,7 @@ This is similar to Grammarly but has support for Emacs.
 
 		(setq-default pyim-english-input-switch-functions
 									'(pyim-probe-dynamic-english
-										pyim-probe-isearch-mode
+										;; pyim-probe-isearch-mode
 										pyim-probe-program-mode
 										pyim-probe-org-structure-template))
 
