@@ -952,20 +952,6 @@ Opens the emacs' config file, which is this config file - =config.org=.
 		(tty-run-terminal-initialization (selected-frame) "xterm"))
 #+END_SRC
 
-** Run =scheme= by loading the =xscheme= library first
-
-This only works in non-Windows environment
-
-#+begin_src emacs-lisp
-	(defun xscheme ()
-		"Loads xscheme and runs a scheme process in the current buffer"
-		(interactive)
-		(load-library "xscheme")
-		(xscheme-start "scheme -emacs"
-									 (buffer-name)
-									 (buffer-name)))
-#+end_src
-
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
