@@ -83,7 +83,7 @@ Use UTF-8 encoding.
 	(prefer-coding-system 'utf-8)
   ;; lookup language environments with 'describe-language-environment
 	(set-language-environment "UTF-8")
-	(set-selection-coding-system 'utf-8)
+	(set-selection-coding-system 'utf-16-le)
 	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
@@ -499,7 +499,7 @@ Interface to git.
 #+BEGIN_SRC emacs-lisp
 	(use-package magit
 		:config
-		(global-magit-file-mode)
+		(magit-define-global-key-bindings)
 		:bind
 		("C-x g" . magit-status)
 		("C-x M-g" . magit-dispatch-popup)
