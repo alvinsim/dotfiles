@@ -278,7 +278,11 @@ Focus help windows when they are opened.
 Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
 
 #+begin_src emacs-lisp
-;; (set-frame-font "Fira Code" nil t)
+	(set-face-attribute 'default nil
+											:family "Cascadia mono"
+											:weight 'normal
+											:width 'normal
+											:height 100)
 #+end_src
 
 ** Powerline
