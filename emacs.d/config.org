@@ -510,6 +510,12 @@ Interface to git.
 		("C-c M-g" . magit-file-popup))
 #+END_SRC
 
+This is a workaround on Windows to have Magit prompt for the SSH passphrase if needed when pushing/pulling from remote.
+
+#+begin_src emacs-lisp
+	(use-package ssh-agency)
+#+end_src
+
 * Markdown
 
 A mode that makes it easy to read files written using markdown.
