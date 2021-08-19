@@ -94,9 +94,9 @@ Use UTF-8 encoding.
 A mode to hide or abbreviate the mode line displays of minor modes.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package diminish)
-	(diminish 'auto-revert-mode)
-	(diminish 'abbrev-mode)
+	(use-package diminish
+		:diminish auto-revert-mode
+		:diminish abbrev-mode)
 
 	(use-package delight)
 #+END_SRC
@@ -453,10 +453,13 @@ To manage my TODO tasks and agenda.
 * Reading E-Pub Books
 
 	#+begin_src emacs-lisp
+		(use-package visual-fill-column)
+
 		(use-package nov
+			:requires visual-fill-column
 			:config
 			(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-			(setq nov-text-width nil)
+			(setq nov-text-width 80)
 			(setq visual-fill-column-center-text t)
 			(add-hook 'nov-mode-hook 'visual-line-mode)
 			(add-hook 'nov-mode-hook 'visual-fill-column-mode))
