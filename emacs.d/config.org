@@ -83,8 +83,8 @@ Use UTF-8 encoding.
 	(prefer-coding-system 'utf-8)
   ;; lookup language environments with 'describe-language-environment
 	(set-language-environment "UTF-8")
-	(set-selection-coding-system 'utf-16-le)
-	(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))
+	(set-selection-coding-system 'utf-8)
+	(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
 * UI Preferences
