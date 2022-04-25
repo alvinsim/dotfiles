@@ -31,11 +31,10 @@
 Configure the package sources to install packages.
 
 #+BEGIN_SRC emacs-lisp
-	(require 'package)
-	(package-initialize)
-	(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-	(add-to-list 'package-archives '("elpa" . "http://elpa.gnu.org/packages/") t)
-	(package-refresh-contents)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (package-refresh-contents)
 #+END_SRC
 
 * Configure =use-package=
