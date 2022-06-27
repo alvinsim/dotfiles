@@ -393,16 +393,20 @@ Colour the text with their value.
 
 Replace the Windows' find program.
 
-#+begin_src emacs-lisp :tangle no
-	(when (string-equal system-type "windows-nt")
-		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
-										 "c:/WINDOWS/system32"
-										 "c:/Program Files/Git/bin"
-										 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
-			(setenv "PATH" (mapconcat 'identity mypaths ";"))
-			(setq exec-path (append mypaths (list "." exec-directory)))))
+#+begin_src emacs-lisp
+	;; (when (string-equal system-type "windows-nt")
+	;; 	(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
+	;; 									 "c:/WINDOWS/system32"
+	;; 									 "c:/Program Files/Git/bin"
+	;; 									 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
+	;; 		(setenv "PATH" (mapconcat 'identity mypaths ";"))
+	;; 		(setq exec-path (append mypaths (list "." exec-directory)))))
 
-;;	(setq find-program "C:/Users/alvin/.bin/cygwin64/bin/find.exe")
+	(setenv "JAVA_HOME" "c:/Users/AlvinWS/bin/jdk11.0.14_9")
+	(setenv "PATH" (concat (getenv "JAVA_HOME") "/bin;" (getenv "PATH")))
+	(setenv "PATH" (concat "c:/Users/AlvinWS/bin/cygwin64/bin;" (getenv "PATH")))
+
+	(setq find-program "C:/Users/alvin/.bin/cygwin64/bin/find.exe")
 #+end_src
 
 * Ido and flx-ido
@@ -885,7 +889,7 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 
 ** Chinese Input method using =pyim=
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 	(use-package pyim
 		:demand t
 		:config
