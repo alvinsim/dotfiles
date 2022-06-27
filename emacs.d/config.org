@@ -1,7 +1,7 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Alvin Sim
 #+TOC: true
-#+STARTUP: showall
+#+STARTUP: overview
 
 * Tasks [16%]
 	:PROPERTIES:
@@ -410,14 +410,11 @@ Replace the Windows' find program.
 For better navigation.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package ido
-		:config
-		(ido-mode 1))
-
 	(setq ido-enable-flex-matching t
 				ido-everywhere t
 				ido-create-new-buffer 'always
-				ido-ignore-extensions t)
+				ido-ignore-extensions t
+				ido-mode 1)
 
 	(use-package flx-ido
 		:config
@@ -567,13 +564,11 @@ Manage code snippets.
 Interface to git.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package magit
-		;; :config
-		;; (magit-define-global-key-bindings)
-		:bind
-		("C-x g" . magit-status)
-		("C-x M-g" . magit-dispatch-popup)
-		("C-c M-g" . magit-file-popup))
+  (use-package magit
+	       :bind
+	       ("C-x g" . magit-status)
+	       ("C-x M-g" . magit-dispatch-popup)
+	       ("C-c M-g" . magit-file-popup))
 #+END_SRC
 
 This is a workaround on Windows to have Magit prompt for the SSH passphrase if needed when pushing/pulling from remote.
@@ -706,6 +701,11 @@ Provides minibuffer hints when working with Emacs Lisp.
 		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook)
 		:config
 		(require 'flycheck-clj-kondo))
+
+	(unless (package-installed-p 'inf-clojure)
+		(package-refresh-contents)
+		(package-install 'inf-clojure))
+	(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 #+END_SRC
 
 *** =clj-refactoring=
@@ -882,13 +882,6 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 	 (require 'ispell)
 	 (setq ispell-dictionary "british")
  #+END_SRC
-
-** Spell
-
-#+BEGIN_SRC emacs-lisp
-	(use-package flyspell
-		:diminish flyspell-mode)
-#+END_SRC
 
 ** Chinese Input method using =pyim=
 
