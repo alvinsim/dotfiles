@@ -14,48 +14,34 @@
 ** TODO install engine-mode?
 ** TODO install =langtool= for grammar check
 ** TODO install ace-jump
-** TODO install ace-window
 ** DONE set default encoding in =init.el=
 ** TODO disable flyspell for global mode. only trigger when needed.
 ** CANCEL install rainbow mode
-** TODO diminish eldoc
 ** TODO Setup =company-box= - [[https://github.com/rememberYou/.emacs.d/blob/master/config.org#javascript]]
 ** TODO Remove unnecessary packages
 ** TODO =org-super-agenda=
 ** DONE =dap-mode=
 ** TODO Mission Control
 ** TODO Beautifying the Mode Line
+** TODO Re-organise headlines
 
-* Add Package Sources
-
-Configure the package sources to install packages.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (package-refresh-contents)
-#+END_SRC
-
-* Configure =use-package=
-
-Install =use-package= if it is not already installed. =use-package= is used to manage the configuration of packages.
+* Configure use-package
 
 #+BEGIN_SRC emacs-lisp
+	;; Install use-package if it is not already installed.
+	;; use-package is used to manage the configuration of packages.
 	(unless (package-installed-p 'use-package)
 		(package-install 'use-package))
 
-	(setq use-package-verbose t)
-	(setq use-package-always-ensure t)
-#+END_SRC
+	(setq use-package-verbose t
+				use-package-always-ensure t)
 
-Always compile packages and use the newest version available.
-
-#+BEGIN_SRC emacs-lisp
+	;; Always compile packages and use the newest version available.
 	(require 'use-package)
 	(use-package auto-compile
-		:config (auto-compile-on-load-mode))
-
-	(setq load-prefer-newer t)
+		:config
+		(auto-compile-on-load-mode)
+		(setq load-prefer-newer t))
 #+END_SRC
 
 * Set Personal Information
@@ -67,19 +53,19 @@ Always compile packages and use the newest version available.
 
 * Set Customised Settings To Different File
 
-This stops emacs from adding customised settings to =init.el=. Creating it as a temporary file disables it i.e. any changes are session local.
-
 #+BEGIN_SRC emacs-lisp
+	;; This stops emacs from adding customised settings to init.el.
+	;; Creating it as a temporary file disables it i.e. any changes are session local.
 	(setq custom-file (make-temp-file "emacs-custom"))
 #+END_SRC
 
-* Set =prefer-coding-system= to =utf-8= as default
-
-Use UTF-8 encoding.
+* Set prefer-coding-system to utf-8 as default
 
 #+BEGIN_SRC emacs-lisp
+	;; Use UTF-8 encoding.
 	(prefer-coding-system 'utf-8)
-  ;; lookup language environments with 'describe-language-environment
+
+	;; lookup language environments with 'describe-language-environment
 	(set-language-environment "UTF-8")
 	(set-selection-coding-system 'utf-8)
 	(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
@@ -87,111 +73,62 @@ Use UTF-8 encoding.
 
 * Confirmation When Exiting Emacs
 
-	#+begin_src emacs-lisp
-		(setq confirm-kill-emacs 'y-or-n-p)
-	#+end_src
+#+begin_src emacs-lisp
+	;; Allows answering 'y' or 'n' instead of 'yes' or 'no'.
+	(setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
 
 * UI Preferences
 
-** Diminish and Delight
-
-A mode to hide or abbreviate the mode line displays of minor modes.
+** Tweak to the window chrome
 
 #+BEGIN_SRC emacs-lisp
-	(use-package diminish
-		:diminish auto-revert-mode
-		:diminish abbrev-mode)
-	;; (diminish 'auto-revert-mode)
-	;; (diminish 'abbrev-mode)
-
-	(use-package delight)
-#+END_SRC
-
-** Tweak Window Chrome
-
-Disable the tooltip, toolbar and scroll bar.
-
-#+BEGIN_SRC emacs-lisp
+	;; Disable the tooltip, toolbar and scroll bar.
 	(tooltip-mode -1)
 	(tool-bar-mode -1)
 	(menu-bar-mode 1)
 	(scroll-bar-mode -1)
-#+END_SRC
 
-Disable tiny scroll bar in the minibuffer window.
-
-#+BEGIN_SRC emacs-lisp
+	;; Disable tiny scroll bar in the minibuffer window.
 	(set-window-scroll-bars (minibuffer-window) nil nil)
-#+END_SRC
 
-Remove trailing whitespaces when saving the file and also show the trailing whitespace.
-
-#+BEGIN_SRC emacs-lisp
+	;; Remove and show  trailing whitespaces when saving a file
 	(add-to-list 'write-file-functions 'delete-trailing-whitespace)
 	(setq show-trailing-whitespace t)
-#+END_SRC
 
-Setting tabs appropriately.
-
-#+BEGIN_SRC emacs-lisp
+	;; Setting tabs appropriately
 	(setq-default tab-width 2)
-  (setq indent-tabs-mode t)
-#+END_SRC
+	(setq indent-tabs-mode t)
 
-Use =aggressive-indent-mode= to automatically indent code while writing.
-
-#+BEGIN_SRC emacs-lisp
+	;; Use aggressive-indent-mode to automatically indent code while writing
 	(use-package aggressive-indent
-		:delight
 		:hook ((css-mode . aggressive-indent-mode)
 					 (emacs-lisp-mode . aggressive-indent-mode)
 					 (js-mode . aggressive-indent-mode)
 					 (clojure-mode . aggressive-indent-mode)
 					 (clojurescript-mode . aggressive-indent-mode))
 		:custom (aggressive-indent-comments-too))
-#+END_SRC
 
-Do not show splash screen when emacs first starts up.
+	;; Do not show splash screen when emacs first starts up
+	;; (setq inhibit-splash-screen t)
 
-#+BEGIN_SRC emacs-lisp
-	(setq inhibit-splash-screen t)
-#+END_SRC
-
-Display the column number in the mode line.
-
-#+BEGIN_SRC emacs-lisp
+	;; Display the column number in the mode line
 	(setq column-number-mode t)
-#+END_SRC
 
-Disable the use of dialog box.
-
-#+BEGIN_SRC emacs-lisp
+	;; Disable the use of dialog box
 	(setq use-dialog-box nil)
-#+END_SRC
 
-Add new line when =next-line= is called.
-
-#+BEGIN_SRC emacs-lisp
+	;; Add new line when next-line is called
 	(setq next-line-add-newlines t)
-#+END_SRC
 
-When deleting a file, move them to the OS' trash instead
-
-#+BEGIN_SRC emacs-lisp
+	;; When deleting a file, move them to the OS' trash instead
 	(setq delete-by-moving-to-trash t)
-#+END_SRC
 
-Toggle visualisation of matching =parens= using paredit.
-
-#+BEGIN_SRC emacs-lisp
+	;; Toggle visualisation of matching parens using paredit
 	(use-package paredit
-		:diminish paredit-mode
 		:config
 		(show-paren-mode t)
-		(dolist (m '(emacs-lisp-mode-hook
-								 racket-mode-hook
-								 racket-repl-mode-hook))
-			(add-hook m #'paredit-mode))
+		(dolist (m '(emacs-lisp-mode-hook)) (add-hook m #'paredit-mode))
 		(bind-keys :map paredit-mode-map
 							 ("{" . paredit-open-curly)
 							 ("}" . paredit-close-curly))
@@ -199,58 +136,37 @@ Toggle visualisation of matching =parens= using paredit.
 			(bind-keys :map paredit-mode-map
 								 ("M-[" . paredit-wrap-square)
 								 ("M-}" . paredit-wrap-curly))))
-#+END_SRC
 
-Make all "yes or no" to "y or n" for more convenience.
-
-#+BEGIN_SRC emacs-lisp
+	;; Make all 'yes or no' to 'y or n' for more convenience
 	(defalias 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
 
-Word-wrap always.
-
-#+BEGIN_SRC emacs-lisp
+	;; Word-wrap always
 	(global-visual-line-mode 1)
-#+END_SRC
 
-Highlights the current line.
-
-#+BEGIN_SRC emacs-lisp
+	;; Highlight the current line
 	(global-hl-line-mode)
-#+END_SRC
 
-Replace lambdas and other forms with pretty symbols.
-
-#+BEGIN_SRC emacs-lisp :tangle no
+	;; Replace lambdas and other forms with pretty symbols
 	(global-prettify-symbols-mode 1)
-#+END_SRC
 
-Disables the audio bell.
-
-#+BEGIN_SRC emacs-lisp
+	;; Disables the audio bell
 	(setq ring-bell-function 'ignore)
-#+END_SRC
 
-Change how emacs backup files.
-
-#+BEGIN_SRC emacs-lisp
+	;; Change how emacs backup files
 	(setq backup-directory-alist '(("." . ".backup"))
 				backup-by-copying t		;; Don't delete hardlinks
 				version-control t			;; Use version numbers on backups
 				delete-old-versions t	;; Delete excess backups
 				kept-new-versions 20	;; Number of new backups to keep
 				kept-old-versions 5) 	;; Number of old backups to keep
-#+END_SRC
 
-Focus help windows when they are opened.
-
-#+BEGIN_SRC emacs-lisp
+	;; Focus help windows when they are opened
 	(setq help-window-select t)
 #+END_SRC
 
 ** Load Theme
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	;; (use-package atom-one-dark-theme)
 
 	;; (use-package solarized-theme
@@ -273,10 +189,8 @@ Focus help windows when they are opened.
 
 	(use-package leuven-theme
 		:after org
-		:custom
-		(org-fontify-whole-heading-line t)
-		:config
-		(load-theme 'leuven t))
+		:custom	(org-fontify-whole-heading-line t)
+		:config	(load-theme 'leuven t))
 
 	;; (use-package nord-theme
 	;; 	:config (load-theme 'nord t))
@@ -315,56 +229,57 @@ Focus help windows when they are opened.
 
 ** Font
 
-Change the font
+Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
 
-#+begin_src emacs-lisp
-	(set-frame-font "Fira Code" nil t)
+#+begin_src emacs-lisp :tangle no
+  (set-frame-font "Cascadia Code ExtraLight" nil t)
+  ;; (set-face-attribute 'default nil
+  ;; 										:family "Iosevka"
+  ;; 										:weight 'normal
+  ;; 										:width 'expanded
+  ;; 										:height 100)
+
+
+  ;; (set-face-attribute 'default nil :font "Iosevka Thin")
+  ;; (set-frame-font "Iosevka ExtraLight" nil t)
 #+end_src
 
 ** Powerline
 
 #+BEGIN_SRC emacs-lisp :tangle no
 	(use-package powerline
-		:config
-		(powerline-default-theme)
-		(when (display-graphic-p)
-			(setq x-select-request-type '(UTF8-STRING COMPOUND_TEXT TEXT STRING))))
+		:config	((powerline-default-theme)
+						 (when (display-graphic-p)
+							 (setq x-select-request-type
+										 '(UTF8-STRING COMPOUND_TEXT TEXT STRING)))))
 #+END_SRC
 
 ** Which key
 
-Displays possible completions for a long keybinding.
-
 #+BEGIN_SRC emacs-lisp
+	;; Displays possible completions for a long keybinding
 	(use-package which-key
-		:diminish which-key-mode
-		:config
-		(add-hook 'after-init-hook 'which-key-mode))
+		:config	(add-hook 'after-init-hook 'which-key-mode))
 #+END_SRC
 
 ** Autocomplete
 
-Add autocomplete to only programming-related major modes using Company.
-
 #+BEGIN_SRC emacs-lisp
+	;; Add autocomplete to only programming-related major modes using Company
 	(use-package company
-		:delight
-		:config
-		(add-hook 'prog-mode-hook 'company-mode)
-		:custom
-		(company-begin-commands '(self-insert-command))
-		(company--idle-delay .1)
-		(company-minimum-prefix-length 2)
-		(company-show-numbers t)
-		(company-tooltip-align-annotations 't)
-		(global-company-mode t))
+		:config	(add-hook 'prog-mode-hook 'company-mode)
+		:custom	((company-begin-commands '(self-insert-command))
+						 (company--idle-delay .1)
+						 (company-minimum-prefix-length 2)
+						 (company-show-numbers t)
+						 (company-tooltip-align-annotations 't)
+						 (global-company-mode t)))
 #+END_SRC
 
 ** Expand-region
 
-Expands the region around the cursor semantically depending on the mode.
-
 #+BEGIN_SRC emacs-lisp
+	;; Expands the region around the cursor semantically depending on the mode
 	(use-package expand-region
 		:bind (("C-=" . er/expand-region)
 					 ("C-+" . er/contract-regions)))
@@ -372,38 +287,34 @@ Expands the region around the cursor semantically depending on the mode.
 
 ** Rainbow-delimiter
 
-Highlights delimiters like parentheses, brackets or braces by their depth.
-
 #+BEGIN_SRC emacs-lisp
+	;; Highlights delimiters like parentheses, brackets or braces by their depth
 	(use-package rainbow-delimiters
-		:hook	(prog-mode . rainbow-delimiters-mode))
+		:hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
-** =rainbow-mode=
-
-Colour the text with their value.
+** rainbow-mode
 
 #+BEGIN_SRC emacs-lisp
+	;; Colour the text with their value
 	(use-package rainbow-mode
-		:delight
 		:hook (prog-mode))
 #+END_SRC
 
 * Configuration specifically for MS Windows
 
-Replace the Windows' find program.
-
 #+begin_src emacs-lisp
-	;; (when (string-equal system-type "windows-nt")
-	;; 	(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
-	;; 									 "c:/WINDOWS/system32"
-	;; 									 "c:/Program Files/Git/bin"
-	;; 									 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
-	;; 		(setenv "PATH" (mapconcat 'identity mypaths ";"))
-	;; 		(setq exec-path (append mypaths (list "." exec-directory)))))
+	;; Replace the Windows' find program
+	(when (string-equal system-type "windows-nt")
+		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
+										 "c:/WINDOWS/system32"
+										 "c:/Program Files/Git/bin"
+										 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
+			(setenv "PATH" (mapconcat 'identity mypaths ";"))
+			(setq exec-path (append mypaths (list "." exec-directory)))))
 
-	(setenv "JAVA_HOME" "c:/Users/AlvinWS/bin/jdk11.0.14_9")
-	(setenv "PATH" (concat (getenv "JAVA_HOME") "/bin;" (getenv "PATH")))
+	;;(setenv "JAVA_HOME" "c:/Users/AlvinWS/bin/jdk11.0.14_9")
+	;;(setenv "PATH" (concat (getenv "JAVA_HOME") "/bin;" (getenv "PATH")))
 	(setenv "PATH" (concat "c:/Users/AlvinWS/bin/cygwin64/bin;" (getenv "PATH")))
 
 	(setq find-program "C:/Users/alvin/.bin/cygwin64/bin/find.exe")
@@ -411,9 +322,8 @@ Replace the Windows' find program.
 
 * Ido and flx-ido
 
-For better navigation.
-
 #+BEGIN_SRC emacs-lisp
+	;; For better navigation
 	(setq ido-enable-flex-matching t
 				ido-everywhere t
 				ido-create-new-buffer 'always
@@ -422,34 +332,32 @@ For better navigation.
 
 	(use-package flx-ido
 		:config
-		(ido-mode 1)
-		(ido-everywhere 1)
+		;; (ido-mode 1)
+		;; (ido-everywhere 1)
 		(flx-ido-mode 1))
 #+END_SRC
 
 * Org
 
-To manage my TODO tasks and agenda.
-
 #+BEGIN_SRC emacs-lisp
-	(setq other-org-files '("/Users/alvin/Dropbox/home/someday.org"))
-	(setq org-agenda-files
-				'("/Users/alvin/Dropbox/home/me.org"
-					"/Users/alvin/Dropbox/home/pay.org"
-					"/Users/alvin/Dropbox/home/australia.org"))
+	;; To manage TODO tasks and agenda
+
 	(setq org-todo-keywords
 				'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
 					(sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
-					(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)")
-					(sequence "TODO(t)" "APPLIED(a)" "WAITING(w)" "|" "REJECTED(R)" "OFFERED(O)")))
-	(setq org-src-fontify-natively t)
-	(setq org-hierarchical-todo-statistics nil
+					(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)"))
+				org-src-fontify-natively t
+				org-hierarchical-todo-statistics nil
+				org-refile-targets '((org-agenda-files :maxlevel . 2))
+				org-catch-invisible-edits 1
+				org-hide-emphasis-markers t
+				org-ellipsis ".."
+				;; Org agenda
+				org-agenda-files '("/Users/alvin/Dropbox/home/me.org")
 				org-agenda-todo-ignore-deadlines t
 				org-agenda-todo-ignore-scheduled t
 				org-agenda-todo-ignore-timestamp t
 				org-agenda-todo-ignore-with-date t)
-	(setq org-refile-targets '((org-agenda-files :maxlevel . 1)
-														 (other-org-files :maxlevel . 1)))
 
 	;; keybindings
 	(global-set-key "\C-cl" 'org-store-link)
@@ -467,125 +375,29 @@ To manage my TODO tasks and agenda.
 	(setq org-capture-templates
 				'(("m" "me tasks" entry
 					 (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
-					 "** TODO %? %^g")
-					("s" "someday tasks" entry
-					 (file+headline "/Users/alvin/Dropbox/home/someday.org" "Tasks")
-					 "** TODO %? %^g")
-					("a" "australia tasks" entry
-					 (file+headline "/Users/alvin/Dropbox/home/australia.org" "Tasks")
-					 "** TODO %? %^g")))
+					 "** TODO %? %^")))
 
-	(setq org-catch-invisible-edits 1
-				org-hide-emphasis-markers t
-				org-ellipsis "..")
-
-  ;; Fixes open pdf file on emacs-27
+	;; Fixes open pdf file on emacs-27
 	(add-hook 'org-mode-hook
 						(lambda ()
 							(delete '("\\.pdf\\'" . default) org-file-apps)
 							(add-to-list 'org-file-apps '("\\.pdf\\'" . "xpdf %s"))))
-
-#+END_SRC
-
-* Reading E-Pub Books
-
-	#+begin_src emacs-lisp
-		(use-package visual-fill-column)
-
-		(use-package nov
-			:requires visual-fill-column
-			:config
-			(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-			(setq nov-text-width 80)
-			(setq visual-fill-column-center-text t)
-			(add-hook 'nov-mode-hook 'visual-line-mode)
-			(add-hook 'nov-mode-hook 'visual-fill-column-mode))
-
-		(defun my-nov-window-configuration-change-hook ()
-			(my-nov-post-html-render-hook)
-			(remove-hook 'window-configuration-change-hook
-									 'my-nov-window-configuration-change-hook
-									 t))
-
-		(defun my-nov-font-setup ()
-			(face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-															 :height 1.5))
-		(add-hook 'nov-mode-hook 'my-nov-font-setup)
-	#+end_src
-
-* Plantuml
-
-A tool for drawing UML diagrams - [[https://www.plantuml.com]]
-
-#+BEGIN_SRC emacs-lisp
-	(use-package plantuml-mode
-		:config
-		(org-babel-do-load-languages 'org-babel-load-languages '((plantuml	. t)))
-		(setq org-plantuml-jar-path
-					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar")
-		(setq plantuml-default-exec-mode 'jar))
-#+END_SRC
-
-* Projectile
-
-Easily find files in a project.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package projectile
-		:bind-keymap
-		("C-c p" . projectile-command-map)
-		("S-p" . projectile-command-map)
-		:custom
-		(projectile-enable-caching t)
-		;; (projectile-indexing-method 'alien)
-		;; (projectile-generic-command 'find-program)
-		(projectile-mode-line '(:eval (projectile-project-name)))
-		:config
-		(projectile-mode +1)
-		(add-to-list 'projectile-globally-ignored-directories "node_modules")
-		(add-to-list 'projectile-globally-ignored-directories "target")
-		(add-to-list 'projectile-globally-ignored-directories "archive")
-		(add-to-list 'projectile-globally-ignored-directories ".cvsignore")
-		:init
-		(add-hook 'projectile-after-switch-project-hook (lambda ()
-																											(projectile-invalidate-cache nil))))
 #+END_SRC
 
 * Yasnippet
 
-Manage code snippets.
-
 #+BEGIN_SRC emacs-lisp
+	;; Manage code snippets
 	(use-package yasnippet
-		:diminish yas-minor-mode
 		:config
 		(yas-global-mode 1)
 		(global-set-key (kbd "M-/") 'company-yasnippet))
 #+END_SRC
 
-* Magit
-
-Interface to git.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-	       :bind
-	       ("C-x g" . magit-status)
-	       ("C-x M-g" . magit-dispatch-popup)
-	       ("C-c M-g" . magit-file-popup))
-#+END_SRC
-
-This is a workaround on Windows to have Magit prompt for the SSH passphrase if needed when pushing/pulling from remote.
-
-#+begin_src emacs-lisp
-	(use-package ssh-agency)
-#+end_src
-
 * Markdown
 
-A mode that makes it easy to read files written using markdown.
-
 #+BEGIN_SRC emacs-lisp
+	;; A mode that makes it easy to read files written using markdown
 	(use-package markdown-mode
 		:mode (("README\\.md\\'" . gfm-mode)
 					 ("\\.md\\'" . markdown-mode)
@@ -595,15 +407,13 @@ A mode that makes it easy to read files written using markdown.
 
 * Coding Environment
 
-Packages or configuration needed when in coding mode.
-
-** Add matching delimiters using =electric-pair-mode=
+** Add matching delimiters using electric-pair-mode
 
 #+BEGIN_SRC emacs-lisp
-	(add-hook 'prog-mode-hook 'electric-pair-mode)
+  (add-hook 'prog-mode-hook 'electric-pair-mode)
 #+END_SRC
 
-** =exec-path-from-shell=
+** exec-path-from-shell
 
 #+begin_src emacs-lisp
 	(use-package exec-path-from-shell
@@ -613,16 +423,15 @@ Packages or configuration needed when in coding mode.
 		(exec-path-from-shell-initialize))
 #+end_src
 
-** =add-node-modules-path=
+** add-node-modules-path
 
 #+begin_src emacs-lisp
 	(use-package add-node-modules-path
-		:config
-		(eval-after-load 'web-mode
-			'(add-hook 'web-mode-hook 'add-node-modules-path)))
+		:config	(eval-after-load 'web-mode '(add-hook 'web-mode-hook
+																									'add-node-modules-path)))
 #+end_src
 
-** =flycheck=
+** flycheck
 
 Check code syntax on the fly.
 
@@ -634,17 +443,10 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	(use-package flycheck
 		:after (add-node-modules-path)
-		:delight
 		:config
-		;; (setq-default flycheck-disabled-checkers
-		;; 							(append	flycheck-disabled-checkers
-		;; 											'(javascript-jshint)))
-		;; (setq-default flycheck-disabled-checkers
-		;; 							(append flycheck-disabled-checkers
-		;; 											'(json-jsonlint)))
 		(setq-default flycheck-temp-prefix ".flycheck")
-		(setq flycheck-local-config-file-functions ".eslintrc.*")
-		(setq flycheck-javascript-eslint-executable "$(npm bin)/eslint")
+		(setq flycheck-local-config-file-functions ".eslintrc.*"
+					flycheck-javascript-eslint-executable "$(npm bin)/eslint")
 		:init	(global-flycheck-mode))
 
 	(use-package flycheck-clj-kondo)
@@ -659,10 +461,6 @@ Adding some hooks for better coding in elisp.
 	(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
 	(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 	(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
-
-	(diminish 'emacs-lisp-mode "elisp")
-	(diminish 'subword-mode)
-	(diminish 'visual-line-mode)
 #+END_SRC
 
 ** Eldoc
@@ -670,105 +468,92 @@ Adding some hooks for better coding in elisp.
 Provides minibuffer hints when working with Emacs Lisp.
 
 #+BEGIN_SRC emacs-lisp
-	(use-package eldoc
-		:delight)
+  (use-package eldoc)
 #+END_SRC
 
-** HTML
+** Web Programming
+
+*** HTML
 
 #+BEGIN_SRC emacs-lisp
 	(use-package sgml-mode
-		:delight html-mode "HTML"
-		:hook
-		((html-mode . as/html-set-pretty-print-function)
-		 (html-mode . sgml-electric-tag-pair-mode)
-		 (html-mode . sgml-name-8bit-mode)
-		 (html-mode . toggle-truncate-lines))
+		:hook	((html-mode . as/html-set-pretty-print-function)
+					 (html-mode . sgml-electric-tag-pair-mode)
+					 (html-mode . sgml-name-8bit-mode)
+					 (html-mode . toggle-truncate-lines))
 		:custom (sgml-basic-offset 2)
 		:preface
 		(defun as/html-set-pretty-print-function ()
 			(setq as/pretty-print-function #'sgml-pretty-print)))
 #+END_SRC
 
-** Clojure
+*** CSS
 
 #+BEGIN_SRC emacs-lisp
-	(use-package clojure-mode
-		:init
-		(add-hook 'clojure-mode-hook #'subword-mode)
-		(add-hook 'clojure-mode-hook #'paredit-mode)
-		(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
-		(add-hook 'clojurescript-mode-hook #'subword-mode)
-		(add-hook 'clojurescript-mode-hook #'paredit-mode)
-		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook)
-		:config
-		(require 'flycheck-clj-kondo))
-
-	(unless (package-installed-p 'inf-clojure)
-		(package-refresh-contents)
-		(package-install 'inf-clojure))
-	(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+	(use-package css-mode
+		:custom (css-indent-offset 2))
 #+END_SRC
 
-*** =clj-refactoring=
-
-To refactor clojure code.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package clj-refactor)
-
-	(defun as/clojure-mode-hook ()
-		(clj-refactor-mode 1)
-		(yas-minor-mode 1)	; for adding require/use/import statements
-		;; This choice of keybinding leaves cider-macroexpand-1 unbound
-		(cljr-add-keybindings-with-prefix "C-c C-m"))
-#+END_SRC
-
-*** Cider
-
-REPL for clojure.
-
-#+BEGIN_SRC emacs-lisp
-	(use-package cider
-		:config
-		(setq cider-repl-pop-to-buffer-on-connect nil)
-		:init
-		(add-hook 'cider-repl-mode-hook #'eldoc-mode))
-#+END_SRC
-
-** =web-mode=
+*** web-mode
 
 #+BEGIN_SRC emacs-lisp
 	(use-package web-mode
-		:delight "☸ "
 		:mode ("\\.html?\\'" "\\.[jt]sx?\\'")
-		:config
-		(setq web-mode-block-padding 2)
-		(setq web-mode-code-indent-offset 2)
-		(setq web-mode-content-types-alist '(("jsx" . "\\.[jt]sx?\\'")))
-		(setq web-mode-css-indent-offset 2)
-		(setq web-mode-enable-auto-closing t)
-		(setq web-mode-enable-auto-pairing t)
-		(setq web-mode-enable-current-element-highlight t)
-		(setq web-mode-markup-indent-offset 2)
-		(setq web-mode-script-padding 2)
-		(setq web-mode-style-padding 2))
+		:config	((setq web-mode-block-padding 2
+									 web-mode-code-indent-offset 2
+									 web-mode-content-types-alist '(("jsx" . "\\.[jt]sx?\\'"))
+									 web-mode-css-indent-offset 2
+									 web-mode-enable-auto-closing t
+									 web-mode-enable-auto-pairing t
+									 web-mode-enable-current-element-highlight t
+									 web-mode-markup-indent-offset 2
+									 web-mode-script-padding 2
+									 web-mode-style-padding 2)
+						 ;; support for tsx and jsx file fomats
+						 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+						 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+						 (add-hook 'web-mode-hook
+											 (lambda ()
+												 (when ((or (string-equal "jsx") (string-equal "tsx"))
+																(file-name-extension buffer-file-name))
+													 (as/setup-tide-mode))))))
+
+	;; enable lint checker
+	(flycheck-add-mode 'typescript-tslint 'web-mode)
+	;; TODO 'jsx-tide' and 'append' failed to be added to the
+	;; flycheck-add-next-checker because it couldn't be found
+	(flycheck-add-mode 'javascript-eslint 'web-mode)
+	;; (flycheck-add-next-checker 'javascript-eslint)))
 #+END_SRC
 
-** =typescript-mode=
+*** JavaScript
+
+#+begin_src javascript :tangle no
+	;; Create jsconfig.json in the root folder of the project.
+	;; jsconfig.json is tsconfig.json with allowJs attribute set to true
+	{
+			"compilerOptions": {
+					"target": "es2017",
+					"allowSyntheticDefaultImports": true,
+					"noEmit": true,
+					"checkJs": true,
+					"jsx": "react",
+					"lib": [ "dom", "es2017" ]
+			}
+	}
+#+end_src
+
+*** typescript-mode
 
 #+begin_src emacs-lisp
 	(use-package typescript-mode
 		:mode ("\\.[jt]s\\'"))
 #+end_src
 
-** =tide=
-
-=tide= is used together with =web-mode=
+*** tide
 
 #+begin_src emacs-lisp
+	;; tide is used together with web-mode
 	(use-package tide
 		:after (company flycheck typescript-mode)
 		:hook ((typescript-mode . tide-setup)
@@ -788,135 +573,126 @@ REPL for clojure.
 		(company-mode +1))
 #+end_src
 
-** JavaScript
-
-Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =tsconfig.json= with =allowJs= attribute set to =true=.
-
-#+begin_src javascript :tangle no
-	{
-			"compilerOptions": {
-					"target": "es2017",
-					"allowSyntheticDefaultImports": true,
-					"noEmit": true,
-					"checkJs": true,
-					"jsx": "react",
-					"lib": [ "dom", "es2017" ]
-			}
-	}
-#+end_src
-
-*** TSX
-
-#+begin_src emacs-lisp
-	(require 'web-mode)
-	(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-	(add-hook 'web-mode-hook
-						(lambda ()
-							(when (string-equal "tsx" (file-name-extension buffer-file-name))
-								(as/setup-tide-mode))))
-
-	;; enable typescript-tslint checker
-	(flycheck-add-mode 'typescript-tslint 'web-mode)
-#+end_src
-
-*** JSX
-
-#+begin_src emacs-lisp
-	(require 'web-mode)
-	(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-	(add-hook 'web-mode-hook
-						(lambda ()
-							(when (string-equal "jsx" (file-name-extension buffer-file-name))
-								(as/setup-tide-mode))))
-
-	;; enable lint checker
-	;; TODO 'jsx-tide' and 'append' failed to be added to the flycheck-add-next-checker because it couldn't be found
-	(flycheck-add-mode 'javascript-eslint 'web-mode)
-	;; (flycheck-add-next-checker 'javascript-eslint)
-#+end_src
-
-*** JSON
-
-#+BEGIN_SRC emacs-lisp
-  (use-package json-mode
-    :mode "\\.json\\'"
-    :config (setq json-reformat:indent-width 2))
-#+END_SRC
-
-** CSS
-
-#+BEGIN_SRC emacs-lisp
-	(use-package css-mode
-		:custom (css-indent-offset 2))
-#+END_SRC
-
-** =emmet-mode=
+*** emmet-mode
 
 #+BEGIN_SRC emacs-lisp
 	(use-package emmet-mode
-		:delight
 		:hook (sgml-mode css-mode web-mode))
 #+END_SRC
 
-** CSV
+** Clojure
 
 #+BEGIN_SRC emacs-lisp
-	(use-package csv-mode)
+	(use-package clojure-mode
+		:init
+		(add-hook 'clojure-mode-hook #'subword-mode)
+		(add-hook 'clojure-mode-hook #'paredit-mode)
+		(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+		(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
+		(add-hook 'clojurescript-mode-hook #'subword-mode)
+		(add-hook 'clojurescript-mode-hook #'paredit-mode)
+		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
+		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook)
+		:config	(require 'flycheck-clj-kondo))
+
+	;; REPL for clojure
+	(use-package cider
+		:config	(setq cider-repl-pop-to-buffer-on-connect nil)
+		:init	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 #+END_SRC
 
-** Go-lang
+** json
 
-	 #+begin_src emacs-lisp
-		 (use-package go-mode
-			 :config
-			 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
-	 #+end_src
+#+BEGIN_SRC emacs-lisp
+	(use-package json-mode
+		:mode "\\.json\\'"
+		:config (setq json-reformat:indent-width 2))
+#+END_SRC
+
+** Plantuml
+
+#+BEGIN_SRC emacs-lisp
+	;; A tool for coding UML diagrams -- https://www.plantuml.com
+	(use-package plantuml-mode
+		:config	(org-babel-do-load-languages 'org-babel-load-languages
+																				 '((plantuml	. t)))
+		(setq org-plantuml-jar-path
+					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
+					plantuml-default-exec-mode 'jar))
+#+END_SRC
+
+** Projectile
+
+Easily find files in a project.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package projectile
+		:bind-keymap(("C-c p" . projectile-command-map)
+								 ("S-p" . projectile-command-map))
+		:custom	((projectile-enable-caching t)
+						 (projectile-mode-line '(:eval (projectile-project-name))))
+		:config	((projectile-mode +1)
+						 (add-to-list 'projectile-globally-ignored-directories "node_modules")
+						 (add-to-list 'projectile-globally-ignored-directories "target")
+						 (add-to-list 'projectile-globally-ignored-directories "archive")
+						 (add-to-list 'projectile-globally-ignored-directories ".cvsignore"))
+		:init	(add-hook 'projectile-after-switch-project-hook
+										(lambda ()
+											(projectile-invalidate-cache nil))))
+#+END_SRC
+
+** Magit
+
+Interface to git.
+
+#+BEGIN_SRC emacs-lisp
+	(use-package magit
+		:bind	(("C-x g" . magit-status)
+					 ("C-x M-g" . magit-dispatch-popup)
+					 ("C-c M-g" . magit-file-popup)))
+#+END_SRC
+
+This is a workaround on Windows to have Magit prompt for the SSH passphrase if needed when pushing/pulling from remote.
+
+#+begin_src emacs-lisp
+	(use-package ssh-agency)
+#+end_src
 
 * Writing
 
-** Ispell
+** Spell Check
 
- Spell check functionality.
+#+BEGIN_SRC emacs-lisp
+	(add-to-list 'exec-path "/Users/alvin/.bin/cygwin64/bin")
+	(setq ispell-program-name "aspell"
+				text-mode-hook '(lambda () (flyspell-mode t)))
 
- #+BEGIN_SRC emacs-lisp
-	 (add-to-list 'exec-path "/usr/bin/aspell")
-	 (setq ispell-program-name "aspell"
-				 text-mode-hook '(lambda () (flyspell-mode t)))
+	(use-package ispell
+		:config (setq ispell-dictionary "british"))
 
-	 (require 'ispell)
-	 (setq ispell-dictionary "british")
- #+END_SRC
+	(use-package flyspell)
+#+END_SRC
 
 ** Chinese Input method using =pyim=
 
 #+begin_src emacs-lisp :tangle no
 	(use-package pyim
 		:demand t
-		:config
-		(use-package pyim-basedict
-			:config (pyim-basedict-enable))
-
-		(setq pyim-default-scheme 'quanpin)
-
-		(setq-default pyim-english-input-switch-functions
-									'(pyim-probe-dynamic-english
-										;; pyim-probe-isearch-mode
-										pyim-probe-program-mode
-										pyim-probe-org-structure-template))
-
-		(setq-default pyim-punctuation-half-width-functions
-									'(pyim-probe-punctuation-line-beginning
-										pyim-probe-punctuation-after-punctuation))
-
-		(pyim-isearch-mode 1)
-
-		(setq pyim-page-tooltip 'popup)
-
-		(setq pyim-page-length 5)
-
-		:bind
-		(("M-j" . pyim-convert-string-at-point)
-		 ("C-;" . pyim-delete-word-from-personal-buffer)))
+		:config	((use-package pyim-basedict
+							 :config (pyim-basedict-enable))
+						 (setq-default pyim-english-input-switch-functions
+													 '(pyim-probe-dynamic-english
+														 pyim-probe-program-mode
+														 pyim-probe-org-structure-template)
+													 pyim-punctuation-half-width-functions
+													 '(pyim-probe-punctuation-line-beginning
+														 pyim-probe-punctuation-after-punctuation))
+						 (setq pyim-page-tooltip 'popup
+									 pyim-page-length 5
+									 pyim-default-scheme 'quanpin)
+						 (pyim-isearch-mode 1))
+		:bind	(("M-j" . pyim-convert-string-at-point)
+					 ("C-;" . pyim-delete-word-from-personal-buffer)))
 #+end_src
 
 * Utilities or helper methods
@@ -926,72 +702,72 @@ Create =jsconfig.json= in the root folder of the project. =jsconfig.json= is =ts
 Opens the emacs' config file, which is this config file - =config.org=.
 
 #+BEGIN_SRC emacs-lisp
-	(defun as/config ()
-		"find and open emacs' config file"
-		(interactive)
-		(find-file "~/.emacs.d/config.org"))
+  (defun as/config ()
+    "find and open emacs' config file"
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
 #+END_SRC
 
 ** Create a new scratch file
 
 #+BEGIN_SRC emacs-lisp
-	(defun as/create-scratch-buffer nil
-		"create a scratch buffer"
-		(interactive)
-		(switch-to-buffer (get-buffer-create "*scratch*"))
-		(lisp-interaction-mode)
-		(insert initial-scratch-message))
+  (defun as/create-scratch-buffer nil
+    "create a scratch buffer"
+    (interactive)
+    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (lisp-interaction-mode)
+    (insert initial-scratch-message))
 #+END_SRC
 
 ** Change Emacs' look when it is opened in the terminal via the =-nw= paramater
 
 #+BEGIN_SRC emacs-lisp
-	(defun as/terminal-init-screen ()
-		"Terminal initialization function for screen"
-		(interactive)
-		(tty-run-terminal-initialization (selected-frame) "rxvt")
-		(tty-run-terminal-initialization (selected-frame) "xterm"))
+  (defun as/terminal-init-screen ()
+    "Terminal initialization function for screen"
+    (interactive)
+    (tty-run-terminal-initialization (selected-frame) "rxvt")
+    (tty-run-terminal-initialization (selected-frame) "xterm"))
 #+END_SRC
 
 ** Dired sort options
 
 #+begin_src emacs-lisp
-	(defun as/dired-sort ()
-		"Sort dired dir listing in different ways.
-	Prompt for a choice.
-	URL `http://xahlee.info/emacs/emacs/dired_sort.html'
-	Version: 2018-12-23 2022-04-07"
-		(interactive)
-		(let (xsortBy xarg)
-			(setq xsortBy (completing-read "Sort by:" '( "date" "size" "name" )))
-			(cond
-			 ((equal xsortBy "name") (setq xarg "-Al "))
-			 ((equal xsortBy "date") (setq xarg "-Al -t"))
-			 ((equal xsortBy "size") (setq xarg "-Al -S"))
-			 ((equal xsortBy "dir") (setq xarg "-Al --group-directories-first"))
-			 (t (error "logic error 09535" )))
-			(dired-sort-other xarg )))
+  (defun as/dired-sort ()
+    "Sort dired dir listing in different ways.
+  Prompt for a choice.
+  URL `http://xahlee.info/emacs/emacs/dired_sort.html'
+  Version: 2018-12-23 2022-04-07"
+    (interactive)
+    (let (xsortBy xarg)
+      (setq xsortBy (completing-read "Sort by:" '( "date" "size" "name" )))
+      (cond
+       ((equal xsortBy "name") (setq xarg "-Al "))
+       ((equal xsortBy "date") (setq xarg "-Al -t"))
+       ((equal xsortBy "size") (setq xarg "-Al -S"))
+       ((equal xsortBy "dir") (setq xarg "-Al --group-directories-first"))
+       (t (error "logic error 09535" )))
+      (dired-sort-other xarg )))
 #+end_src
 
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
-	(global-set-key (kbd "C-+") 'text-scale-increase)
-	(global-set-key (kbd "C--") 'text-scale-decrease)
-	(global-set-key (kbd "C-x C-b") 'ibuffer)
-	(global-set-key (kbd "RET") 'newline-and-indent)
-	(global-set-key (kbd "C-:") 'comment-or-uncomment-region)
-	(global-set-key (kbd "M-/") 'hippie-expand)
-	(global-set-key (kbd "<f8>") 'ispell-word)
-	(global-set-key (kbd "C-<f8>") 'flyspell-mode)
-	(global-set-key (kbd "C-c i") 'imenu)
-	(define-key global-map (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
+  (global-set-key (kbd "M-/") 'hippie-expand)
+  (global-set-key (kbd "<f8>") 'ispell-word)
+  (global-set-key (kbd "C-<f8>") 'flyspell-mode)
+  (global-set-key (kbd "C-c i") 'imenu)
+  (define-key global-map (kbd "RET") 'newline-and-indent)
 
-	;; move line of text up or down
-	(global-set-key [M-up] 'move-text-up)
-	(global-set-key [M-down] 'move-text-down)
+  ;; move line of text up or down
+  (global-set-key [M-up] 'move-text-up)
+  (global-set-key [M-down] 'move-text-down)
 
-	;; mini-buffer history
-	(global-set-key (kbd "M-n") 'next-history-element)
-	(global-set-key (kbd "M-p") 'previous-history-element)
+  ;; mini-buffer history
+  (global-set-key (kbd "M-n") 'next-history-element)
+  (global-set-key (kbd "M-p") 'previous-history-element)
 #+END_SRC
