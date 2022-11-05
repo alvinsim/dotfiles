@@ -166,35 +166,38 @@
 
 ** Load Theme
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
+	;; atom-one-dark
 	;; (use-package atom-one-dark-theme)
 
+	;; solarized light
 	;; (use-package solarized-theme
-	;; 	:init
-	;; 	(setq solarized-distinct-fringe-background t
-	;; 				solarized-use-variable-pitch nil
-	;; 				solarized-high-contrast-mode-line t
-	;; 				solarized-use-less-bold t
-	;; 				solarized-use-more-italic t
-	;; 				solarized-emphasize-indicators nil
-	;; 				solarized-scale-org-headlines nil
-	;; 				solarized-height-minus-1 1.0
-	;; 				solarized-height-plus-1 1.0
-	;; 				solarized-height-plus-2 1.0
-	;; 				solarized-height-plus-3 1.0
-	;; 				solarized-height-plus-4 1.0
-	;; 				x-underline-at-descent-line t)
-	;; 	:config
-	;; 	(load-theme 'solarized-light t))
+	;; 	:init (setq solarized-distinct-fringe-background t
+	;; 							solarized-use-variable-pitch nil
+	;; 							solarized-high-contrast-mode-line t
+	;; 							solarized-use-less-bold t
+	;; 							solarized-use-more-italic t
+	;; 							solarized-emphasize-indicators nil
+	;; 							solarized-scale-org-headlines nil
+	;; 							solarized-height-minus-1 1.0
+	;; 							solarized-height-plus-1 1.0
+	;; 							solarized-height-plus-2 1.0
+	;; 							solarized-height-plus-3 1.0
+	;; 							solarized-height-plus-4 1.0
+	;; 							x-underline-at-descent-line t)
+	;; 	:config	(load-theme 'solarized-light t))
 
-	(use-package leuven-theme
-		:after org
-		:custom	(org-fontify-whole-heading-line t)
-		:config	(load-theme 'leuven t))
+	;; leuven
+	;;(use-package leuven-theme
+	;;		:after org
+	;;		:custom	(org-fontify-whole-heading-line t)
+	;;		:config	(load-theme 'leuven t))
 
+	;; nord
 	;; (use-package nord-theme
 	;; 	:config (load-theme 'nord t))
 
+	;; modus-operandi
 	;; TODO Headlines similar to Leuven
 	;; TODO Headline tags similar to Leuven
 	;; (use-package modus-themes
@@ -224,6 +227,11 @@
 	;; 	:config
 	;; 	(modus-themes-load-operandi)
 	;; 	(load-theme 'modus-operandi t))
+
+	;; ef-theme
+	(use-package ef-themes)
+	;; Load a light Ef theme at random
+	(ef-themes-load-random 'light)
 
 #+END_SRC
 
@@ -301,39 +309,20 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 		:hook (prog-mode))
 #+END_SRC
 
-* Configuration specifically for MS Windows
-
-#+begin_src emacs-lisp
-	;; Replace the Windows' find program
-	(when (string-equal system-type "windows-nt")
-		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
-										 "c:/WINDOWS/system32"
-										 "c:/Program Files/Git/bin"
-										 "c:/Program Files/MiKTeX 2.9/miktex/bin/x64")))
-			(setenv "PATH" (mapconcat 'identity mypaths ";"))
-			(setq exec-path (append mypaths (list "." exec-directory)))))
-
-	;;(setenv "JAVA_HOME" "c:/Users/AlvinWS/bin/jdk11.0.14_9")
-	;;(setenv "PATH" (concat (getenv "JAVA_HOME") "/bin;" (getenv "PATH")))
-	(setenv "PATH" (concat "c:/Users/AlvinWS/bin/cygwin64/bin;" (getenv "PATH")))
-
-	(setq find-program "C:/Users/alvin/.bin/cygwin64/bin/find.exe")
-#+end_src
-
 * Ido and flx-ido
 
 #+BEGIN_SRC emacs-lisp
 	;; For better navigation
 	(setq ido-enable-flex-matching t
-				ido-everywhere t
+				;; ido-everywhere t
 				ido-create-new-buffer 'always
-				ido-ignore-extensions t
-				ido-mode 1)
+				ido-ignore-extensions t)
+				;;ido-mode 1)
 
 	(use-package flx-ido
 		:config
-		;; (ido-mode 1)
-		;; (ido-everywhere 1)
+		(ido-mode 1)
+		(ido-everywhere 1)
 		(flx-ido-mode 1))
 #+END_SRC
 
@@ -454,9 +443,8 @@ When having problems with React code, check the following:
 
 ** Emacs Lisp
 
-Adding some hooks for better coding in elisp.
-
 #+BEGIN_SRC emacs-lisp
+	;; Adding some hooks for better coding in elisp
 	(add-hook 'emacs-lisp-mode-hook #'subword-mode)
 	(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
 	(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
@@ -465,10 +453,9 @@ Adding some hooks for better coding in elisp.
 
 ** Eldoc
 
-Provides minibuffer hints when working with Emacs Lisp.
-
 #+BEGIN_SRC emacs-lisp
-  (use-package eldoc)
+	;; Provides minibuffer hints when working with Emacs Lisp
+	(use-package eldoc)
 #+END_SRC
 
 ** Web Programming
@@ -623,9 +610,8 @@ Provides minibuffer hints when working with Emacs Lisp.
 
 ** Projectile
 
-Easily find files in a project.
-
 #+BEGIN_SRC emacs-lisp
+	;; Easily find files in a project
 	(use-package projectile
 		:bind-keymap(("C-c p" . projectile-command-map)
 								 ("S-p" . projectile-command-map))
@@ -643,20 +629,17 @@ Easily find files in a project.
 
 ** Magit
 
-Interface to git.
-
 #+BEGIN_SRC emacs-lisp
+	;; Interface to git
 	(use-package magit
 		:bind	(("C-x g" . magit-status)
 					 ("C-x M-g" . magit-dispatch-popup)
 					 ("C-c M-g" . magit-file-popup)))
-#+END_SRC
 
-This is a workaround on Windows to have Magit prompt for the SSH passphrase if needed when pushing/pulling from remote.
-
-#+begin_src emacs-lisp
+	;; This is a workaround on Windows to have Magit prompt for the SSH passphrase
+	;; when needed
 	(use-package ssh-agency)
-#+end_src
+#+END_SRC
 
 * Writing
 
@@ -699,20 +682,18 @@ This is a workaround on Windows to have Magit prompt for the SSH passphrase if n
 
 ** Load Emacs' Configuration File
 
-Opens the emacs' config file, which is this config file - =config.org=.
-
 #+BEGIN_SRC emacs-lisp
-  (defun as/config ()
-    "find and open emacs' config file"
-    (interactive)
-    (find-file "~/.emacs.d/config.org"))
+	(defun as/config ()
+		"Finds and opens the emacs' config file"
+		(interactive)
+		(find-file "~/.emacs.d/config.org"))
 #+END_SRC
 
 ** Create a new scratch file
 
 #+BEGIN_SRC emacs-lisp
   (defun as/create-scratch-buffer nil
-    "create a scratch buffer"
+    "Create a scratch buffer"
     (interactive)
     (switch-to-buffer (get-buffer-create "*scratch*"))
     (lisp-interaction-mode)
@@ -771,3 +752,18 @@ Opens the emacs' config file, which is this config file - =config.org=.
   (global-set-key (kbd "M-n") 'next-history-element)
   (global-set-key (kbd "M-p") 'previous-history-element)
 #+END_SRC
+
+* Configuration specifically for MS Windows
+
+#+begin_src emacs-lisp
+	;; Replace the Windows' find program
+	(when (string-equal system-type "windows-nt")
+		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
+										 "c:/windows/system32"
+										 "c:/Program Files/Git/bin"
+										 "c:/Program Files/MiKTeX/miktex/bin/x64")))
+			(setenv "PATH" (mapconcat 'identity mypaths ";"))
+			(setq exec-path (append mypaths (list "." exec-directory)))))
+
+	(setq find-program "c:/Users/alvin/.bin/cygwin64/bin/find.exe")
+#+end_src
