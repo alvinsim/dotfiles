@@ -730,6 +730,19 @@ When having problems with React code, check the following:
       (dired-sort-other xarg )))
 #+end_src
 
+* Blogging
+
+** Jekyll
+
+#+begin_src emacs-lisp
+	(use-package poly-markdown)
+	(use-package jekyll-modes)
+
+	(add-to-list 'auto-mode-alist '("\\.md$" . jekyll-markdown-mode))
+	(add-to-list 'auto-mode-alist '("\\.markdown$" . jekyll-markdown-mode))
+	(add-to-list 'auto-mode-alist '("\\.html$" . jekyll-html-mode))
+#+end_src
+
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
