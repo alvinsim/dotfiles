@@ -8,7 +8,7 @@ echo ======================================
 echo Downloading latest cygwin installer...
 echo ======================================
 echo.
-%wget% -N http://cygwin.com/setup-x86_64.exe
+%wget% -N https://cygwin.com/setup-x86_64.exe
 echo.
 echo ======================================
 echo Updating all cygwin packages...
