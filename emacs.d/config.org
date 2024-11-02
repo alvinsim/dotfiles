@@ -3,7 +3,7 @@
 #+TOC: true
 #+STARTUP: showall
 
-* Tasks [16%]
+* Tasks [21%]
 	:PROPERTIES:
 	:ARCHIVE:  %s_archive::* Tasks
 	:END:
@@ -23,7 +23,8 @@
 ** DONE =dap-mode=
 ** TODO Mission Control
 ** TODO Beautifying the Mode Line
-** TODO Re-organise headlines
+** TODO Install ace-window?
+** DONE Re-organise headlines
 
 * Configure use-package
 
@@ -32,6 +33,8 @@
 	;; use-package is used to manage the configuration of packages.
 	(unless (package-installed-p 'use-package)
 		(package-install 'use-package))
+
+	(setq package-check-signature nil)
 
 	(setq use-package-verbose t
 				use-package-always-ensure t)
@@ -102,6 +105,7 @@
 
 	;; Use aggressive-indent-mode to automatically indent code while writing
 	(use-package aggressive-indent
+		:defer t
 		:hook ((css-mode . aggressive-indent-mode)
 					 (emacs-lisp-mode . aggressive-indent-mode)
 					 (js-mode . aggressive-indent-mode)
@@ -126,6 +130,7 @@
 
 	;; Toggle visualisation of matching parens using paredit
 	(use-package paredit
+		:defer t
 		:config
 		(show-paren-mode t)
 		(dolist (m '(emacs-lisp-mode-hook)) (add-hook m #'paredit-mode))
@@ -275,6 +280,7 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 #+BEGIN_SRC emacs-lisp
 	;; Add autocomplete to only programming-related major modes using Company
 	(use-package company
+		:defer t
 		:config	(add-hook 'prog-mode-hook 'company-mode)
 		:custom	((company-begin-commands '(self-insert-command))
 						 (company--idle-delay .1)
@@ -286,9 +292,10 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 
 ** Expand-region
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	;; Expands the region around the cursor semantically depending on the mode
 	(use-package expand-region
+		:defer t
 		:bind (("C-=" . er/expand-region)
 					 ("C-+" . er/contract-regions)))
 #+END_SRC
@@ -298,6 +305,7 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 #+BEGIN_SRC emacs-lisp
 	;; Highlights delimiters like parentheses, brackets or braces by their depth
 	(use-package rainbow-delimiters
+		:defer t
 		:hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
@@ -306,6 +314,7 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 #+BEGIN_SRC emacs-lisp
 	;; Colour the text with their value
 	(use-package rainbow-mode
+		:defer t
 		:hook (prog-mode))
 #+END_SRC
 
@@ -378,6 +387,7 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 #+BEGIN_SRC emacs-lisp
 	;; Manage code snippets
 	(use-package yasnippet
+		:defer t
 		:config
 		(yas-global-mode 1)
 		(global-set-key (kbd "M-/") 'company-yasnippet))
@@ -388,6 +398,7 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 #+BEGIN_SRC emacs-lisp
 	;; A mode that makes it easy to read files written using markdown
 	(use-package markdown-mode
+		:defer t
 		:mode (("README\\.md\\'" . gfm-mode)
 					 ("\\.md\\'" . markdown-mode)
 					 ("\\.markdown\\'" . markdown-mode))
@@ -432,6 +443,7 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	(use-package flycheck
 		:after (add-node-modules-path)
+		:defer t
 		:config
 		(setq-default flycheck-temp-prefix ".flycheck")
 		(setq flycheck-local-config-file-functions ".eslintrc.*"
@@ -455,7 +467,8 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	;; Provides minibuffer hints when working with Emacs Lisp
-	(use-package eldoc)
+	(use-package eldoc
+		:defer t)
 #+END_SRC
 
 ** Web Programming
@@ -464,6 +477,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package sgml-mode
+		:defer t
 		:hook	((html-mode . as/html-set-pretty-print-function)
 					 (html-mode . sgml-electric-tag-pair-mode)
 					 (html-mode . sgml-name-8bit-mode)
@@ -478,6 +492,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package css-mode
+		:defer t
 		:custom (css-indent-offset 2))
 #+END_SRC
 
@@ -485,6 +500,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package web-mode
+		:defer t
 		:mode ("\\.html?\\'" "\\.[jt]sx?\\'")
 		:config	((setq web-mode-block-padding 2
 									 web-mode-code-indent-offset 2
@@ -534,6 +550,7 @@ When having problems with React code, check the following:
 
 #+begin_src emacs-lisp
 	(use-package typescript-mode
+		:defer t
 		:mode ("\\.[jt]s\\'"))
 #+end_src
 
@@ -542,6 +559,7 @@ When having problems with React code, check the following:
 #+begin_src emacs-lisp
 	;; tide is used together with web-mode
 	(use-package tide
+		:defer t
 		:after (company flycheck typescript-mode)
 		:hook ((typescript-mode . tide-setup)
 					 (typescript-mode . tide-hl-identifier-mode)
@@ -564,6 +582,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package emmet-mode
+		:defer t
 		:hook (sgml-mode css-mode web-mode))
 #+END_SRC
 
@@ -571,6 +590,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package clojure-mode
+		:defer t
 		:init
 		(add-hook 'clojure-mode-hook #'subword-mode)
 		(add-hook 'clojure-mode-hook #'paredit-mode)
@@ -584,6 +604,7 @@ When having problems with React code, check the following:
 
 	;; REPL for clojure
 	(use-package cider
+		:defer t
 		:config	(setq cider-repl-pop-to-buffer-on-connect nil)
 		:init	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 #+END_SRC
@@ -592,6 +613,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
 	(use-package json-mode
+		:defer t
 		:mode "\\.json\\'"
 		:config (setq json-reformat:indent-width 2))
 #+END_SRC
@@ -601,6 +623,7 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	;; A tool for coding UML diagrams -- https://www.plantuml.com
 	(use-package plantuml-mode
+		:defer t
 		:config	(org-babel-do-load-languages 'org-babel-load-languages
 																				 '((plantuml	. t)))
 		(setq org-plantuml-jar-path
@@ -613,6 +636,7 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	;; Easily find files in a project
 	(use-package projectile
+		:defer t
 		:bind-keymap(("C-c p" . projectile-command-map)
 								 ("S-p" . projectile-command-map))
 		:custom	((projectile-enable-caching t)
@@ -632,6 +656,7 @@ When having problems with React code, check the following:
 #+BEGIN_SRC emacs-lisp
 	;; Interface to git
 	(use-package magit
+		:defer t
 		:bind	(("C-x g" . magit-status)
 					 ("C-x M-g" . magit-dispatch-popup)
 					 ("C-c M-g" . magit-file-popup)))
@@ -646,7 +671,7 @@ When having problems with React code, check the following:
 ** Spell Check
 
 #+BEGIN_SRC emacs-lisp
-	(add-to-list 'exec-path "/Users/alvin/.bin/cygwin64/bin")
+	;; (add-to-list 'exec-path "/Users/alvin/.bin/cygwin64/bin")
 	(setq ispell-program-name "aspell"
 				text-mode-hook '(lambda () (flyspell-mode t)))
 
@@ -660,6 +685,7 @@ When having problems with React code, check the following:
 
 #+begin_src emacs-lisp :tangle no
 	(use-package pyim
+		:defer t
 		:demand t
 		:config	((use-package pyim-basedict
 							 :config (pyim-basedict-enable))
