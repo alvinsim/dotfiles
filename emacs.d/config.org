@@ -50,35 +50,35 @@
 * Set Personal Information
 
 #+BEGIN_SRC emacs-lisp
-	(setq user-full-name "Alvin Sim Wee Lee"
-				user-mail-address "sim.alvin@gmail.com")
+  (setq user-full-name "Alvin Sim Wee Lee"
+	user-mail-address "sim.alvin@gmail.com")
 #+END_SRC
 
 * Set Customised Settings To Different File
 
 #+BEGIN_SRC emacs-lisp
-	;; This stops emacs from adding customised settings to init.el.
-	;; Creating it as a temporary file disables it i.e. any changes are session local.
-	(setq custom-file (make-temp-file "emacs-custom"))
+  ;; This stops emacs from adding customised settings to init.el.
+  ;; Creating it as a temporary file disables it i.e. any changes are session local.
+  (setq custom-file (make-temp-file "emacs-custom"))
 #+END_SRC
 
 * Set prefer-coding-system to utf-8 as default
 
 #+BEGIN_SRC emacs-lisp
-	;; Use UTF-8 encoding.
-	(prefer-coding-system 'utf-8)
+  ;; Use UTF-8 encoding.
+  (prefer-coding-system 'utf-8)
 
-	;; lookup language environments with 'describe-language-environment
-	(set-language-environment "UTF-8")
-	(set-selection-coding-system 'utf-8)
-	(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+  ;; lookup language environments with 'describe-language-environment
+  (set-language-environment "UTF-8")
+  (set-selection-coding-system 'utf-8)
+  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+END_SRC
 
 * Confirmation When Exiting Emacs
 
 #+begin_src emacs-lisp
-	;; Allows answering 'y' or 'n' instead of 'yes' or 'no'.
-	(setq confirm-kill-emacs 'y-or-n-p)
+  ;; Allows answering 'y' or 'n' instead of 'yes' or 'no'.
+  (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
 * UI Preferences
@@ -86,323 +86,204 @@
 ** Tweak to the window chrome
 
 #+BEGIN_SRC emacs-lisp
-	;; Disable the tooltip, toolbar and scroll bar.
-	(tooltip-mode -1)
-	(tool-bar-mode -1)
-	(menu-bar-mode 1)
-	(scroll-bar-mode -1)
+  ;; Disable the tooltip, toolbar and scroll bar.
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode 1)
+  (scroll-bar-mode -1)
 
-	;; Disable tiny scroll bar in the minibuffer window.
-	(set-window-scroll-bars (minibuffer-window) nil nil)
+  ;; Disable tiny scroll bar in the minibuffer window.
+  (set-window-scroll-bars (minibuffer-window) nil nil)
 
-	;; Remove and show  trailing whitespaces when saving a file
-	(add-to-list 'write-file-functions 'delete-trailing-whitespace)
-	(setq show-trailing-whitespace t)
+  ;; Remove and show  trailing whitespaces when saving a file
+  (add-to-list 'write-file-functions 'delete-trailing-whitespace)
+  (setq show-trailing-whitespace t)
 
-	;; Setting tabs appropriately
-	(setq-default tab-width 2)
-	(setq indent-tabs-mode t)
+  ;; Setting tabs appropriately
+  ;;(setq-default tab-width 2)
+  ;;(setq indent-tabs-mode t)
 
-	;; Use aggressive-indent-mode to automatically indent code while writing
-	(use-package aggressive-indent
-		:defer t
-		:hook ((css-mode . aggressive-indent-mode)
-					 (emacs-lisp-mode . aggressive-indent-mode)
-					 (js-mode . aggressive-indent-mode)
-					 (clojure-mode . aggressive-indent-mode)
-					 (clojurescript-mode . aggressive-indent-mode))
-		:custom (aggressive-indent-comments-too))
+  ;; Use aggressive-indent-mode to automatically indent code while writing
+  ;; (use-package aggressive-indent
+  ;;   :defer t
+  ;;   :hook ((css-mode . aggressive-indent-mode)
+  ;; 	 (emacs-lisp-mode . aggressive-indent-mode)
+  ;; 	 (js-mode . aggressive-indent-mode)
+  ;; 	 (clojure-mode . aggressive-indent-mode)
+  ;; 	 (clojurescript-mode . aggressive-indent-mode))
+  ;;  :custom (aggressive-indent-comments-too))
 
-	;; Do not show splash screen when emacs first starts up
-	;; (setq inhibit-splash-screen t)
+  ;; Do not show splash screen when emacs first starts up
+  ;; (setq inhibit-splash-screen t)
 
-	;; Display the column number in the mode line
-	(setq column-number-mode t)
+  ;; Display the column number in the mode line
+  (setq column-number-mode t)
 
-	;; Disable the use of dialog box
-	(setq use-dialog-box nil)
+  ;; Disable the use of dialog box
+  (setq use-dialog-box nil)
 
-	;; Add new line when next-line is called
-	(setq next-line-add-newlines t)
+  ;; Add new line when next-line is called
+  (setq next-line-add-newlines t)
 
-	;; When deleting a file, move them to the OS' trash instead
-	(setq delete-by-moving-to-trash t)
+  ;; When deleting a file, move them to the OS' trash instead
+  (setq delete-by-moving-to-trash t)
 
-	;; Toggle visualisation of matching parens using paredit
-	(use-package paredit
-		:defer t
-		:config
-		(show-paren-mode t)
-		(dolist (m '(emacs-lisp-mode-hook)) (add-hook m #'paredit-mode))
-		(bind-keys :map paredit-mode-map
-							 ("{" . paredit-open-curly)
-							 ("}" . paredit-close-curly))
-		(unless terminal-frame
-			(bind-keys :map paredit-mode-map
-								 ("M-[" . paredit-wrap-square)
-								 ("M-}" . paredit-wrap-curly))))
+  ;; Toggle visualisation of matching parens using paredit
+  (use-package paredit
+    :defer t
+    :config
+    (show-paren-mode t)
+    (dolist (m '(emacs-lisp-mode-hook)) (add-hook m #'paredit-mode))
+    (bind-keys :map paredit-mode-map
+	       ("{" . paredit-open-curly)
+	       ("}" . paredit-close-curly))
+    (unless terminal-frame
+      (bind-keys :map paredit-mode-map
+		 ("M-[" . paredit-wrap-square)
+		 ("M-}" . paredit-wrap-curly))))
 
-	;; Make all 'yes or no' to 'y or n' for more convenience
-	(defalias 'yes-or-no-p 'y-or-n-p)
+  ;; Make all 'yes or no' to 'y or n' for more convenience
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
-	;; Word-wrap always
-	(global-visual-line-mode 1)
+  ;; Word-wrap always
+  (global-visual-line-mode 1)
 
-	;; Highlight the current line
-	(global-hl-line-mode)
+  ;; Highlight the current line
+  (global-hl-line-mode)
 
-	;; Replace lambdas and other forms with pretty symbols
-	(global-prettify-symbols-mode 1)
+  ;; Replace lambdas and other forms with pretty symbols
+  (global-prettify-symbols-mode 1)
 
-	;; Disables the audio bell
-	(setq ring-bell-function 'ignore)
+  ;; Disables the audio bell
+  (setq ring-bell-function 'ignore)
 
-	;; Change how emacs backup files
-	(setq backup-directory-alist '(("." . ".backup"))
-				backup-by-copying t		;; Don't delete hardlinks
-				version-control t			;; Use version numbers on backups
-				delete-old-versions t	;; Delete excess backups
-				kept-new-versions 20	;; Number of new backups to keep
-				kept-old-versions 5) 	;; Number of old backups to keep
+  ;; Change how emacs backup files
+  (setq backup-directory-alist '(("." . "~/tmp"))
+	backup-by-copying t		;; Don't delete hardlinks
+	version-control t			;; Use version numbers on backups
+	delete-old-versions t	;; Delete excess backups
+	kept-new-versions 8	;; Number of new backups to keep
+	kept-old-versions 5) 	;; Number of old backups to keep
 
-	;; Focus help windows when they are opened
-	(setq help-window-select t)
+  ;; Focus help windows when they are opened
+  (setq help-window-select t)
 #+END_SRC
 
 ** Load Theme
 
 #+BEGIN_SRC emacs-lisp
-	;; atom-one-dark
-	;; (use-package atom-one-dark-theme)
+  ;; leuven
+  ;;(use-package leuven-theme
+  ;;		:after org
+  ;;		:custom	(org-fontify-whole-heading-line t)
+  ;;		:config	(load-theme 'leuven t))
 
-	;; solarized light
-	;; (use-package solarized-theme
-	;; 	:init (setq solarized-distinct-fringe-background t
-	;; 							solarized-use-variable-pitch nil
-	;; 							solarized-high-contrast-mode-line t
-	;; 							solarized-use-less-bold t
-	;; 							solarized-use-more-italic t
-	;; 							solarized-emphasize-indicators nil
-	;; 							solarized-scale-org-headlines nil
-	;; 							solarized-height-minus-1 1.0
-	;; 							solarized-height-plus-1 1.0
-	;; 							solarized-height-plus-2 1.0
-	;; 							solarized-height-plus-3 1.0
-	;; 							solarized-height-plus-4 1.0
-	;; 							x-underline-at-descent-line t)
-	;; 	:config	(load-theme 'solarized-light t))
+  ;; ef-theme
+  (use-package ef-themes)
+  ;; Load a light Ef theme at random
+  (ef-themes-load-random 'light)
 
-	;; leuven
-	;;(use-package leuven-theme
-	;;		:after org
-	;;		:custom	(org-fontify-whole-heading-line t)
-	;;		:config	(load-theme 'leuven t))
-
-	;; nord
-	;; (use-package nord-theme
-	;; 	:config (load-theme 'nord t))
-
-	;; modus-operandi
-	;; TODO Headlines similar to Leuven
-	;; TODO Headline tags similar to Leuven
-	;; (use-package modus-themes
-	;; 	:init
-	;; 	(setq modus-themes-italic-constructs t
-	;; 				modus-themes-bold-constucts nil
-	;; 				modus-themes-region '(bg-only no-extend)
-	;; 				modus-themes-tabs-accented t
-	;; 				modus-themes-markup '(background italic)
-	;; 				modus-themes-hl-line '(undeline accented)
-	;; 				modus-themes-variable-pitch-ui nil
-	;; 				modus-themes-paren-match '(bold intense)
-	;; 				modus-themes-links '(neutral-underline background)
-	;; 				modus-themes-box-buttons '(flat faint 0.9)
-	;; 				modus-themes-diffs 'desaturated
-	;; 				modus-themes-org-blocks 'gray-background
-	;; 				modus-themes-org-agenda '((header-block . (1.3))
-	;; 																	(header-date . (grayscale workaholic bold-today 1.1))
-	;; 																	(event . (accented italic varied))
-	;; 																	(scheduled . uniform)
-	;; 																	(habit . traffic-light))
-	;; 				modus-themes-headings '((1 . (background overline 1.3))
-	;; 																(2 . (background overline rainbow 1.1))
-	;; 																(3 . (background overline semibold))
-	;; 																(t . (monochrome))))
-	;; 	(modus-themes-load-themes)
-	;; 	:config
-	;; 	(modus-themes-load-operandi)
-	;; 	(load-theme 'modus-operandi t))
-
-	;; ef-theme
-	(use-package ef-themes)
-	;; Load a light Ef theme at random
-	(ef-themes-load-random 'light)
-
-#+END_SRC
-
-** Font
-
-Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains.com/lp/mono/][here]].
-
-#+begin_src emacs-lisp :tangle no
-  (set-frame-font "Cascadia Code ExtraLight" nil t)
-  ;; (set-face-attribute 'default nil
-  ;; 										:family "Iosevka"
-  ;; 										:weight 'normal
-  ;; 										:width 'expanded
-  ;; 										:height 100)
-
-
-  ;; (set-face-attribute 'default nil :font "Iosevka Thin")
-  ;; (set-frame-font "Iosevka ExtraLight" nil t)
-#+end_src
-
-** Powerline
-
-#+BEGIN_SRC emacs-lisp :tangle no
-	(use-package powerline
-		:config	((powerline-default-theme)
-						 (when (display-graphic-p)
-							 (setq x-select-request-type
-										 '(UTF8-STRING COMPOUND_TEXT TEXT STRING)))))
 #+END_SRC
 
 ** Which key
 
 #+BEGIN_SRC emacs-lisp
-	;; Displays possible completions for a long keybinding
-	(use-package which-key
-		:config	(add-hook 'after-init-hook 'which-key-mode))
-#+END_SRC
-
-** Autocomplete
-
-#+BEGIN_SRC emacs-lisp
-	;; Add autocomplete to only programming-related major modes using Company
-	(use-package company
-		:defer t
-		:config	(add-hook 'prog-mode-hook 'company-mode)
-		:custom	((company-begin-commands '(self-insert-command))
-						 (company--idle-delay .1)
-						 (company-minimum-prefix-length 2)
-						 (company-show-numbers t)
-						 (company-tooltip-align-annotations 't)
-						 (global-company-mode t)))
-#+END_SRC
-
-** Expand-region
-
-#+BEGIN_SRC emacs-lisp :tangle no
-	;; Expands the region around the cursor semantically depending on the mode
-	(use-package expand-region
-		:defer t
-		:bind (("C-=" . er/expand-region)
-					 ("C-+" . er/contract-regions)))
+  ;; Displays possible completions for a long keybinding
+  (use-package which-key
+    :config	(add-hook 'after-init-hook 'which-key-mode))
 #+END_SRC
 
 ** Rainbow-delimiter
 
 #+BEGIN_SRC emacs-lisp
-	;; Highlights delimiters like parentheses, brackets or braces by their depth
-	(use-package rainbow-delimiters
-		:defer t
-		:hook (prog-mode . rainbow-delimiters-mode))
+  ;; Highlights delimiters like parentheses, brackets or braces by their depth
+  (use-package rainbow-delimiters
+    :defer t
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 ** rainbow-mode
 
 #+BEGIN_SRC emacs-lisp
-	;; Colour the text with their value
-	(use-package rainbow-mode
-		:defer t
-		:hook (prog-mode))
+  ;; Colour the text with their value
+  (use-package rainbow-mode
+    :defer t
+    :hook (prog-mode))
 #+END_SRC
 
 * Ido and flx-ido
 
 #+BEGIN_SRC emacs-lisp
-	;; For better navigation
-	(setq ido-enable-flex-matching t
-				;; ido-everywhere t
-				ido-create-new-buffer 'always
-				ido-ignore-extensions t)
-				;;ido-mode 1)
+  ;; For better navigation
+  (setq ido-enable-flex-matching t	;; ido-everywhere t
+	ido-create-new-buffer 'always
+	ido-ignore-extensions t)
+  ;;ido-mode 1)
 
-	(use-package flx-ido
-		:config
-		(ido-mode 1)
-		(ido-everywhere 1)
-		(flx-ido-mode 1))
+  (use-package flx-ido
+    :config
+    (ido-mode 1)
+    (ido-everywhere 1)
+    (flx-ido-mode 1))
 #+END_SRC
 
 * Org
 
 #+BEGIN_SRC emacs-lisp
-	;; To manage TODO tasks and agenda
+  ;; To manage TODO tasks and agenda
 
-	(setq org-todo-keywords
-				'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
-					(sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
-					(sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)"))
-				org-src-fontify-natively t
-				org-hierarchical-todo-statistics nil
-				org-refile-targets '((org-agenda-files :maxlevel . 2))
-				org-catch-invisible-edits 1
-				org-hide-emphasis-markers t
-				org-ellipsis ".."
-				;; Org agenda
-				org-agenda-files '("/Users/alvin/Dropbox/home/me.org")
-				org-agenda-todo-ignore-deadlines t
-				org-agenda-todo-ignore-scheduled t
-				org-agenda-todo-ignore-timestamp t
-				org-agenda-todo-ignore-with-date t)
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "NEXT(n)" "DOING(g)" "|" "DONE(D)" "CANCEL(C)")
+	  (sequence "PAY(p)" "|" "PAID(P)" "CANCEL(C)")
+	  (sequence "TODO(t)" "DRAFT(d)" "|" "PUBLISHED(U)"))
+	org-src-fontify-natively t
+	org-hierarchical-todo-statistics nil
+	org-refile-targets '((org-agenda-files :maxlevel . 2))
+	org-catch-invisible-edits 1
+	org-hide-emphasis-markers t
+	org-ellipsis ".."
+	;; Org agenda
+	org-agenda-files '("/Users/alvin/Dropbox/home/me.org")
+	org-agenda-todo-ignore-deadlines t
+	org-agenda-todo-ignore-scheduled t
+	org-agenda-todo-ignore-timestamp t
+	org-agenda-todo-ignore-with-date t)
 
-	;; keybindings
-	(global-set-key "\C-cl" 'org-store-link)
-	(global-set-key "\C-cc" 'org-capture)
-	(global-set-key "\C-ca" 'org-agenda)
-	(global-set-key "\C-cb" 'org-iswitchb)
-	(global-set-key (kbd "C-c C-.") 'org-time-stamp-inactive)
+  ;; keybindings
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key (kbd "C-c C-.") 'org-time-stamp-inactive)
 
-	;; Turn on font lock for org mode
-	(add-hook 'org-mode-hook 'turn-on-font-lock)
+  ;; Turn on font lock for org mode
+  (add-hook 'org-mode-hook 'turn-on-font-lock)
 
-	(eval-after-load "org"  '(require 'ox-md nil t))
+  (eval-after-load "org"  '(require 'ox-md nil t))
 
-	;; org capture
-	(setq org-capture-templates
-				'(("m" "me tasks" entry
-					 (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
-					 "** TODO %? %^")))
+  ;; org capture
+  (setq org-capture-templates
+	'(("m" "me tasks" entry
+	   (file+headline "/Users/alvin/Dropbox/home/me.org" "Tasks")
+	   "** TODO %? %^")))
 
-	;; Fixes open pdf file on emacs-27
-	(add-hook 'org-mode-hook
-						(lambda ()
-							(delete '("\\.pdf\\'" . default) org-file-apps)
-							(add-to-list 'org-file-apps '("\\.pdf\\'" . "xpdf %s"))))
+  ;; Fixes open pdf file on emacs-27
+  (add-hook 'org-mode-hook
+	    (lambda ()
+	      (delete '("\\.pdf\\'" . default) org-file-apps)
+	      (add-to-list 'org-file-apps '("\\.pdf\\'" . "xpdf %s"))))
+
 #+END_SRC
 
 * Yasnippet
 
 #+BEGIN_SRC emacs-lisp
-	;; Manage code snippets
-	(use-package yasnippet
-		:defer t
-		:config
-		(yas-global-mode 1)
-		(global-set-key (kbd "M-/") 'company-yasnippet))
-#+END_SRC
-
-* Markdown
-
-#+BEGIN_SRC emacs-lisp
-	;; A mode that makes it easy to read files written using markdown
-	(use-package markdown-mode
-		:defer t
-		:mode (("README\\.md\\'" . gfm-mode)
-					 ("\\.md\\'" . markdown-mode)
-					 ("\\.markdown\\'" . markdown-mode))
-		:init (setq markdown-command "multimarkdown"))
+  ;; Manage code snippets
+  (use-package yasnippet
+    :defer t
+    :config
+    (yas-global-mode 1)
+    (global-set-key (kbd "M-/") 'company-yasnippet))
 #+END_SRC
 
 * Coding Environment
@@ -415,20 +296,12 @@ Use JetBrains Mono font. If not installed, download from [[https://www.jetbrains
 
 ** exec-path-from-shell
 
-#+begin_src emacs-lisp
-	(use-package exec-path-from-shell
-		:custom (exec-path-from-shell-check-startup-files nil)
-		:config
-		(push "HISTFILE" exec-path-from-shell-variables)
-		(exec-path-from-shell-initialize))
-#+end_src
-
-** add-node-modules-path
-
-#+begin_src emacs-lisp
-	(use-package add-node-modules-path
-		:config	(eval-after-load 'web-mode '(add-hook 'web-mode-hook
-																									'add-node-modules-path)))
+#+begin_src emacs-lisp :tangle no
+  (use-package exec-path-from-shell
+    :custom (exec-path-from-shell-check-startup-files nil)
+    :config
+    (push "HISTFILE" exec-path-from-shell-variables)
+    (exec-path-from-shell-initialize))
 #+end_src
 
 ** flycheck
@@ -440,7 +313,7 @@ When having problems with React code, check the following:
 - Install =npm= globally - =npm install -g npm=.
 - Install =webpack= and =eslint-import-resolver-webpack= globally.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 	(use-package flycheck
 		:after (add-node-modules-path)
 		:defer t
@@ -450,25 +323,25 @@ When having problems with React code, check the following:
 					flycheck-javascript-eslint-executable "$(npm bin)/eslint")
 		:init	(global-flycheck-mode))
 
-	(use-package flycheck-clj-kondo)
+	(use-package flycheck-clj-kondo
+		:defer t)
 #+END_SRC
 
 ** Emacs Lisp
 
 #+BEGIN_SRC emacs-lisp
-	;; Adding some hooks for better coding in elisp
-	(add-hook 'emacs-lisp-mode-hook #'subword-mode)
-	(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-	(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-	(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+  ;; Adding some hooks for better coding in elisp
+  (add-hook 'emacs-lisp-mode-hook #'subword-mode)
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 #+END_SRC
 
 ** Eldoc
 
 #+BEGIN_SRC emacs-lisp
-	;; Provides minibuffer hints when working with Emacs Lisp
-	(use-package eldoc
-		:defer t)
+  ;; Provides minibuffer hints when working with Emacs Lisp
+  (use-package eldoc)
 #+END_SRC
 
 ** Web Programming
@@ -476,232 +349,263 @@ When having problems with React code, check the following:
 *** HTML
 
 #+BEGIN_SRC emacs-lisp
-	(use-package sgml-mode
-		:defer t
-		:hook	((html-mode . as/html-set-pretty-print-function)
-					 (html-mode . sgml-electric-tag-pair-mode)
-					 (html-mode . sgml-name-8bit-mode)
-					 (html-mode . toggle-truncate-lines))
-		:custom (sgml-basic-offset 2)
-		:preface
-		(defun as/html-set-pretty-print-function ()
-			(setq as/pretty-print-function #'sgml-pretty-print)))
+  (use-package sgml-mode
+    :hook	((html-mode . as/html-set-pretty-print-function)
+	   (html-mode . sgml-electric-tag-pair-mode)
+	   (html-mode . sgml-name-8bit-mode)
+	   (html-mode . toggle-truncate-lines))
+    :custom (sgml-basic-offset 2)
+    :preface
+    (defun as/html-set-pretty-print-function ()
+      (setq as/pretty-print-function #'sgml-pretty-print)))
 #+END_SRC
 
 *** CSS
 
 #+BEGIN_SRC emacs-lisp
-	(use-package css-mode
-		:defer t
-		:custom (css-indent-offset 2))
+  (use-package css-mode
+    :defer t
+    :mode ("\\.css'" . css-mode)
+    :custom (css-indent-offset 2))
 #+END_SRC
 
 *** web-mode
 
 #+BEGIN_SRC emacs-lisp
-	(use-package web-mode
-		:defer t
-		:mode ("\\.html?\\'" "\\.[jt]sx?\\'")
-		:config	((setq web-mode-block-padding 2
-									 web-mode-code-indent-offset 2
-									 web-mode-content-types-alist '(("jsx" . "\\.[jt]sx?\\'"))
-									 web-mode-css-indent-offset 2
-									 web-mode-enable-auto-closing t
-									 web-mode-enable-auto-pairing t
-									 web-mode-enable-current-element-highlight t
-									 web-mode-markup-indent-offset 2
-									 web-mode-script-padding 2
-									 web-mode-style-padding 2)
-						 ;; support for tsx and jsx file fomats
-						 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-						 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-						 (add-hook 'web-mode-hook
-											 (lambda ()
-												 (when ((or (string-equal "jsx") (string-equal "tsx"))
-																(file-name-extension buffer-file-name))
-													 (as/setup-tide-mode))))))
+  (use-package web-mode
+    :defer t
+    :mode ("\\.html?\\'" "\\.[jt]sx?\\'")
+    :config	((setq web-mode-block-padding 2
+			 web-mode-code-indent-offset 2
+			 web-mode-content-types-alist '(("jsx" . "\\.[jt]sx?\\'"))
+			 web-mode-css-indent-offset 2
+			 web-mode-enable-auto-closing t
+			 web-mode-enable-auto-pairing t
+			 web-mode-enable-current-element-highlight t
+			 web-mode-markup-indent-offset 2
+			 web-mode-script-padding 2
+			 web-mode-style-padding 2)
+		   ;; support for tsx and jsx file fomats
+		   (add-hook 'web-mode-hook
+			     (lambda ()
+			       (when ((or (string-equal "jsx") (string-equal "tsx"))
+				      (file-name-extension buffer-file-name))
+				 (as/setup-tide-mode))))))
 
-	;; enable lint checker
-	(flycheck-add-mode 'typescript-tslint 'web-mode)
-	;; TODO 'jsx-tide' and 'append' failed to be added to the
-	;; flycheck-add-next-checker because it couldn't be found
-	(flycheck-add-mode 'javascript-eslint 'web-mode)
-	;; (flycheck-add-next-checker 'javascript-eslint)))
+  ;; enable lint checker
+  ;;(flycheck-add-mode 'typescript-tslint 'web-mode)
+  ;; TODO 'jsx-tide' and 'append' failed to be added to the
+  ;; flycheck-add-next-checker because it couldn't be found
+  ;;(flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;; (flycheck-add-next-checker 'javascript-eslint)))
 #+END_SRC
 
 *** JavaScript
 
 #+begin_src javascript :tangle no
-	;; Create jsconfig.json in the root folder of the project.
-	;; jsconfig.json is tsconfig.json with allowJs attribute set to true
-	{
-			"compilerOptions": {
-					"target": "es2017",
-					"allowSyntheticDefaultImports": true,
-					"noEmit": true,
-					"checkJs": true,
-					"jsx": "react",
-					"lib": [ "dom", "es2017" ]
-			}
-	}
+  ;; Create jsconfig.json in the root folder of the project.
+      ;; jsconfig.json is tsconfig.json with allowJs attribute set to true
+  {
+      "compilerOptions": {
+	  "target": "es2017",
+	  "allowSyntheticDefaultImports": true,
+	  "noEmit": true,
+	  "checkJs": true,
+	  "jsx": "react",
+	  "lib": [ "dom", "es2017" ]
+      }
+  }
 #+end_src
 
 *** typescript-mode
 
 #+begin_src emacs-lisp
-	(use-package typescript-mode
-		:defer t
-		:mode ("\\.[jt]s\\'"))
+  (use-package typescript-mode
+    :defer t
+    :mode ("\\.[jt]s\\'" . typescript-mode))
 #+end_src
 
 *** tide
 
 #+begin_src emacs-lisp
-	;; tide is used together with web-mode
-	(use-package tide
-		:defer t
-		:after (company flycheck typescript-mode)
-		:hook ((typescript-mode . tide-setup)
-					 (typescript-mode . tide-hl-identifier-mode)
-					 (before-save . tide-format-before-save)))
+  ;; tide is used together with web-mode
+  (use-package tide
+    :defer t
+    :after (typescript-mode)
+    :hook ((typescript-mode . tide-setup)
+	   (typescript-mode . tide-hl-identifier-mode)
+	   (before-save . tide-format-before-save)))
 
-	(defun as/setup-tide-mode ()
-		(interactive)
-		(tide-setup)
-		(flycheck-mode +1)
-		(setq flycheck-check-syntax-automatically '(save mode-enabled))
-		(eldoc-mode +1)
-		(tide-hl-identifier-mode +1)
-		;; company is an optional dependency. You have to
-		;; install it separately via package-install
-		;; `M-x package-install [ret] company`
-		(company-mode +1))
+  (defun as/setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flymake-mode)
+    ;;(setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode)
+    (tide-hl-identifier-mode)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode))
 #+end_src
 
 *** emmet-mode
 
 #+BEGIN_SRC emacs-lisp
-	(use-package emmet-mode
-		:defer t
-		:hook (sgml-mode css-mode web-mode))
+  (use-package emmet-mode
+    :defer t
+    :hook (sgml-mode css-mode web-mode))
 #+END_SRC
 
 ** Clojure
 
 #+BEGIN_SRC emacs-lisp
-	(use-package clojure-mode
-		:defer t
-		:init
-		(add-hook 'clojure-mode-hook #'subword-mode)
-		(add-hook 'clojure-mode-hook #'paredit-mode)
-		(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
-		(add-hook 'clojurescript-mode-hook #'subword-mode)
-		(add-hook 'clojurescript-mode-hook #'paredit-mode)
-		(add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
-		(add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook)
-		:config	(require 'flycheck-clj-kondo))
+  (use-package clojure-mode
+    :defer t
+    :mode ("\\.clj?\\'" . clojure-mode)
+    :init
+    (add-hook 'clojure-mode-hook #'subword-mode)
+    (add-hook 'clojure-mode-hook #'paredit-mode)
+    (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'clojure-mode-hook #'as/clojure-mode-hook)
+    (add-hook 'clojurescript-mode-hook #'subword-mode)
+    (add-hook 'clojurescript-mode-hook #'paredit-mode)
+    (add-hook 'clojurescript-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'clojurescript-mode-hook #'as/clojure-mode-hook))
 
-	;; REPL for clojure
-	(use-package cider
-		:defer t
-		:config	(setq cider-repl-pop-to-buffer-on-connect nil)
-		:init	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
+  ;; REPL for clojure
+  (use-package cider
+    :defer t
+    :after clojure-mode
+    :config	(setq cider-repl-pop-to-buffer-on-connect nil)
+    :init	(add-hook 'cider-repl-mode-hook #'eldoc-mode))
 #+END_SRC
 
 ** json
 
 #+BEGIN_SRC emacs-lisp
-	(use-package json-mode
-		:defer t
-		:mode "\\.json\\'"
-		:config (setq json-reformat:indent-width 2))
+  (use-package json-mode
+    :defer t
+    :mode ("\\.json\\'" . json-mode)
+    :config (setq json-reformat:indent-width 2))
 #+END_SRC
 
 ** Plantuml
 
 #+BEGIN_SRC emacs-lisp
-	;; A tool for coding UML diagrams -- https://www.plantuml.com
-	(use-package plantuml-mode
-		:defer t
-		:config	(org-babel-do-load-languages 'org-babel-load-languages
-																				 '((plantuml	. t)))
-		(setq org-plantuml-jar-path
-					"C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
-					plantuml-default-exec-mode 'jar))
+  ;; A tool for coding UML diagrams -- https://www.plantuml.com
+  (use-package plantuml-mode
+    :defer t
+    :after org-mode
+    :config	(org-babel-do-load-languages 'org-babel-load-languages
+					       '((plantuml	. t)))
+    (setq org-plantuml-jar-path
+	  "C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
+	  plantuml-default-exec-mode 'jar))
 #+END_SRC
 
 ** Projectile
 
 #+BEGIN_SRC emacs-lisp
-	;; Easily find files in a project
-	(use-package projectile
-		:defer t
-		:bind-keymap(("C-c p" . projectile-command-map)
-								 ("S-p" . projectile-command-map))
-		:custom	((projectile-enable-caching t)
-						 (projectile-mode-line '(:eval (projectile-project-name))))
-		:config	((projectile-mode +1)
-						 (add-to-list 'projectile-globally-ignored-directories "node_modules")
-						 (add-to-list 'projectile-globally-ignored-directories "target")
-						 (add-to-list 'projectile-globally-ignored-directories "archive")
-						 (add-to-list 'projectile-globally-ignored-directories ".cvsignore"))
-		:init	(add-hook 'projectile-after-switch-project-hook
-										(lambda ()
-											(projectile-invalidate-cache nil))))
+  ;; Easily find files in a project
+  (use-package projectile
+    :defer t
+    :bind-keymap(("C-c p" . projectile-command-map)
+		 ("S-p" . projectile-command-map))
+    :custom	((projectile-enable-caching t)
+		   (projectile-mode-line '(:eval (projectile-project-name))))
+    :init	(add-hook 'projectile-after-switch-project-hook
+		    (lambda ()
+		      (projectile-invalidate-cache nil))))
 #+END_SRC
 
 ** Magit
 
 #+BEGIN_SRC emacs-lisp
-	;; Interface to git
-	(use-package magit
-		:defer t
-		:bind	(("C-x g" . magit-status)
-					 ("C-x M-g" . magit-dispatch-popup)
-					 ("C-c M-g" . magit-file-popup)))
+  ;; Interface to git
+  (use-package magit
+    :defer t
+    :bind	(("C-x g" . magit-status)
+	   ("C-x M-g" . magit-dispatch-popup)
+	   ("C-c M-g" . magit-file-popup)))
 
-	;; This is a workaround on Windows to have Magit prompt for the SSH passphrase
-	;; when needed
-	(use-package ssh-agency)
+  ;; This is a workaround on Windows to have Magit prompt for the SSH passphrase
+  ;; when needed
+  (use-package ssh-agency
+    :after magit)
 #+END_SRC
+
+** Yaml
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :defer t
+    :mode (("\\.yml\\'" . yaml-mode)
+	   ("\\.yaml\\'" . yaml-mode)))
+#+end_src
 
 * Writing
 
 ** Spell Check
 
 #+BEGIN_SRC emacs-lisp
-	;; (add-to-list 'exec-path "/Users/alvin/.bin/cygwin64/bin")
-	(setq ispell-program-name "aspell"
-				text-mode-hook '(lambda () (flyspell-mode t)))
+  ;;(add-to-list 'exec-path "/Users/alvin/.bin/cygwin64/bin")
 
-	(use-package ispell
-		:config (setq ispell-dictionary "british"))
+  (use-package ispell
+    :defer t
+    :config
+    (setq ispell-dictionary "british")
+    (setq ispell-program-name "/ProgramData/chocolatey/lib/hunspell.portable/tools/hunspell.exe"
+	  text-mode-hook '(lambda () (flyspell-mode t))))
 
-	(use-package flyspell)
+  (use-package flyspell)
 #+END_SRC
 
 ** Chinese Input method using =pyim=
 
 #+begin_src emacs-lisp :tangle no
-	(use-package pyim
-		:defer t
-		:demand t
-		:config	((use-package pyim-basedict
-							 :config (pyim-basedict-enable))
-						 (setq-default pyim-english-input-switch-functions
-													 '(pyim-probe-dynamic-english
-														 pyim-probe-program-mode
-														 pyim-probe-org-structure-template)
-													 pyim-punctuation-half-width-functions
-													 '(pyim-probe-punctuation-line-beginning
-														 pyim-probe-punctuation-after-punctuation))
-						 (setq pyim-page-tooltip 'popup
-									 pyim-page-length 5
-									 pyim-default-scheme 'quanpin)
-						 (pyim-isearch-mode 1))
-		:bind	(("M-j" . pyim-convert-string-at-point)
-					 ("C-;" . pyim-delete-word-from-personal-buffer)))
+  (use-package pyim
+    :defer t
+    :config	((use-package pyim-basedict
+		     :config (pyim-basedict-enable))
+		   (setq-default pyim-english-input-switch-functions
+				 '(pyim-probe-dynamic-english
+				   pyim-probe-program-mode
+				   pyim-probe-org-structure-template)
+				 pyim-punctuation-half-width-functions
+				 '(pyim-probe-punctuation-line-beginning
+				   pyim-probe-punctuation-after-punctuation))
+		   (setq pyim-page-tooltip 'popup
+			 pyim-page-length 5
+			 pyim-default-scheme 'quanpin)
+		   (pyim-isearch-mode 1))
+    :bind	(("M-j" . pyim-convert-string-at-point)
+	   ("C-;" . pyim-delete-word-from-personal-buffer)))
+#+end_src
+
+* Blogging
+
+** Jekyll
+
+#+begin_src emacs-lisp
+  (use-package jekyll-modes
+    :defer t
+    :mode (("_config\\.yml\\'" . jekyll-mode)
+	   ("\\.md\\'" . jekyll-markdown-mode)
+	   ("\\.markdown\\'" . jekyll-markdown-mode)
+	   ("\\.html\\'" . jekyll-html-mode))
+    :config (setq jekyll-mode-indent-level 2)
+    :hook ((html-mode . as/enable-jekyll-html-mode)))
+
+  (defun as/jekyll-project-p ()
+    "Check if the current directory is a Jekyll project by looking for _config.yml."
+    (let ((project-root (locate-dominating-file default-directory "_config.yml")))
+      (and project-root (file-exists-p (concat project-root "_config.yml")))))
+
+  (defun as/enable-jekyll-html-mode ()
+    "Enable jekyll-html-mode only if we are in a Jekyll project."
+    (when (as/jekyll-project-p)
+      (jekyll-html-mode)))
 #+end_src
 
 * Utilities or helper methods
@@ -709,10 +613,10 @@ When having problems with React code, check the following:
 ** Load Emacs' Configuration File
 
 #+BEGIN_SRC emacs-lisp
-	(defun as/config ()
-		"Finds and opens the emacs' config file"
-		(interactive)
-		(find-file "~/.emacs.d/config.org"))
+  (defun as/config ()
+    "Finds and opens the emacs' config file"
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
 #+END_SRC
 
 ** Create a new scratch file
@@ -756,19 +660,6 @@ When having problems with React code, check the following:
       (dired-sort-other xarg )))
 #+end_src
 
-* Blogging
-
-** Jekyll
-
-#+begin_src emacs-lisp
-	(use-package poly-markdown)
-	(use-package jekyll-modes)
-
-	(add-to-list 'auto-mode-alist '("\\.md$" . jekyll-markdown-mode))
-	(add-to-list 'auto-mode-alist '("\\.markdown$" . jekyll-markdown-mode))
-	(add-to-list 'auto-mode-alist '("\\.html$" . jekyll-html-mode))
-#+end_src
-
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
@@ -795,14 +686,14 @@ When having problems with React code, check the following:
 * Configuration specifically for MS Windows
 
 #+begin_src emacs-lisp
-	;; Replace the Windows' find program
-	(when (string-equal system-type "windows-nt")
-		(let ((mypaths '("c:/Users/alvin/.bin/cygwin64/bin"
-										 "c:/windows/system32"
-										 "c:/Program Files/Git/bin"
-										 "c:/Program Files/MiKTeX/miktex/bin/x64")))
-			(setenv "PATH" (mapconcat 'identity mypaths ";"))
-			(setq exec-path (append mypaths (list "." exec-directory)))))
+  ;; Replace the Windows' find program
+  (when (string-equal system-type "windows-nt")
+    (let ((mypaths '("c:/Program Files/Git/usr/bin"
+		     "c:/windows/system32"
+		     "c:/Program Files/Git/bin"
+		     "c:/Program Files/MiKTeX/miktex/bin/x64")))
+      (setenv "PATH" (mapconcat 'identity mypaths ";"))
+      (setq exec-path (append mypaths (list "." exec-directory)))))
 
-	(setq find-program "c:/Users/alvin/.bin/cygwin64/bin/find.exe")
+  (setq find-program "c:/Users/alvinsim/.bin/cygwin64/bin/find.exe")
 #+end_src
