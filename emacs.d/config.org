@@ -4,9 +4,9 @@
 #+STARTUP: showall
 
 * Tasks [21%]
-	:PROPERTIES:
-	:ARCHIVE:  %s_archive::* Tasks
-	:END:
+:PROPERTIES:
+:ARCHIVE:  %s_archive::* Tasks
+ :END:
 ** TODO switch to ivy from ido and flx-ido. Refer to [[https://jamiecollinson.com/blog/my-emacs-config/]] "Command completion" section.
 ** TODO install [[https://github.com/lewang/command-log-mode][command-log-mode]]
 ** TODO install undo-tree
@@ -29,22 +29,22 @@
 * Configure use-package
 
 #+BEGIN_SRC emacs-lisp
-	;; Install use-package if it is not already installed.
-	;; use-package is used to manage the configuration of packages.
-	(unless (package-installed-p 'use-package)
-		(package-install 'use-package))
+  ;; Install use-package if it is not already installed.
+  ;; use-package is used to manage the configuration of packages.
+  (unless (package-installed-p 'use-package)
+	  (package-install 'use-package))
 
-	(setq package-check-signature nil)
+  (setq package-check-signature nil)
 
-	(setq use-package-verbose t
-				use-package-always-ensure t)
+  (setq use-package-verbose t
+	use-package-always-ensure t)
 
-	;; Always compile packages and use the newest version available.
-	(require 'use-package)
-	(use-package auto-compile
-		:config
-		(auto-compile-on-load-mode)
-		(setq load-prefer-newer t))
+  ;; Always compile packages and use the newest version available.
+  (require 'use-package)
+  (use-package auto-compile
+    :config
+    (auto-compile-on-load-mode)
+    (setq load-prefer-newer t))
 #+END_SRC
 
 * Set Personal Information
@@ -100,8 +100,8 @@
   (setq show-trailing-whitespace t)
 
   ;; Setting tabs appropriately
-  ;;(setq-default tab-width 2)
-  ;;(setq indent-tabs-mode t)
+  (setq-default tab-width 2)
+  (setq indent-tabs-mode t)
 
   ;; Use aggressive-indent-mode to automatically indent code while writing
   ;; (use-package aggressive-indent
@@ -172,16 +172,26 @@
 ** Load Theme
 
 #+BEGIN_SRC emacs-lisp
-  ;; leuven
-  ;;(use-package leuven-theme
-  ;;		:after org
-  ;;		:custom	(org-fontify-whole-heading-line t)
-  ;;		:config	(load-theme 'leuven t))
+	;; leuven
+	;;(use-package leuven-theme
+	;;		:after org
+	;;		:custom	(org-fontify-whole-heading-line t)
+	;;		:config	(load-theme 'leuven t))
 
-  ;; ef-theme
-  (use-package ef-themes)
-  ;; Load a light Ef theme at random
-  (ef-themes-load-random 'light)
+	;; ef-theme
+	(use-package ef-themes)
+	;; Load a light Ef theme at random
+	(ef-themes-load-random 'light)
+
+	;; modus-theme-vivendi
+	;;;; best dark-mode for terminal
+	;;;; NOTE: To use themes for terminal, use 'xterm-256color' by exporting TERM
+	;;;;       in the .bashrc, .zshrc and .shrc files
+	;;;;       Example: export TERM=xterm-256color
+	;; (use-package modus-themes
+	;;   :ensure t
+	;;   :config
+	;;   (load-theme 'modus-vivendi t))
 
 #+END_SRC
 
@@ -215,7 +225,8 @@
 
 #+BEGIN_SRC emacs-lisp
   ;; For better navigation
-  (setq ido-enable-flex-matching t	;; ido-everywhere t
+  (setq ido-enable-flex-matching t
+	;; ido-everywhere t
 	ido-create-new-buffer 'always
 	ido-ignore-extensions t)
   ;;ido-mode 1)
@@ -272,7 +283,6 @@
 	    (lambda ()
 	      (delete '("\\.pdf\\'" . default) org-file-apps)
 	      (add-to-list 'org-file-apps '("\\.pdf\\'" . "xpdf %s"))))
-
 #+END_SRC
 
 * Yasnippet
@@ -306,6 +316,8 @@
 
 ** flycheck
 
+TODO: convert to flymake
+
 Check code syntax on the fly.
 
 When having problems with React code, check the following:
@@ -314,14 +326,14 @@ When having problems with React code, check the following:
 - Install =webpack= and =eslint-import-resolver-webpack= globally.
 
 #+BEGIN_SRC emacs-lisp :tangle no
-	(use-package flycheck
-		:after (add-node-modules-path)
-		:defer t
-		:config
-		(setq-default flycheck-temp-prefix ".flycheck")
-		(setq flycheck-local-config-file-functions ".eslintrc.*"
-					flycheck-javascript-eslint-executable "$(npm bin)/eslint")
-		:init	(global-flycheck-mode))
+  (use-package flycheck
+    :after (add-node-modules-path)
+    :defer t
+    :config
+    (setq-default flycheck-temp-prefix ".flycheck")
+    (setq flycheck-local-config-file-functions ".eslintrc.*"
+	  flycheck-javascript-eslint-executable "$(npm bin)/eslint")
+    :init	(global-flycheck-mode))
 
 	(use-package flycheck-clj-kondo
 		:defer t)
@@ -350,6 +362,7 @@ When having problems with React code, check the following:
 
 #+BEGIN_SRC emacs-lisp
   (use-package sgml-mode
+    :defer t
     :hook	((html-mode . as/html-set-pretty-print-function)
 	   (html-mode . sgml-electric-tag-pair-mode)
 	   (html-mode . sgml-name-8bit-mode)
@@ -404,7 +417,7 @@ When having problems with React code, check the following:
 
 #+begin_src javascript :tangle no
   ;; Create jsconfig.json in the root folder of the project.
-      ;; jsconfig.json is tsconfig.json with allowJs attribute set to true
+  ;; jsconfig.json is tsconfig.json with allowJs attribute set to true
   {
       "compilerOptions": {
 	  "target": "es2017",
@@ -514,6 +527,11 @@ When having problems with React code, check the following:
 		 ("S-p" . projectile-command-map))
     :custom	((projectile-enable-caching t)
 		   (projectile-mode-line '(:eval (projectile-project-name))))
+    :config	((projectile-mode +1)
+		   (add-to-list 'projectile-globally-ignored-directories "node_modules")
+		   (add-to-list 'projectile-globally-ignored-directories "target")
+		   (add-to-list 'projectile-globally-ignored-directories "archive")
+		   (add-to-list 'projectile-globally-ignored-directories ".cvsignore"))
     :init	(add-hook 'projectile-after-switch-project-hook
 		    (lambda ()
 		      (projectile-invalidate-cache nil))))
@@ -534,15 +552,6 @@ When having problems with React code, check the following:
   (use-package ssh-agency
     :after magit)
 #+END_SRC
-
-** Yaml
-
-#+begin_src emacs-lisp
-  (use-package yaml-mode
-    :defer t
-    :mode (("\\.yml\\'" . yaml-mode)
-	   ("\\.yaml\\'" . yaml-mode)))
-#+end_src
 
 * Writing
 
