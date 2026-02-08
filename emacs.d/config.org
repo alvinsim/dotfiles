@@ -89,7 +89,7 @@
   ;; Disable the tooltip, toolbar and scroll bar.
   (tooltip-mode -1)
   (tool-bar-mode -1)
-  (menu-bar-mode 1)
+  (menu-bar-mode -1)
   (scroll-bar-mode -1)
 
   ;; Disable tiny scroll bar in the minibuffer window.
@@ -672,24 +672,27 @@ When having problems with React code, check the following:
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-+") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "RET") 'newline-and-indent)
-  (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
-  (global-set-key (kbd "M-/") 'hippie-expand)
-  (global-set-key (kbd "<f8>") 'ispell-word)
-  (global-set-key (kbd "C-<f8>") 'flyspell-mode)
-  (global-set-key (kbd "C-c i") 'imenu)
-  (define-key global-map (kbd "RET") 'newline-and-indent)
+	(global-set-key (kbd "C-+") 'text-scale-increase)
+	(global-set-key (kbd "C--") 'text-scale-decrease)
+	(global-set-key (kbd "C-x C-b") 'ibuffer)
+	(global-set-key (kbd "RET") 'newline-and-indent)
+	(global-set-key (kbd "C-:") 'comment-or-uncomment-region)
+	(global-set-key (kbd "M-/") 'hippie-expand)
+	(global-set-key (kbd "<f8>") 'ispell-word)
+	(global-set-key (kbd "C-<f8>") 'flyspell-mode)
+	(global-set-key (kbd "C-c i") 'imenu)
+	(define-key global-map (kbd "RET") 'newline-and-indent)
 
-  ;; move line of text up or down
-  (global-set-key [M-up] 'move-text-up)
-  (global-set-key [M-down] 'move-text-down)
+	;; move line of text up or down
+	(global-set-key [M-up] 'move-text-up)
+	(global-set-key [M-down] 'move-text-down)
 
-  ;; mini-buffer history
-  (global-set-key (kbd "M-n") 'next-history-element)
-  (global-set-key (kbd "M-p") 'previous-history-element)
+	;; mini-buffer history
+	(global-set-key (kbd "M-n") 'next-history-element)
+	(global-set-key (kbd "M-p") 'previous-history-element)
+
+	;; overwrite "f10" to toggle 'menu-bar-open'
+	(global-set-key (kbd "<f10>") 'menu-bar-open)
 #+END_SRC
 
 * Configuration specifically for MS Windows
